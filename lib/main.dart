@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:roomiesMobile/presentation/screens/home-view.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:roomiesMobile/presentation/screens/login_screen/login-view.dart';
 
 void main() {
   runApp(DevicePreview( builder: (context)=> MyApp()));
-  //unApp(MyApp());
+  //runApp(MyApp());
 }
 
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
-      home: HomeView(),
+      home: LoginView(),
     );
   }
 }
