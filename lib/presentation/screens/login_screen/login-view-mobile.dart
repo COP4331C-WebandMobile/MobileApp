@@ -68,6 +68,7 @@ class LoginViewMobile extends StatelessWidget {
                     style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
+                        Navigator.pushNamed(context, '/register');
                         print('Create an account!');
                       }
                   ),
