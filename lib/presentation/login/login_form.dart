@@ -56,8 +56,14 @@ class _EmailInput extends StatelessWidget {
                 context.read<LoginCubit>().emailChanged(email),
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              border: OutlineInputBorder(),
+              filled: true,
+              fillColor: Colors.white,
               labelText: 'Email',
               helperText: '',
+              hintText: 'example@gmail.com',
               errorText: state.email.invalid ? 'Invalid Email' : null,
             ),
           );
@@ -68,18 +74,30 @@ class _EmailInput extends StatelessWidget {
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var _controller = TextEditingController();
+
     return BlocBuilder<LoginCubit, LoginState>(
         buildWhen: (previous, current) => previous.password != current.password,
         builder: (context, state) {
           return TextField(
+            controller: _controller,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (password) =>
                 context.read<LoginCubit>().passwordChanged(password),
             obscureText: true,
             decoration: InputDecoration(
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              border: OutlineInputBorder(),
+              filled: true,
+              fillColor: Colors.white,
               labelText: 'Password',
               helperText: '',
               errorText: state.password.invalid ? 'Invalid password' : null,
+              suffixIcon: IconButton(
+                onPressed: () {return const Tooltip(message: 'message', child: Text('O'),);},
+                icon: Icon(Icons.info),
+              ),
             ),
           );
         });
@@ -94,17 +112,21 @@ class _LoginButton extends StatelessWidget {
         builder: (context, state) {
           return state.status.isSubmissionInProgress
               ? const CircularProgressIndicator()
-              : ElevatedButton(
-                  key: const Key('loginForm_continue_raisedButton'),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+              : Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: ElevatedButton(
+                    key: const Key('loginForm_continue_raisedButton'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
                     ),
+                    child: const Text('LOGIN'),
+                    onPressed: state.status.isValidated
+                        ? () =>
+                            context.read<LoginCubit>().logInWithCredentials()
+                        : (() {}),
                   ),
-                  child: const Text('LOGIN'),
-                  onPressed: state.status.isValidated
-                      ? () => context.read<LoginCubit>().logInWithCredentials()
-                      : null,
                 );
         });
   }
@@ -113,10 +135,17 @@ class _LoginButton extends StatelessWidget {
 class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      key: const Key('loginForm_createAccount_flatButton'),
-      child: Text('SIGN UP'),
-      onPressed: () => Navigator.of(context).push<void>(RegisterPage.route()),
+    return Container(
+      width: MediaQuery.of(context).size.width / 3,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+        ),
+        key: const Key('loginForm_createAccount_flatButton'),
+        child: Text('SIGN UP'),
+        onPressed: () => Navigator.of(context).push<void>(RegisterPage.route()),
+      ),
     );
   }
 }

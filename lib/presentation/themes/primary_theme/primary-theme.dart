@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 class PrimaryTheme {
@@ -6,6 +7,7 @@ class PrimaryTheme {
     return ThemeData(
       primaryColor: CustomColors.gold,
       colorScheme: CustomColorTheme.primaryScheme,
+      textTheme: GoogleFonts.oswaldTextTheme(),
       buttonTheme: ButtonThemeData(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
