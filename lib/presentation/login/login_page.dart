@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/login/cubit/login_cubit.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'login_form.dart';
 
 class LoginPage extends StatelessWidget {

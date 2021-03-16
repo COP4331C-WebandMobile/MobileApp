@@ -144,7 +144,7 @@ class _SignUpButton extends StatelessWidget {
         ),
         key: const Key('loginForm_createAccount_flatButton'),
         child: Text('SIGN UP'),
-        onPressed: () => {},
+        onPressed: () => Navigator.of(context).push<void>(RegisterPage.route()),
       ),
     );
   }
