@@ -16,3 +16,4 @@ class Password extends FormzInput<String, PasswordValidationError> {
   }
 
 }
+
