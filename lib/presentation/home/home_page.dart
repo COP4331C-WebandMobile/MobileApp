@@ -8,7 +8,6 @@ class HomePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(builder: (_) => HomePage());
   }
-
   @override
   Widget build(BuildContext context) {
     final user =
@@ -34,10 +33,11 @@ class HomePage extends StatelessWidget {
             Text(user.email),
             const SizedBox(height: 4.0),
             Text(user.name ?? ''),
-            SideBar(),
           ],
         ),
+        
       ),
+      drawer: SideBar()
     );
   }
 }
