@@ -1,8 +1,10 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/business_logic/login/cubit/login_cubit.dart';
 import 'package:roomiesMobile/presentation/register/register_page.dart';
 import 'package:formz/formz.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -13,7 +15,10 @@ class LoginForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-                const SnackBar(content: Text('Authentication Failure')));
+                const SnackBar(
+                  content: Text('Authentication Failure'),
+                  backgroundColor: CustomColors.gold,
+                ));
         }
       },
       child: Align(
@@ -51,11 +56,15 @@ class _EmailInput extends StatelessWidget {
         buildWhen: (previous, current) => previous.email != current.email,
         builder: (context, state) {
           return TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter(RegExp('[ ]'), allow: false),
+            ],
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (email) =>
                 context.read<LoginCubit>().emailChanged(email),
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
+              
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               border: OutlineInputBorder(),
@@ -80,6 +89,9 @@ class _PasswordInput extends StatelessWidget {
         buildWhen: (previous, current) => previous.password != current.password,
         builder: (context, state) {
           return TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter(RegExp('[ ]'), allow: false),
+            ],
             controller: _controller,
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (password) =>
