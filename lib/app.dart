@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.dart';
 
 import 'business_logic/authentication/authentication.dart';
-import 'presentation/home_page.dart';
+import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'presentation/login/login_page.dart';
 import 'presentation/splash_page.dart';
 
@@ -46,7 +46,7 @@ class _AppViewState extends State<AppView> {
       theme: PrimaryTheme.primaryTheme,
       navigatorKey: _navigatorKey,
       builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
+        return BlocListener<AuthenticationBloc, AuthenticationState>( //Keeps track of the state and shows the home page when authenticated
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
