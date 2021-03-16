@@ -4,6 +4,10 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
+  - cloud_firestore (0.16.0-1):
+    - Firebase/Firestore (= 7.3.0)
+    - firebase_core
+    - Flutter
   - Firebase/Analytics (7.3.0):
     - Firebase/Core
   - Firebase/Auth (7.3.0):
@@ -14,11 +18,14 @@ PODS:
     - FirebaseAnalytics (= 7.3.0)
   - Firebase/CoreOnly (7.3.0):
     - FirebaseCore (= 7.3.0)
-  - firebase_auth (1.0.1):
+  - Firebase/Firestore (7.3.0):
+    - Firebase/CoreOnly
+    - FirebaseFirestore (~> 7.3.0)
+  - firebase_auth (0.20.1):
     - Firebase/Auth (= 7.3.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.0.1):
+  - firebase_core (0.7.0):
     - Firebase/CoreOnly (= 7.3.0)
     - Flutter
   - FirebaseAnalytics (7.3.0):
@@ -44,7 +51,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
     - nanopb (~> 2.30906.0)
-  - FirebaseFirestore (1.15.0)
+  - FirebaseFirestore (7.3.0)
   - FirebaseInstallations (7.8.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
@@ -101,10 +108,11 @@ PODS:
   - PromisesObjC (1.2.12)
 
 DEPENDENCIES:
+  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - Firebase/Analytics
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `6.26.0`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `7.3.0`)
   - Flutter (from `Flutter`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
 
@@ -127,13 +135,15 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  cloud_firestore:
+    :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 6.26.0
+    :tag: 7.3.0
   Flutter:
     :path: Flutter
   google_sign_in:
@@ -142,18 +152,19 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 6.26.0
+    :tag: 7.3.0
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  cloud_firestore: 357b92d4778d7715d76a393db5f89e7dcc9b7401
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
-  firebase_auth: 9f6491ea8e44570323361ae713a2ae3175b3f21a
-  firebase_core: d2e03528e2a600891f6f460b5e92932624480d1d
+  firebase_auth: 7220e26fc14a501a63093edc10443de6bca0d7e8
+  firebase_core: 91b27774a52f41f8b58484a75edf71197ac01c59
   FirebaseAnalytics: 2580c2d62535ae7b644143d48941fcc239ea897a
   FirebaseAuth: c224a0cf1afa0949bd5c7bfcf154b4f5ce8ddef2
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
-  FirebaseFirestore: 2cf6944bc538e57c94d8332bae501178edb70727
+  FirebaseFirestore: 46e32f479aac127e742b1cf873930f7bb43e7b45
   FirebaseInstallations: 7f7ed0e7e27fb51f57291e1876e2ddb1524126c1
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
@@ -166,6 +177,6 @@ SPEC CHECKSUMS:
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
 
-PODFILE CHECKSUM: a77c20f747e4f4541a4a8a2b9e9d5c918a9a94b3
+PODFILE CHECKSUM: 72ad64bd5f8b14293189c6f2afa2c65ebb09468a
 
 COCOAPODS: 1.10.0
