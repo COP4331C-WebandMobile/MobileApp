@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../business_logic/authentication/authentication.dart';
-import '../business_logic/authentication/bloc/authentication_bloc.dart';
+import '../../business_logic/authentication/authentication.dart';
+import '../../business_logic/authentication/bloc/authentication_bloc.dart';
+import '../../widgets/home/sidebar.dart';
 
 class HomePage extends StatelessWidget {
   static Route route() {
@@ -12,7 +13,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user =
         context.select((AuthenticationBloc element) => element.state.user);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
             Text(user.email),
             const SizedBox(height: 4.0),
             Text(user.name ?? ''),
+            SideBar(),
           ],
         ),
       ),
