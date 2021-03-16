@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.dart';
 
 import 'business_logic/authentication/authentication.dart';
-import 'presentation/home-page.dart';
-import 'presentation/loginPage.dart';
-import 'presentation/splash-page.dart';
+import 'presentation/home_page.dart';
+import 'presentation/login_page.dart';
+import 'presentation/splash_page.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;

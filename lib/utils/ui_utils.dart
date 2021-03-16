@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:roomiesMobile/enums/device-screen-type.dart';
+import 'package:roomiesMobile/utils/device_screen_type.dart';
 
 DeviceScreenType getDeviceType(MediaQueryData mediaQuery)
 {

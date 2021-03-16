@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:roomiesMobile/enums/device-screen-type.dart';
-import 'package:roomiesMobile/utils/responsive-builder.dart';
+import 'package:roomiesMobile/utils/device_screen_type.dart';
+import 'package:roomiesMobile/utils/responsive_builder.dart';
 
 class ScreenTypeLayout extends StatelessWidget
 {

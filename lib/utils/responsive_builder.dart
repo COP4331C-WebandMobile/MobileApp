@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:roomiesMobile/presentation/sizing-information.dart';
-import 'package:roomiesMobile/utils/ui-utils.dart';
+import 'package:roomiesMobile/utils/sizing_information.dart';
+import 'package:roomiesMobile/utils/ui_utils.dart';
 
 class ResponsiveBuilder extends StatelessWidget{
   final Widget Function(BuildContext context, SizingInformation sizingInformation) builder;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:roomiesMobile/enums/device-screen-type.dart';
+import 'package:roomiesMobile/utils/device_screen_type.dart';
 
 class SizingInformation {
   final DeviceScreenType deviceScreenType;
