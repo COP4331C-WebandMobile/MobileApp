@@ -5,7 +5,7 @@ import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.da
 
 import 'business_logic/authentication/authentication.dart';
 import 'presentation/home_page.dart';
-import 'presentation/login_page.dart';
+import 'presentation/login/login_page.dart';
 import 'presentation/splash_page.dart';
 
 class App extends StatelessWidget {

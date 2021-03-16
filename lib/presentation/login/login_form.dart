@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/business_logic/login/cubit/login_cubit.dart';
+import 'package:roomiesMobile/presentation/register/register_page.dart';
 import 'package:formz/formz.dart';
-
-import '../business_logic/login/cubit/login_cubit.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -117,7 +116,7 @@ class _SignUpButton extends StatelessWidget {
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
       child: Text('SIGN UP'),
-      //onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+      onPressed: () => Navigator.of(context).push<void>(RegisterPage.route()),
     );
   }
 }
