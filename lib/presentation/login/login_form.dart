@@ -83,16 +83,11 @@ class _EmailInput extends StatelessWidget {
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController();
-
     return BlocBuilder<LoginCubit, LoginState>(
         buildWhen: (previous, current) => previous.password != current.password,
         builder: (context, state) {
           return TextField(
-            inputFormatters: [
-              FilteringTextInputFormatter(RegExp('[ ]'), allow: false),
-            ],
-            controller: _controller,
+
             key: const Key('loginForm_emailInput_textField'),
             onChanged: (password) =>
                 context.read<LoginCubit>().passwordChanged(password),
@@ -106,10 +101,6 @@ class _PasswordInput extends StatelessWidget {
               labelText: 'Password',
               helperText: '',
               errorText: state.password.invalid ? 'Invalid password' : null,
-              suffixIcon: IconButton(
-                onPressed: () {return const Tooltip(message: 'message', child: Text('O'),);},
-                icon: Icon(Icons.info),
-              ),
             ),
           );
         });

@@ -31,7 +31,7 @@ class AuthenticationRepository {
        _fireStore = fireStore ?? FirebaseFirestore.instance;
 
     //waits till not NULL
-
+  
   Future <void> addUser(
     String email,
     String firstName,
