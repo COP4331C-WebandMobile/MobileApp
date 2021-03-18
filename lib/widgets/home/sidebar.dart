@@ -21,14 +21,42 @@ class SideBar extends StatelessWidget {
         ),
       ),
       ListTile(
-        title: Text('Item 1'),
+        title: Text('Messages'),
         onTap: () {
           // Update the state of the app.
           // ...
         },
       ),
       ListTile(
-        title: Text('Item 2'),
+        title: Text('Chores'),
+        onTap: () {
+          // Update the state of the app.
+          // ...
+        },
+      ),
+       ListTile(
+        title: Text('Locations'),
+        onTap: () {
+          // Update the state of the app.
+          // ...
+        },
+      ),
+       ListTile(
+        title: Text('Calendar'),
+        onTap: () {
+          // Update the state of the app.
+          // ...
+        },
+      ),
+       ListTile(
+        title: Text('House Items'),
+        onTap: () {
+          // Update the state of the app.
+          // ...
+        },
+      ),
+       ListTile(
+        title: Text('Settings'),
         onTap: () {
           // Update the state of the app.
           // ...

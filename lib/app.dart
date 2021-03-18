@@ -29,7 +29,6 @@ class App extends StatelessWidget {
         ));
   }
 }
-
 class AppView extends StatefulWidget {
   @override
   _AppViewState createState() => _AppViewState();
@@ -55,6 +54,7 @@ class _AppViewState extends State<AppView> {
                   (route) => false,
                 );
                 break;
+
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
