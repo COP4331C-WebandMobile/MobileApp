@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/password_reset/cubit/password_reset_cubit.dart';
 import 'package:formz/formz.dart';
+import 'package:roomiesMobile/presentation/login/login_page.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 
 class PasswordResetForm extends StatelessWidget {
@@ -22,6 +23,22 @@ class PasswordResetForm extends StatelessWidget {
               backgroundColor: CustomColors.gold,
             )
           );
+        }
+        else if(state.status.isSubmissionSuccess)
+        {
+          Navigator.of(context).push<void>(LoginPage.route());
+
+          Future.delayed(Duration(milliseconds: 500), () {
+            ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(
+              content: Text('Recovery email has been sent.'),
+              backgroundColor: CustomColors.gold,
+            )
+          );
+          });
+
         }
       },
       child: Align(
@@ -52,7 +69,7 @@ class _EmailInput extends StatelessWidget {
       buildWhen:  (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return TextField(
-            key: const Key('loginForm_emailInput_textField'),
+            key: const Key('passwordResetForm_emailInput_textField'),
             onChanged: (email) =>
                 context.read<PasswordResetCubit>().emailChanged(email),
             keyboardType: TextInputType.emailAddress,
@@ -86,13 +103,13 @@ class _PasswordResetButton extends StatelessWidget {
               : Container(
                   width: MediaQuery.of(context).size.width / 2,
                   child: ElevatedButton(
-                    key: const Key('loginForm_continue_raisedButton'),
+                    key: const Key('passwordResetForm_submit_raisedButton'),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
-                    child: const Text('LOGIN'),
+                    child: const Text('SUBMIT'),
                     onPressed: state.status.isValidated
                         ? () =>
                             context.read<PasswordResetCubit>().requestPasswordReset()
