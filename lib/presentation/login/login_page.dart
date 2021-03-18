@@ -31,7 +31,7 @@ class LoginPage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(32),
-          child: BlocProvider(
+          child: BlocProvider<LoginCubit>(
             create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
             child: LoginForm(),
           ),

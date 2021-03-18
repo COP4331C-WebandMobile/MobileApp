@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
@@ -12,9 +13,13 @@ class AddUserFailure implements Exception {}
 
 class LogInWithEmailAndPasswordFailure implements Exception {}
 
+class LogInEmailVerificationFailure implements Exception {}
+
 class LogInWithGoogleFailure implements Exception {}
 
 class LogOutFailure implements Exception {}
+
+class PasswordResetFailure implements Exception {}
 
 class AuthenticationRepository {
   
@@ -31,6 +36,8 @@ class AuthenticationRepository {
        _fireStore = fireStore ?? FirebaseFirestore.instance;
 
     //waits till not NULL
+  
+  
 
   Future <void> addUser(
     String email,
@@ -46,11 +53,13 @@ class AuthenticationRepository {
       'phone_number': phoneNumber,
       'house_name': ""
       });
+
     }
     on Exception{
       AddUserFailure();
     }
   }
+
   // Stream of User which will emit the current user whenever authentication state changes.
   // If user isn't authenticated then the empty user is returned.
   Stream<User> get user {
@@ -67,10 +76,21 @@ class AuthenticationRepository {
     }) async {
       assert (email != null && password != null);
       try {
-          await _firebaseAuth.createUserWithEmailAndPassword(
+          final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
+        
+        
+
+        var actionSettings = auth.ActionCodeSettings(
+          url: 'https://www.gmail.com/?email=' + email,
+          androidPackageName: 'com.cop4331.Roomies',
+          androidInstallApp: false,
+        );
+        
+        newUser.user.sendEmailVerification();
+
         addUser(
           email,
           firstName = "testing",
@@ -92,10 +112,21 @@ class AuthenticationRepository {
       assert(email != null && password != null);
 
       try {
-        await _firebaseAuth.signInWithEmailAndPassword(
+        var tempUser = await _firebaseAuth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
+
+        tempUser.user.reload();
+
+        // was not email verified therefore fail to log in...
+        if(!tempUser.user.emailVerified)
+        {
+
+          throw LogInEmailVerificationFailure();
+        }
+        
+
       }
       on Exception {
         throw LogInWithEmailAndPasswordFailure();
@@ -114,12 +145,32 @@ class AuthenticationRepository {
         throw LogOutFailure();
       }
     }
+
+  // Sends an email to reset password.
+  Future<void> passwordReset({
+    @required String email,
+  })
+  async {
+    assert(email != null);
+
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    }
+    on Exception {
+      throw PasswordResetFailure();
+    }
+
+  }
+
 }
+
 extension on auth.User {
   User get toUser {
+    
     return User(
       id: uid,
       email: email,
+      isVerified: emailVerified,
       name: displayName,
       photo: photoURL
     );

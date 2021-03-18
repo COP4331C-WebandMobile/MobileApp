@@ -44,8 +44,18 @@ class AuthenticationBloc
   AuthenticationState _mapAuthenticationUserChangedToState(
     AuthenticatedUserChanged event,
   ) {
-    return event.user != User.empty
-        ? AuthenticationState.authenticated(event.user)
-        : const AuthenticationState.unathenticated();
+    // return event.user != User.empty
+    //     ? AuthenticationState.authenticated(event.user)
+    //     : const AuthenticationState.unathenticated();
+    if(event.user != User.empty && event.user.isVerified)
+    {
+      print('Auth');
+      return AuthenticationState.authenticated(event.user);
+    }
+    else
+    {
+      print('Unauth.');
+      return const AuthenticationState.unathenticated();
+    }
   }
 }
