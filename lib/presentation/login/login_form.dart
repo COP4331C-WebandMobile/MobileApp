@@ -22,6 +22,10 @@ class LoginForm extends StatelessWidget {
                   backgroundColor: CustomColors.gold,
                 ));
         }
+        else if(state.status.isSubmissionSuccess)
+        {
+          
+        }
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
