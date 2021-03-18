@@ -16,6 +16,8 @@ class LogInWithGoogleFailure implements Exception {}
 
 class LogOutFailure implements Exception {}
 
+class PasswordResetFailure implements Exception {}
+
 class AuthenticationRepository {
   
   final auth.FirebaseAuth _firebaseAuth;
@@ -114,7 +116,25 @@ class AuthenticationRepository {
         throw LogOutFailure();
       }
     }
+
+  // Sends an email to reset password.
+  Future<void> passwordReset({
+    @required String email,
+  })
+  async {
+    assert(email != null);
+
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    }
+    on Exception {
+      throw PasswordResetFailure();
+    }
+
+  }
+
 }
+
 extension on auth.User {
   User get toUser {
     return User(

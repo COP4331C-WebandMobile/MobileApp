@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/business_logic/login/cubit/login_cubit.dart';
+import 'package:roomiesMobile/presentation/password_reset/password_reset_page.dart';
 import 'package:roomiesMobile/presentation/register/register_page.dart';
 import 'package:formz/formz.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
@@ -40,6 +42,9 @@ class LoginForm extends StatelessWidget {
                 _LoginButton(),
                 const SizedBox(height: 4.0),
                 _SignUpButton(),
+                const SizedBox(height: 4.0),
+                _ForgotPasswordText(),
+
               ],
             ),
           ),
@@ -151,4 +156,27 @@ class _SignUpButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ForgotPasswordText extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(text: 'Forgot password? ', style: TextStyle(color: Colors.black)),
+          TextSpan(
+            text: 'Click here',
+            style: TextStyle(color:  Colors.blue),
+            recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              Navigator.of(context).push<void>(PasswordResetPage.route());
+            }
+          ),
+        ],
+      ),
+    );
+  }
+
 }
