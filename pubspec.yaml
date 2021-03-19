@@ -34,7 +34,10 @@ dependencies:
   pedantic: ^1.11.0
   authentication_repository:
     path: packages/authentication_repository
-
+  chores_repository:
+    path: packages/chores_repository
+    
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter

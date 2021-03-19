@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:roomiesMobile/presentation/chores/chore_page.dart';
+
 
 class SideBar extends StatelessWidget {
 
@@ -30,8 +32,13 @@ class SideBar extends StatelessWidget {
       ListTile(
         title: Text('Chores'),
         onTap: () {
+            /*Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Chores()),
+              );
           // Update the state of the app.
           // ...
+          */
         },
       ),
        ListTile(

@@ -1,3 +1,5 @@
+
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,8 @@ import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.da
 
 import 'business_logic/authentication/authentication.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
+import 'package:roomiesMobile/presentation/landing/landing_page.dart';
+
 import 'presentation/login/login_page.dart';
 import 'presentation/splash_page.dart';
 
@@ -49,6 +53,14 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
+
+                if(state.user.houseName=="Test") {
+                  _navigator.pushAndRemoveUntil<void>(
+                  LandingPage.route(),
+                  (route) => false,
+                );
+
+                } else
                 _navigator.pushAndRemoveUntil<void>(
                   HomePage.route(),
                   (route) => false,
@@ -60,6 +72,7 @@ class _AppViewState extends State<AppView> {
                   LoginPage.route(),
                   (route) => false,
                 );
+  
                 break;
 
               default:

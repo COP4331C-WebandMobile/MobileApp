@@ -11,6 +11,8 @@ class SignUpFailure implements Exception {}
 
 class AddUserFailure implements Exception {}
 
+class FetchUserFailure implements Exception {}
+
 class LogInWithEmailAndPasswordFailure implements Exception {}
 
 class LogInEmailVerificationFailure implements Exception {}
@@ -36,14 +38,33 @@ class AuthenticationRepository {
        _fireStore = fireStore ?? FirebaseFirestore.instance;
 
     //waits till not NULL
+
+/*Future<String> checkHome(String email) async {
   
+  String home; 
   
+  try{
+    _fireStore..collection('users')
+    .doc(email)
+    .get()
+    .then((DocumentSnapshot documentSnapshot) => {
+        home = documentSnapshot.data()["home"]
+        });
+  }
+  on Exception{
+    FetchUserFailure();
+  }
+
+  return home;
+} */
+
 
   Future <void> addUser(
     String email,
     String firstName,
     String lastName,
     String phoneNumber, 
+    String house,
     ) async{
     try {
     CollectionReference users = _fireStore.collection('users');
@@ -51,9 +72,8 @@ class AuthenticationRepository {
       'first_name': firstName,
       'last_name': lastName,
       'phone_number': phoneNumber,
-      'house_name': ""
+      'house_name': house,
       });
-
     }
     on Exception{
       AddUserFailure();
@@ -72,7 +92,9 @@ class AuthenticationRepository {
     @required String password,
     String firstName,
     String lastName,
-    String phoneNumber
+    String phoneNumber,
+    
+    
     }) async {
       assert (email != null && password != null);
       try {
@@ -81,14 +103,7 @@ class AuthenticationRepository {
           password: password,
         );
         
-        
-
-        var actionSettings = auth.ActionCodeSettings(
-          url: 'https://www.gmail.com/?email=' + email,
-          androidPackageName: 'com.cop4331.Roomies',
-          androidInstallApp: false,
-        );
-        
+    
         newUser.user.sendEmailVerification();
 
         addUser(
@@ -96,6 +111,7 @@ class AuthenticationRepository {
           firstName = "testing",
           lastName ="test",
           phoneNumber ="testing",
+          "",
           );
   
       }
@@ -117,21 +133,17 @@ class AuthenticationRepository {
           password: password,
         );
 
-        tempUser.user.reload();
-
+        //tempUser.user.reload();
         // was not email verified therefore fail to log in...
         if(!tempUser.user.emailVerified)
         {
-
           throw LogInEmailVerificationFailure();
         }
-        
-
+      
       }
       on Exception {
         throw LogInWithEmailAndPasswordFailure();
       }
-
     }
 
     Future<void> logOut() async {
@@ -166,13 +178,14 @@ class AuthenticationRepository {
 
 extension on auth.User {
   User get toUser {
-    
     return User(
       id: uid,
       email: email,
       isVerified: emailVerified,
       name: displayName,
-      photo: photoURL
+      photo: photoURL,
+      houseName:"",
     );
   }
+
 }
