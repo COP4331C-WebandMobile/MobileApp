@@ -29,20 +29,26 @@ class HomeRepository {
   Future<void> addHouse({
     @required String houseName,
     @required String member,
-  }) 
-  {
-
-    CollectionReference houses = _firestore.collection('houses');
-    return houses
-        .doc(houseName)
-        .collection('roomates')
-        .doc('usernames')
-        .set({'member': member})
-        .catchError((error) {
-          // Handle error here...
-        });
+  }) async {
+    try {
+      CollectionReference houses = _firestore.collection('houses');
+      houses.doc(houseName).collection('roomates').doc('usernames').set({
+        'member': FieldValue.arrayUnion([member])
+      });
+    } on Exception {
+      AddHouseFailure();
+    }
   }
 
   Future<void> joinHouse(
-      {@required String houseName, @required String member}) async {}
+      {@required String houseName, @required String member}) async {
+    try {
+      CollectionReference houses = _firestore.collection('houses');
+      houses.doc(houseName).collection('roomates').doc('usernames').update({
+        'member': FieldValue.arrayUnion([member])
+      });
+    } on Exception {
+      JoinHouseFailure();
+    }
+  }
 }
