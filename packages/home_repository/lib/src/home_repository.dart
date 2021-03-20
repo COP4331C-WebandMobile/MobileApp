@@ -29,17 +29,18 @@ class HomeRepository {
   Future<void> addHouse({
     @required String houseName,
     @required String member,
-  }) async {
-    try {
-      CollectionReference houses = _firestore.collection('houses');
-      houses
-          .doc(houseName)
-          .collection('roomates')
-          .doc('usernames')
-          .set({'member': member});
-    } on Exception {
-      AddHouseFailure();
-    }
+  }) 
+  {
+
+    CollectionReference houses = _firestore.collection('houses');
+    return houses
+        .doc(houseName)
+        .collection('roomates')
+        .doc('usernames')
+        .set({'member': member})
+        .catchError((error) {
+          // Handle error here...
+        });
   }
 
   Future<void> joinHouse(

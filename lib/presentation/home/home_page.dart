@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 import '../../widgets/home/sidebar.dart';
+import 'package:home_repository/home_repository.dart';
 
 class HomePage extends StatelessWidget {
   static Route route() {
