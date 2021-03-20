@@ -7,13 +7,13 @@ class LandingCubit extends Cubit<LandingState> {
   LandingCubit() : super(LandingInitial());
 
 
-  ChoredAdded()
+  // ChoredAdded()
 
-  ChoreDeleted()
+  // ChoreDeleted()
 
-  ChoreCompleted()
+  // ChoreCompleted()
 
-  ChoreMarked()
+  // ChoreMarked()
 
   
 

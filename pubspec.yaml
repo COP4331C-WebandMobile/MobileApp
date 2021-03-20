@@ -34,8 +34,8 @@ dependencies:
   pedantic: ^1.11.0
   authentication_repository:
     path: packages/authentication_repository
-  chores_repository:
-    path: packages/chores_repository
+  chore_repository:
+    path: packages/chore_repository
     
     
 dev_dependencies:
