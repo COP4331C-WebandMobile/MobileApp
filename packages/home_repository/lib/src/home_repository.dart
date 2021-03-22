@@ -29,15 +29,17 @@ class HomeRepository {
   Future<void> addHouse({
     @required String houseName,
     @required String member,
-  }) async {
-    try {
+  }) 
+  {
       CollectionReference houses = _firestore.collection('houses');
       houses.doc(houseName).collection('roomates').doc('usernames').set({
         'member': FieldValue.arrayUnion([member])
       });
-    } on Exception {
-      AddHouseFailure();
-    }
+
+      CollectionReference currentUser = _firestore.collection('users');
+
+      currentUser.doc(member).update({'house_name': houseName});
+
   }
 
   Future<void> joinHouse(
