@@ -36,7 +36,7 @@ class ChoresPage extends StatelessWidget {
               Container(
                 child: IconButton(
                 key: const Key('homePage_logout_iconButton'),
-                icon: const Icon(Icons.exit_to_app),
+                icon: const Icon(Icons.add),
                 onPressed: () => BlocProvider.of<ChoresBloc>(context)
                 .add(AddChore(Chore("testing"))),
              ),
