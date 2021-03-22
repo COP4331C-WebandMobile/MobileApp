@@ -10,12 +10,12 @@ part 'chores_state.dart';
 
 
 class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
-  final ChoresRepository _ChoresRepository;
-  StreamSubscription _ChoresSubscription;
+  final ChoresRepository _choresRepository;
+  StreamSubscription _choresSubscription;
 
-  ChoresBloc({@required ChoresRepository ChoresRepository})
-      : assert(ChoresRepository != null),
-        _ChoresRepository = ChoresRepository,
+  ChoresBloc({@required ChoresRepository choresRepository})
+      : assert(choresRepository != null),
+        _choresRepository = choresRepository,
         super(ChoresLoading());
 
   @override
@@ -34,31 +34,31 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
   }
 
   Stream<ChoresState> _mapLoadChoresToState() async* {
-    _ChoresSubscription?.cancel();
-    _ChoresSubscription = _ChoresRepository.Chores().listen(
-          (Chores) => add(ChoresUpdated(Chores)), //
+    _choresSubscription?.cancel();
+    _choresSubscription = _choresRepository.Chores().listen(
+          (chores) => add(ChoresUpdated(chores)), //
         );
   }
 
   Stream<ChoresState> _mapAddChoreToState(AddChore event) async* {
-    _ChoresRepository.addNewChore(event.Chore);
+    _choresRepository.addNewChore(event.chore);
   }
 
   Stream<ChoresState> _mapUpdateChoreToState(UpdateChore event) async* {
-    _ChoresRepository.updateChore(event.updatedChore);
+    _choresRepository.updateChore(event.updatedChore);
   }
 
   Stream<ChoresState> _mapDeleteChoreToState(DeleteChore event) async* {
-    _ChoresRepository.deleteChore(event.Chore);
+    _choresRepository.deleteChore(event.chore);
   }
 
   Stream<ChoresState> _mapChoresUpdateToState(ChoresUpdated event) async* {
-    yield ChoresLoaded(event.Chores);
+    yield ChoresLoaded(event.chores);
   }
 
   @override
   Future<void> close() {
-    _ChoresSubscription?.cancel();
+    _choresSubscription?.cancel();
     return super.close();
   }
 }
