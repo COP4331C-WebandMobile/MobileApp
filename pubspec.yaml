@@ -32,10 +32,12 @@ dependencies:
   google_fonts: ^2.0.0
   formz: ^0.3.2
   pedantic: ^1.11.0
+  home_repository:
+    path: packages/home_repository
   authentication_repository:
     path: packages/authentication_repository
-  chores_repository:
-    path: packages/chores_repository
+  chore_repository:
+    path: packages/chore_repository
     
     
 dev_dependencies:

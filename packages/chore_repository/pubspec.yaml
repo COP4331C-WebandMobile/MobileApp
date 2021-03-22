@@ -2,7 +2,6 @@ name: chore_repository
 description: A new Flutter package project.
 version: 0.0.1
 author:
-homepage:
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -15,8 +14,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
-cloud_firestore: ^1.0.1
+
+  firebase_core: ^1.0.1
+  cloud_firestore: ^1.0.1
+  equatable: ^2.0.0
+  meta: ^1.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

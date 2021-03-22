@@ -87,6 +87,22 @@ class AuthenticationRepository {
       return firebaseUser == null ? User.empty : firebaseUser.toUser;
     });
   }
+
+  Stream<User> get userChanges {
+    return _firebaseAuth.userChanges().map((firebaseUser) {
+      
+      if(firebaseUser == null)
+        return User.empty;
+      else
+      {
+        if(!firebaseUser.emailVerified)
+          return User.empty;
+        else
+          return firebaseUser.toUser;
+      }
+    });
+  }
+
   Future<void> register({
     @required String email, 
     @required String password,
@@ -132,14 +148,12 @@ class AuthenticationRepository {
           email: email,
           password: password,
         );
-
-        //tempUser.user.reload();
-        // was not email verified therefore fail to log in...
-        if(!tempUser.user.emailVerified)
-        {
-          throw LogInEmailVerificationFailure();
-        }
       
+      if(!tempUser.user.emailVerified)
+      {
+        throw LogInEmailVerificationFailure();
+      }
+
       }
       on Exception {
         throw LogInWithEmailAndPasswordFailure();
