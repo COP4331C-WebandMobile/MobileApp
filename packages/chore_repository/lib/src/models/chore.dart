@@ -1,8 +1,10 @@
 import 'package:meta/meta.dart';
 import '../entities/chore_entity.dart';
+import 'package:equatable/equatable.dart';
+
 
 @immutable
-class Chore {
+class Chore extends Equatable {
   final bool complete;
   final String id;
   final String note;
@@ -22,18 +24,8 @@ class Chore {
   }
 
   @override
-  int get hashCode =>
-      complete.hashCode ^ task.hashCode ^ note.hashCode ^ id.hashCode;
+  List<Object> get props => [complete, id, note, task];
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Chore &&
-          runtimeType == other.runtimeType &&
-          complete == other.complete &&
-          task == other.task &&
-          note == other.note &&
-          id == other.id;
 
   @override
   String toString() {

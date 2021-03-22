@@ -5,21 +5,21 @@ abstract class ChoresState extends Equatable {
   const ChoresState();
 
   @override
-  List<Object> get props => [];
+  List<Chore> get props => [];
 }
 
 class ChoresLoading extends ChoresState {}
 
 class ChoresLoaded extends ChoresState {
-  final List<Chore> Chores;
+  final List<Chore> chores;
 
-  const ChoresLoaded([this.Chores = const []]);
-
-  @override
-  List<Object> get props => [Chores];
+  const ChoresLoaded([this.chores = const []]);
 
   @override
-  String toString() => 'ChoresLoaded { Chores: $Chores }';
+  List<Chore> get props => chores;
+
+  @override
+  String toString() => 'ChoresLoaded { Chores: $chores }';
 }
 
 class ChoresNotLoaded extends ChoresState {}
