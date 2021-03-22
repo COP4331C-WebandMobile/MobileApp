@@ -14,7 +14,6 @@ class ChoreRepository() {
     FirebaseFirestore fireStore,
     }) :  _fireStore = fireStore ?? FirebaseFirestore.instance;
 
-    
     Stream<Chores> get chores{
        Stream collectionStream = _fireStore.collection('houses')
        .doc('house_name')
@@ -22,14 +21,14 @@ class ChoreRepository() {
        .then((QuerySnapshot querySnapshot) => {
          var choreList = new List<chore>(); 
         querySnapshot.docs.forEach((doc) {
-            
             chore = new chore()
             chore.description = doc["description"];
             chore.creator = doc["creator"]
-             choreList.add(doc);
+            choreList.add(doc);
              
         });
-       
+
+        yield choreList;
     });
   }
 
