@@ -1,69 +1,22 @@
 
-/*import 'dart:html';
-
+import 'package:chore_repository/chore_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
-import '../../business_logic/authentication/authentication.dart';
-import '../../business_logic/authentication/bloc/authentication_bloc.dart';
+import '../../business_logic/chores/bloc/chores_bloc.dart';
 
-
-
-class Chores extends StatelessWidget {
-
+class ChoresPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    return BlocProvider(
+          create: (context) {
+            return ChoresBloc(
+              ChoresRepository: ChoresRepository(),
+            )..add(LoadChores());
+          },
+          child: Scaffold(
 
-    final user = context.select((AuthenticationBloc element) => element.state.user);
-
-    
-    return BlocListener<ChoreState,ChoreCubit> {
-     Scaffold(
-        drawer:SideBar(),
-        body: Text(user.email),
+        ),
       );
-    };
-    
-
-
+    }
   }
-
-}
-
-class DisplayChore extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-
-    //Add Modal
-   return Text("Testing"); 
-  }
-}
-
-
-class AddChore extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-
-    //Add Modal
-   return Text("Testing"); 
-  }
-}
-
-class DeleteChore extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    //Add Modal
-   return Text("Testing"); 
-  }
-}
-
-
-
-
-
-
-//Add Chore
-//Delete Chore
-// Mark Chore
-// Complete Chore
-*/
