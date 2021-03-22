@@ -1,54 +1,35 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:meta/meta.dart';
 
-import 'models/chore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'models/models.dart';
+import 'entities/entities.dart';
+
+class ChoresRepository {
+  final ChoreCollection = FirebaseFirestore.instance.collection('houses').doc('house_name').collection('chores');
 
 
-class ChoreRepository {
-
-   FirebaseFirestore _fireStore;
-
-   ChoreRepository({
-    FirebaseFirestore fireStore,
-    }) :  _fireStore = fireStore ?? FirebaseFirestore.instance;
-
-    
-    // Stream<Chore> get chores{
-    //    Stream collectionStream = _fireStore.collection('houses')
-    //    .doc('house_name')
-    //    .collection("chores")
-    //    .then((QuerySnapshot querySnapshot) => {
-    //      var choreList = new List<chore>(); 
-    //     querySnapshot.docs.forEach((doc) {
-            
-    //         chore = new chore()
-    //         chore.description = doc["description"];
-    //         chore.creator = doc["creator"]
-    //          choreList.add(doc);
-             
-    //     });
-       
-    // });
+  Future<void> addNewChore(Chore chore) {
+    return ChoreCollection.add(chore.toEntity().ChoreDocument());
   }
 
-/*
-  Future AddChore<void>(@required Chore ChoreId) {
 
-     collection('house'). add()
+  Future<void> deleteChore(Chore chore) async {
+    return ChoreCollection.doc(chore.id).delete();
+  }
 
-  } 
 
-Future DeleteChore<void>(@required Chore ChoreID) {
+  Stream<List<Chore>> Chores() {
+    return ChoreCollection.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Chore.fromEntity(ChoreEntity.fromSnapshot(doc)))
+          .toList();
+    });
+  }
 
+
+  Future<void> updateChore(Chore update) {
+    return ChoreCollection
+        .doc(update.id)
+        .set(update.toEntity().ChoreDocument());
+  }
 }
-
-Future MarkChore<void>(@required Chore ChoreID) {
-
-}
-
-Future CompleteChore<void>(@required Chore ChoreID) {
-
-}
-*/
