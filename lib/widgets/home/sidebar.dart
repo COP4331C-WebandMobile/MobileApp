@@ -34,7 +34,7 @@ class SideBar extends StatelessWidget {
         onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Chores()),
+              MaterialPageRoute(builder: (context) => ChoresPage()),
               );
           // Update the state of the app.
           // ...

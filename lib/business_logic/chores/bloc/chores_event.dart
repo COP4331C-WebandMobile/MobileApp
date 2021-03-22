@@ -11,12 +11,12 @@ abstract class ChoresEvent extends Equatable {
 class LoadChores extends ChoresEvent {}
 
 class AddChore extends ChoresEvent {
-  final Chore Chore;
+  final Chore chore;
 
-  const AddChore(this.Chore);
+  const AddChore(this.chore);
 
   @override
-  List<Object> get props => [Chore];
+  List<Object> get props => [chore];
 
   @override
   String toString() => 'AddChore { Chore: $Chore }';
@@ -35,9 +35,9 @@ class UpdateChore extends ChoresEvent {
 }
 
 class DeleteChore extends ChoresEvent {
-  final Chore Chore;
+  final Chore chore;
 
-  const DeleteChore(this.Chore);
+  const DeleteChore(this.chore);
 
   @override
   List<Object> get props => [Chore];
@@ -47,10 +47,10 @@ class DeleteChore extends ChoresEvent {
 }
 
 class ChoresUpdated extends ChoresEvent {
-  final List<Chore> Chores;
+  final List<Chore> chores;
 
-  const ChoresUpdated(this.Chores);
+  const ChoresUpdated(this.chores);
 
   @override
-  List<Object> get props => [Chores];
+  List<Object> get props => [chores];
 }

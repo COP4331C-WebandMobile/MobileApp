@@ -11,7 +11,7 @@ class ChoresPage extends StatelessWidget {
     return BlocProvider(
           create: (context) {
             return ChoresBloc(
-              ChoresRepository: ChoresRepository(),
+              choresRepository: ChoresRepository(),
             )..add(LoadChores());
           },
           child: Scaffold(
