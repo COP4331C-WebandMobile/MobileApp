@@ -48,7 +48,7 @@ class ChoreEntity extends Equatable {
     );
   }
 
-  Map<String, Object> ChoreDocument() {
+  Map<String, Object> choreDocument() {
     return {
       "complete": complete,
       "task": task,

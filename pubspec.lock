@@ -345,6 +345,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.10"
+  messaging_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/messaging_repository"
+      relative: true
+    source: path
+    version: "0.0.1"
   meta:
     dependency: "direct main"
     description:

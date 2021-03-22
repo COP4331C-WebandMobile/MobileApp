@@ -38,6 +38,8 @@ dependencies:
     path: packages/authentication_repository
   chore_repository:
     path: packages/chore_repository
+  messaging_repository:
+    path: packages/messaging_repository
     
     
 dev_dependencies:

@@ -5,21 +5,21 @@ import 'models/models.dart';
 import 'entities/entities.dart';
 
 class ChoresRepository {
-  final ChoreCollection = FirebaseFirestore.instance.collection('houses').doc('house_name').collection('chores');
+  final choreCollection = FirebaseFirestore.instance.collection('houses').doc('house_name').collection('chores');
 
 
   Future<void> addNewChore(Chore chore) {
-    return ChoreCollection.add(chore.toEntity().ChoreDocument());
+    return choreCollection.add(chore.toEntity().choreDocument());
   }
 
 
   Future<void> deleteChore(Chore chore) async {
-    return ChoreCollection.doc(chore.id).delete();
+    return choreCollection.doc(chore.id).delete();
   }
 
 
-  Stream<List<Chore>> Chores() {
-    return ChoreCollection.snapshots().map((snapshot) {
+  Stream<List<Chore>> chores() {
+    return choreCollection.snapshots().map((snapshot) {
       return snapshot.docs
           .map((doc) => Chore.fromEntity(ChoreEntity.fromSnapshot(doc)))
           .toList();
@@ -28,8 +28,8 @@ class ChoresRepository {
 
 
   Future<void> updateChore(Chore update) {
-    return ChoreCollection
+    return choreCollection
         .doc(update.id)
-        .set(update.toEntity().ChoreDocument());
+        .set(update.toEntity().choreDocument());
   }
 }

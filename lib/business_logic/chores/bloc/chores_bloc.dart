@@ -35,7 +35,7 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
 
   Stream<ChoresState> _mapLoadChoresToState() async* {
     _choresSubscription?.cancel();
-    _choresSubscription = _choresRepository.Chores().listen(
+    _choresSubscription = _choresRepository.chores().listen(
           (chores) => add(ChoresUpdated(chores)), //
         );
   }
