@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 import '../../widgets/home/sidebar.dart';
+import '../../widgets/appbar.dart';
 import 'package:home_repository/home_repository.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,18 +15,7 @@ class HomePage extends StatelessWidget {
     final user =
         context.select((AuthenticationBloc element) => element.state.user);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: <Widget>[
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context
-                .read<AuthenticationBloc>()
-                .add(AuthenticationLogoutRequested()),
-          ),
-        ],
-      ),
+      appBar: Bar(),
       body: Align(
         alignment: const Alignment(0, -1 / 3),
         child: Column(

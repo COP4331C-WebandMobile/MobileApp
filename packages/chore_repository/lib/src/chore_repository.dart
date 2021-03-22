@@ -9,7 +9,12 @@ class ChoresRepository {
 
 
   Future<void> addNewChore(Chore chore) {
-    return ChoreCollection.add(chore.toEntity().ChoreDocument());
+    try{
+      ChoreCollection.add(chore.toEntity().ChoreDocument());
+    }
+    on Exception {
+      print(Exception());
+    }
   }
 
 
@@ -25,7 +30,6 @@ class ChoresRepository {
           .toList();
     });
   }
-
 
   Future<void> updateChore(Chore update) {
     return ChoreCollection
