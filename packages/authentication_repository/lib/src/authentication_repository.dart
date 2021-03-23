@@ -38,27 +38,7 @@ class AuthenticationRepository {
        _fireStore = fireStore ?? FirebaseFirestore.instance;
 
     //waits till not NULL
-
-/*Future<String> checkHome(String email) async {
   
-  String home; 
-  
-  try{
-    _fireStore..collection('users')
-    .doc(email)
-    .get()
-    .then((DocumentSnapshot documentSnapshot) => {
-        home = documentSnapshot.data()["home"]
-        });
-  }
-  on Exception{
-    FetchUserFailure();
-  }
-
-  return home;
-} */
-
-
   Future <void> addUser(
     String email,
     String firstName,
@@ -68,7 +48,7 @@ class AuthenticationRepository {
     ) async{
     try {
     CollectionReference users = _fireStore.collection('users');
-    users.doc(email).set({
+    await users.doc(email).set({
       'first_name': firstName,
       'last_name': lastName,
       'phone_number': phoneNumber,
@@ -89,9 +69,31 @@ class AuthenticationRepository {
   // }
 
   // Subscribes to more changes since 'userChanges' is a superset of 'authStateChanges'
+
+User getUser(user) {
+      return User(
+          id: user.uid,
+          email: user.email,
+          isVerified: user.emailVerified,
+          name: user.displayName,
+          photo: user.photoURL,
+          houseName: "",
+      );
+  }
+
+  Stream<String> get home {
+     String email = _firebaseAuth.currentUser.email;
+      try {
+          return _fireStore.collection('users').doc(email).snapshots().map((snapshot) => snapshot.data()["house_name"]);
+      }
+       on Exception catch(e){
+        print(e);
+        throw SignUpFailure();
+      }
+  }
+
   Stream<User> get user {
-    return _firebaseAuth.userChanges().map((firebaseUser) {
-      
+    return _firebaseAuth.userChanges().map((firebaseUser){ 
       if(firebaseUser == null)
       {
         return User.empty;
@@ -104,7 +106,7 @@ class AuthenticationRepository {
         }
         else
         {
-          return firebaseUser.toUser;
+        return getUser(firebaseUser);
         }
       }
     });
@@ -126,14 +128,12 @@ class AuthenticationRepository {
           password: password,
         );
         
-    
         newUser.user.sendEmailVerification();
-
         addUser(
           email,
-          firstName = "testing",
-          lastName ="test",
-          phoneNumber ="testing",
+          firstName = firstName,
+          lastName = lastName,
+          phoneNumber = phoneNumber,
           "",
           );
   
@@ -160,7 +160,6 @@ class AuthenticationRepository {
       {
         throw LogInEmailVerificationFailure();
       }
-
       }
       on Exception {
         throw LogInWithEmailAndPasswordFailure();
@@ -185,7 +184,6 @@ class AuthenticationRepository {
   })
   async {
     assert(email != null);
-
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     }
@@ -197,7 +195,7 @@ class AuthenticationRepository {
 
 }
 
-extension on auth.User {
+/*extension on auth.User {
   User get toUser {
     return User(
       id: uid,
@@ -205,8 +203,8 @@ extension on auth.User {
       isVerified: emailVerified,
       name: displayName,
       photo: photoURL,
-      houseName:"",
+      houseName:"Test",
     );
   }
 
-}
+}*/
