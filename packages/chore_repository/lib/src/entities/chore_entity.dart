@@ -6,35 +6,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class ChoreEntity extends Equatable {
-  final bool complete;
+  final bool mark;
   final String id;
-  final String note;
-  final String task;
+  final String creator;
+  final String description;
 
-  const ChoreEntity(this.task, this.id, this.note, this.complete);
+  const ChoreEntity(this.description, this.id, this.creator, this.mark);
 
   @override
-  List<Object> get props => [complete, id, note, task];
+  List<Object> get props => [mark, id, creator, description];
 
   @override
   String toString() {
-    return 'ChoreEntity { complete: $complete, task: $task, note: $note, id: $id }';
+    return 'ChoreEntity { mark: $mark, creator: $creator, description: $description, id: $id }';
   }
 
   static ChoreEntity fromSnapshot(DocumentSnapshot snap) {
     return ChoreEntity(
-      snap.data()['task'],
+      snap.data()['description'],
       snap.id,
-      snap.data()['note'],
-      snap.data()['complete'],
+      snap.data()['creator'],
+      snap.data()['mark'],
     );
   }
 
   Map<String, Object> ChoreDocument() {
     return {
-      "complete": complete,
-      "task": task,
-      "note": note,
+      "mark": mark,
+      "description": description,
+      "creator": creator,
     };
   }
 }

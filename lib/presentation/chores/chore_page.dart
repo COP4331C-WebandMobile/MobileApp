@@ -25,7 +25,6 @@ class ChoresPage extends StatelessWidget {
                 child: BlocBuilder<ChoresBloc,ChoresState>(
                   builder: (context,state){
                     return Column(
-              
                     children:<Widget>[SizedBox(
                       height:700,
                       child: ChoreWidget(state.props))],
@@ -33,14 +32,20 @@ class ChoresPage extends StatelessWidget {
                   }
                 ),
               ),
-              Container(
+              Container( 
                 child: IconButton(
                 key: const Key('homePage_logout_iconButton'),
                 icon: const Icon(Icons.add),
-                onPressed: () => BlocProvider.of<ChoresBloc>(context)
-                .add(AddChore(Chore("testing"))),
-             ),
-            )]
+                onPressed: (){
+                   BlocProvider.of<ChoresBloc>(context)
+                  .add(AddChore(Chore("testing")));
+                  showDialog(
+                  context: context,
+                  builder: (context)=>AddModal()
+                );
+                }
+              ))]
+      
           ),
         );
       }
@@ -48,25 +53,7 @@ class ChoresPage extends StatelessWidget {
     );
     }
   }
-
-/*class  {
-
- 
-
-  void createWidget(){
-  for(var i = 0; i<chores.length;i++){
-    ChoreWidget(chores[i].id,chores[i].id);
-  }
-  }
-
-}
-*/
-
-
 class ChoreWidget extends StatelessWidget {
-
-
-
 
   final String id ="";
   final String description="";
@@ -82,19 +69,68 @@ class ChoreWidget extends StatelessWidget {
     itemBuilder: (BuildContext context, i) {
       return ListTile(
         title: Text(chores[i].id),
-        //subtitle: Text("\$${chores[i].id}"),
-        //trailing: IconButton(
-          //icon: Icon(Icons.remove_shopping_cart),
-          //onPressed: () {
-           // bloc.removeFromCart(cartList[i]);
-          //},
-        //),
-        onTap: () {},
+        onTap: () {
+          BlocProvider.of<ChoresBloc>(context)
+                .add(DeleteChore(chores[i]));
+        }, // Delete Chore
       );
     },
   );
 
   }
+}
 
+class AddModal extends StatelessWidget {
 
+@override
+Widget build(BuildContext context) {
+          
+final ChoresBloc bloc = BlocProvider.of<ChoresBloc>(context);
+
+return Dialog(
+  shape: RoundedRectangleBorder(
+    //borderRadius: BorderRadius.circular(),
+  ),
+  elevation: 3,
+  backgroundColor: Colors.transparent,
+  child:  Builder(builder: (context) =>MyCustomForm()) 
+);
+}
+}
+
+class MyCustomForm extends StatefulWidget {
+  @override
+  _MyCustomFormState createState() => _MyCustomFormState();
+}
+class _MyCustomFormState extends State<MyCustomForm> {
+ 
+  final description = TextEditingController();
+
+  @override
+  void dispose() {
+    description.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+
+        //final ChoresBloc bloc = BlocProvider.of<ChoresBloc>(context);
+
+        return Column (
+        children: [ Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TextField(
+          controller: description,
+        ),
+        ),
+        Container( 
+                child: Builder(builder: (context) =>IconButton(
+                key: const Key('homePage_logout_iconButton'),
+                icon: const Icon(Icons.add),
+                onPressed: () =>
+                  BlocProvider.of<ChoresBloc>(context)
+                  .add(AddChore(Chore("testing"))),
+                )))]
+      );
+  }
 }

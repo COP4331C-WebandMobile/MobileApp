@@ -5,42 +5,42 @@ import 'package:equatable/equatable.dart';
 
 @immutable
 class Chore extends Equatable {
-  final bool complete;
+  final bool mark;
   final String id;
-  final String note;
-  final String task;
+  final String description;
+  final String creator;
 
-  Chore(this.task, {this.complete = false, String note = '', String id})
-      : this.note = note ?? '',
+  Chore(this.creator, {this.mark = false, String description = '', String id})
+      : this.description = description ?? '',
         this.id = id;
 
-  Chore copyWith({bool complete, String id, String note, String task}) {
+  Chore copyWith({bool mark, String id, String description, String creator}) {
     return Chore(
-      task ?? this.task,
-      complete: complete ?? this.complete,
+      creator ?? this.creator,
+      mark: mark ?? this.mark,
       id: id ?? this.id,
-      note: note ?? this.note,
+      description: description ?? this.description,
     );
   }
 
   @override
-  List<Object> get props => [complete, id, note, task];
+  List<Object> get props => [mark, id, description, creator];
 
 
   @override
   String toString() {
-    return 'Chore { complete: $complete, task: $task, note: $note, id: $id }';
+    return 'Chore { mark: $mark, creator: $creator, description: $description, id: $id }';
   }
 
   ChoreEntity toEntity() {
-    return ChoreEntity(task, id, note, complete);
+    return ChoreEntity(creator, id, description, mark);
   }
 
   static Chore fromEntity(ChoreEntity entity) {
     return Chore(
-      entity.task,
-      complete: entity.complete ?? false,
-      note: entity.note,
+      entity.creator,
+      mark: entity.mark ?? false,
+      description: entity.description,
       id: entity.id,
     );
   }
