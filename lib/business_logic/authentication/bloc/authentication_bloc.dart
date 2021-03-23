@@ -49,12 +49,10 @@ class AuthenticationBloc
     //     : const AuthenticationState.unathenticated();
     if(event.user != User.empty && event.user.isVerified)
     {
-      print('Auth');
       return AuthenticationState.authenticated(event.user);
     }
     else
     {
-      print('Unauth.');
       return const AuthenticationState.unathenticated();
     }
   }

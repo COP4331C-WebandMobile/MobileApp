@@ -73,6 +73,8 @@ class MessageEntity extends Equatable {
     var temp = snap.data();
     MessageType _type = _getType(temp['type']);
 
+    print(temp);
+
     return MessageEntity(
       snap.id,
       temp['creator'],
@@ -86,11 +88,11 @@ class MessageEntity extends Equatable {
   Map<String, Object> toDocument() {
 
     return {
-      'creator': creator,
-      'title': title,
-      'description': description,
-      'date': date,
-      'type': type,
+      "creator": creator,
+      "title": title,
+      "description": description,
+      "date": date,
+      "type": type,
     };
   }
 

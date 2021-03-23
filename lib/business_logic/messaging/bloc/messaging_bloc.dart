@@ -19,7 +19,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   })
     : assert(messageRepository != null),
       _messagingRepository = messageRepository,
-      super(MessagesLoadInProgress());
+      super(const MessagingState.unkown()) {
+        _messagesSubscription = _messagingRepository.messages().listen((messages) => add(MessagesUpdated(messages)),);
+      }
 
 
   @override
@@ -27,47 +29,30 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     MessagingEvent event,
   ) async* {
 
-    if (event is MessagesLoadInProgress) 
-    {
-      yield* _mapLoadMessagesToState();
-    }
-    else if (event is MessageCreated)
-    {
-      yield* _mapCreateMessageToState(event);
-    }
-    else if (event is MessageDeleted)
-    {
-      yield* _mapDeleteMessageToState(event);
-    }
-    else if (event is MessageUpdated)
-    {
-      yield* _mapUpdateMessageToState(event);
-    }
 
   }
 
 
-  Stream<MessagingState> _mapLoadMessagesToState() async* {
+  // 
+  Stream<MessagingState> _mapUpdateMessagesToState(MessagesUpdated event) async* {
 
     _messagesSubscription?.cancel();
     // Cancels subscriptions to make sure we are not double subscribing.
-    _messagesSubscription = _messagingRepository.messages().listen( (messages) => add(MessagesUpdated(messages)));
+    if(event.messages.isEmpty)
+    {
+      // Change to No messages state...
+    }
+    else if(event.messages.isNotEmpty)
+    {
+      // messages available state...
+    }
     
   }
 
-    Stream<MessagingState> _mapCreateMessageToState(MessageCreated event) async* {
-
-      _messagingRepository.createNewMessage(event.message);
-  }
-
-   Stream<MessagingState> _mapDeleteMessageToState(MessageDeleted event) async* {
-
-      _messagingRepository.createNewMessage(event.message);
-  }
-
-     Stream<MessagingState> _mapUpdateMessageToState(MessageUpdated event) async* {
-
-      _messagingRepository.createNewMessage(event.message);
+  @override 
+  Future<void> close() {
+    _messagesSubscription?.cancel();
+    return super.close();
   }
 
 }

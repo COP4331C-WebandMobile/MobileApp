@@ -7,41 +7,41 @@ abstract class MessagingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class MessageLoadSuccess extends MessagingEvent {}
+//class MessageLoadSuccess extends MessagingEvent {}
 
-class MessageCreated extends MessagingEvent {
+// class MessageCreated extends MessagingEvent {
 
-  final Message message;
+//   final Message message;
 
-  const MessageCreated(this.message);
+//   const MessageCreated(this.message);
 
-  @override
-  List<Object> get props => [message];
+//   @override
+//   List<Object> get props => [message];
 
-  // ToString
-}
+//   // ToString
+// }
 
-class MessageUpdated extends MessagingEvent {
+// class MessageUpdated extends MessagingEvent {
 
-  final Message message;
+//   final Message message;
 
-  const MessageUpdated(this.message);
+//   const MessageUpdated(this.message);
 
-  @override
-  List<Object> get props => [message];
+//   @override
+//   List<Object> get props => [message];
 
-}
+// }
 
-class MessageDeleted extends MessagingEvent {
+// class MessageDeleted extends MessagingEvent {
 
-  final Message message;
+//   final Message message;
 
-  const MessageDeleted(this.message);
+//   const MessageDeleted(this.message);
 
-  @override
-  List<Object> get props => [message];
+//   @override
+//   List<Object> get props => [message];
 
-}
+// }
 
 class MessagesUpdated extends MessagingEvent {
 
