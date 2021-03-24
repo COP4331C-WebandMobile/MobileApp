@@ -1,42 +1,67 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
-import 'package:roomiesMobile/business_logic/messaging/bloc/messaging_bloc.dart';
+import 'package:roomiesMobile/business_logic/Test/bloc/messaging_bloc.dart';
+import 'package:roomiesMobile/widgets/messages/message_card.dart';
 
-class MessagingPage extends StatelessWidget {
-  
+class TestMessagePage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MessagingBloc(messageRepository: FirebaseMessageRepository()),
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: AppBar(title: Text('Messages'),),
-            body: Column(
-              children: <Widget>[
-                BlocBuilder<MessagingBloc, MessagingState>(
-                  builder: (context, state) {
-                    if(state.status == MessageStatus.updated)
-                    {
-                      return MessagesList(state.messages);
-                    }
-                    else
-                    {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
-            ),
-          );
-        },
+      create: (context) => MessagingBloc(FirebaseMessageRepository()),
+      child: Scaffold(
+        body: MyMessagePage(),
       ),
-      );
+    );
   }
+}
+
+class MyMessagePage extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() => _MyMessagePageState();
+}
+
+class _MyMessagePageState extends State<MyMessagePage> {
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        alignment: Alignment.center,
+        child: BlocConsumer<MessagingBloc, MessagingState>(
+          listener: (context, state) {
+            if(state is NoMessages)
+            {
+              ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                content: Text(state.errorMessage),
+              ));
+            }
+          },
+          builder: (context, state) {
+            if (state is MessagingLoading)
+            {
+              return Center(child: CircularProgressIndicator(),);
+            }
+            else if(state is MessagesLoaded)
+            {
+              return MessagesList(state.messages);
+            }
+            return Container();
+          }
+
+        ),
+      ),
+    );
+  }
+
 
 }
 
@@ -69,10 +94,15 @@ class MessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     if(message.type == MessageType.alert)
     {
-        return AlertWidget(message);
+        return MessageCard(
+          child: Column(
+            children: [
+              
+            ],
+          ),
+        );
     }
     else
     {
@@ -101,7 +131,7 @@ class AlertWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(Icons.account_circle_rounded),
-                Expanded(child: Text("This is just a sample text to see how the wrapping would occur and it looks like its good.")),
+                Expanded(child: Text(message.creator)),
                 Icon(Icons.pets_outlined),
               ],
             ),
@@ -134,8 +164,3 @@ class CustomBoxWidget extends StatelessWidget {
   }
 
 }
-
-// So if I can build a custom widget with this kind of format
-// It can be reused and altered for each message type.
-// Which will be returned accordingly.
-// So modifying each look would be easier.

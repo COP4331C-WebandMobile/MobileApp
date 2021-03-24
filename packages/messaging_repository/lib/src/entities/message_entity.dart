@@ -8,31 +8,29 @@ class MessageEntity extends Equatable {
 
   final String id;
   final String creator;
-  final String title;
-  final String description;
-  final String date;
+  final String body;
+  final Timestamp date;
   final MessageType type;
   
 
-  const MessageEntity(this.id, this.creator, this.title, this.description, this.date, this.type);
+  const MessageEntity(this.id, this.creator, this.body, this.date, this.type);
 
   Map<String, Object> toJson() {
     return {
       "id": id,
       "creator": creator,
-      "title": title,
-      "description": description,
+      "body": body,
       "date": date,
       "type": type,
     };
   }
   
   @override
-  List<Object> get props => [id, creator, title, description, date, type];
+  List<Object> get props => [id, creator, body, date, type];
 
   @override
   String toString() {
-  return 'MessageEntity { id: $id, creator: $creator, title: $title, description: $description, date: $date, type: $type }';
+  return 'MessageEntity { id: $id, creator: $creator, body: $body, date: $date, type: $type }';
    }
 
   static MessageEntity fromJson(Map<String, Object> json)
@@ -44,9 +42,8 @@ class MessageEntity extends Equatable {
     return MessageEntity(
       json['id'] as String,
       json['creator'] as String,
-      json['title'] as String,
-      json['description'] as String,
-      json['date'] as String,
+      json['body'] as String,
+      json['date'] as Timestamp,
       _type,
      );
   }
@@ -70,15 +67,14 @@ class MessageEntity extends Equatable {
 
   static MessageEntity fromSnapshot(DocumentSnapshot snap) {
     
-    var temp = snap.data();
-    MessageType _type = _getType(temp['type']);
+    var data = snap.data();
+    MessageType _type = _getType(data['type']);
 
     return MessageEntity(
       snap.id,
-      temp['creator'],
-      temp['title'],
-      temp['description'],
-      temp['date'],
+      data['creator'],
+      data['body'],
+      data['date'],
       _type
     );
   }
@@ -87,8 +83,7 @@ class MessageEntity extends Equatable {
 
     return {
       "creator": creator,
-      "title": title,
-      "description": description,
+      "body": body,
       "date": date,
       "type": type,
     };
