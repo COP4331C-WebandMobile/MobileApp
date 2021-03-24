@@ -1,6 +1,6 @@
 
 
-import 'package:equatable/equatable.dart';
+/*import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 class House extends Equatable {
@@ -17,4 +17,4 @@ class House extends Equatable {
   // Create an empty chores and house list
   // static empty house for the null case...
 
-}
+}8?

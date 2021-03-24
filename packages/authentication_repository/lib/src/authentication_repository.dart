@@ -80,17 +80,6 @@ User getUser(user) {
       );
   }
 
-  Stream<String> get home {
-     String email = _firebaseAuth.currentUser.email;
-      try {
-          return _fireStore.collection('users').doc(email).snapshots().map((snapshot) => snapshot.data()["house_name"]);
-      }
-       on Exception catch(e){
-        print(e);
-        throw SignUpFailure();
-      }
-  }
-
   Stream<User> get user {
     return _firebaseAuth.userChanges().map((firebaseUser){ 
       if(firebaseUser == null)
@@ -117,7 +106,6 @@ User getUser(user) {
     String firstName,
     String lastName,
     String phoneNumber,
-    
     
     }) async {
       assert (email != null && password != null);
@@ -193,7 +181,6 @@ User getUser(user) {
   }
 
 }
-
 /*extension on auth.User {
   User get toUser {
     return User(
