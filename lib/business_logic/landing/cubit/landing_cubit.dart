@@ -2,21 +2,20 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:authentication_repository/authentication_repository.dart';
+import 'package:home_repository/home_repository.dart';
 part 'landing_state.dart';
 
 class LandingCubit extends Cubit<LandingState> {
 
-  final AuthenticationRepository _authenticationRepository;
+  final HomeRepository _homeRepository;
   StreamSubscription<String> _homeSubscription;
 
   LandingCubit({
-    @required AuthenticationRepository authenticationRepository,
-  })  : assert(authenticationRepository != null),
-        _authenticationRepository = authenticationRepository,
-         super(LandingState("sdfds")){
-    changeState();
-    _homeSubscription = _authenticationRepository.home.listen(
+    @required HomeRepository homeRepository,
+  })  : assert(HomeRepository != null),
+        _homeRepository = homeRepository,
+         super(LandingState("newState")){
+    _homeSubscription = _homeRepository.home.listen(
       (home) => emit(LandingState(home)), 
     );
   }

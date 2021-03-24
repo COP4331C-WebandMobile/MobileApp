@@ -1,6 +1,8 @@
 
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:home_repository/home_repository.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.dart';
@@ -53,12 +55,12 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                   //return BlocProvider<LandingCubit>(
-                  // create: (context) => LandingCubit(authenticationRepository: context.read<AuthenticationRepository>()),
-                  // child: BlocListener<LandingCubit,LandingState>(
-                  // listener: (context, state){
-                    if (state.props==[""]) {
-                   
+                    final _homeRepository = HomeRepository(state.user.email);
+                    return BlocProvider<LandingCubit>(
+                    create: (context) => LandingCubit(homeRepository: _homeRepository),
+                    child: BlocListener<LandingCubit,LandingState>(
+                    listener: (context, state){
+                    if (state.home==""){
                     _navigator.pushAndRemoveUntil<void>(
                     LandingPage.route(),
                     (route) => false,
@@ -70,9 +72,8 @@ class _AppViewState extends State<AppView> {
                     (route) => false,
                     );
                     }
-                    //})
-                    //
-                    
+                    }));
+      
                     break;
 
               case AuthenticationStatus.unauthenticated:
