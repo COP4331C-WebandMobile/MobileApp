@@ -17,4 +17,4 @@ class House extends Equatable {
   // Create an empty chores and house list
   // static empty house for the null case...
 
-}8?
+}8? */

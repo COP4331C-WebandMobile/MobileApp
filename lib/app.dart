@@ -55,21 +55,12 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-<<<<<<< HEAD
-                   //return BlocProvider<LandingCubit>(
-                  // create: (context) => LandingCubit(authenticationRepository: context.read<AuthenticationRepository>()),
-                  // child: BlocListener<LandingCubit,LandingState>(
-                  // listener: (context, state){
-                    if (state.props==[""]) {
-                      
-=======
                     final _homeRepository = HomeRepository(state.user.email);
                     return BlocProvider<LandingCubit>(
                     create: (context) => LandingCubit(homeRepository: _homeRepository),
                     child: BlocListener<LandingCubit,LandingState>(
                     listener: (context, state){
                     if (state.home==""){
->>>>>>> 24a10234305909eebca5adfca0bd0069798c1d2e
                     _navigator.pushAndRemoveUntil<void>(
                     LandingPage.route(),
                     (route) => false,
