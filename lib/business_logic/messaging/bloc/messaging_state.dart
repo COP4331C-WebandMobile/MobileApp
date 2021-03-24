@@ -1,6 +1,6 @@
 part of 'messaging_bloc.dart';
 
-enum MessageStatus { loading, received, failure, unkown}
+enum MessageStatus { loading, updated, failure, empty, unkown}
 
 class MessagingState extends Equatable {
   
@@ -16,7 +16,9 @@ class MessagingState extends Equatable {
 
   const MessagingState.loading() : this._(status: MessageStatus.loading);
 
-  const MessagingState.received(List<Message> messages) : this._(status: MessageStatus.received, messages: messages);
+  const MessagingState.updated(List<Message> messages) : this._(status: MessageStatus.updated, messages: messages);
+
+  const MessagingState.empty() : this._(status: MessageStatus.empty);
 
   @override
   List<Object> get props => [status, messages];

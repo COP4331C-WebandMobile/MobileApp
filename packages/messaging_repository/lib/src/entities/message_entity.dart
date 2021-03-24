@@ -73,8 +73,6 @@ class MessageEntity extends Equatable {
     var temp = snap.data();
     MessageType _type = _getType(temp['type']);
 
-    print(temp);
-
     return MessageEntity(
       snap.id,
       temp['creator'],

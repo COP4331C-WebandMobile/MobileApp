@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:messaging_repository/messaging_repository.dart';
@@ -29,24 +30,26 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     MessagingEvent event,
   ) async* {
 
-
+    if(event is MessagesUpdated)
+    {
+      yield _mapUpdateMessagesToState(event);
+    }
   }
 
-
   // 
-  Stream<MessagingState> _mapUpdateMessagesToState(MessagesUpdated event) async* {
+  MessagingState _mapUpdateMessagesToState(MessagesUpdated event) {
 
-    _messagesSubscription?.cancel();
-    // Cancels subscriptions to make sure we are not double subscribing.
     if(event.messages.isEmpty)
     {
       // Change to No messages state...
+      return const MessagingState.empty();
     }
     else if(event.messages.isNotEmpty)
     {
-      // messages available state...
+      return MessagingState.updated(event.messages);
     }
     
+    return MessagingState.unkown();
   }
 
   @override 

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
+import 'package:roomiesMobile/presentation/messaging/messaging_page.dart';
 
 
 class SideBar extends StatelessWidget {
@@ -25,6 +26,10 @@ class SideBar extends StatelessWidget {
       ListTile(
         title: Text('Messages'),
         onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MessagingPage()),
+              );
           // Update the state of the app.
           // ...
         },

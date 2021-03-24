@@ -54,6 +54,7 @@ class Message extends Equatable{
       entity.date, 
       entity.title,
       id: entity.id,
+      type: entity.type,
       );
   }
 

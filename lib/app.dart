@@ -58,7 +58,7 @@ class _AppViewState extends State<AppView> {
                   // child: BlocListener<LandingCubit,LandingState>(
                   // listener: (context, state){
                     if (state.props==[""]) {
-                   
+                      
                     _navigator.pushAndRemoveUntil<void>(
                     LandingPage.route(),
                     (route) => false,
