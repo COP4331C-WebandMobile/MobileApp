@@ -26,7 +26,7 @@ class ChoresPage extends StatelessWidget {
                   builder: (context,state){
                     return Column(
                     children:<Widget>[SizedBox(
-                      height:700,
+                      height:500,
                       child: ChoreWidget(state.props))],
                     );
                   }
@@ -39,12 +39,14 @@ class ChoresPage extends StatelessWidget {
                 key: const Key('homePage_logout_iconButton'),
                 icon: const Icon(Icons.add),
                 onPressed: (){
-                   BlocProvider.of<ChoresBloc>(context)
-                  .add(AddChore(Chore("testing")));
-                  showDialog(
-                  context: context,
-                  builder: (context)=>AddModal()
-                );
+                  BlocProvider.of<ChoresBloc>(context).add(AddChore(Chore('Name')));
+                  showDialog(context: context, builder: (context) => AddModal());
+                //    BlocProvider.of<ChoresBloc>(context)
+                //   .add(AddChore(Chore("testing")));
+                //   showDialog(
+                //   context: context,
+                //   builder: (context)=>AddModal()
+                // );
                 }
               );}))]
       
@@ -86,8 +88,6 @@ class AddModal extends StatelessWidget {
 @override
 Widget build(BuildContext context) {
           
-final ChoresBloc bloc = BlocProvider.of<ChoresBloc>(context);
-
 return Dialog(
   shape: RoundedRectangleBorder(
     //borderRadius: BorderRadius.circular(),
