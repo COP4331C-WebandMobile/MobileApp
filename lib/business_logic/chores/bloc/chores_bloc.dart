@@ -30,7 +30,12 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
       yield* _mapDeleteChoreToState(event);
     } else if (event is ChoresUpdated) {
       yield* _mapChoresUpdateToState(event);
+    }else if (event is MarkChore) {
+      yield* _mapMarkChoreToState(event);
+    }else if (event is CompleteChore) {
+      yield* _mapCompleteChoreToState(event);
     }
+
   }
 
   Stream<ChoresState> _mapLoadChoresToState() async* {
@@ -39,7 +44,6 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
           (chores) => add(ChoresUpdated(chores)), //
         );
   }
-
   Stream<ChoresState> _mapAddChoreToState(AddChore event) async* {
     _choresRepository.addNewChore(event.chore);
   }
@@ -52,8 +56,16 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
     _choresRepository.deleteChore(event.chore);
   }
 
+   Stream<ChoresState> _mapMarkChoreToState(MarkChore event) async* {
+    _choresRepository.markChore(event.chore);
+  }
+
   Stream<ChoresState> _mapChoresUpdateToState(ChoresUpdated event) async* {
     yield ChoresLoaded(event.chores);
+  }
+
+   Stream<ChoresState> _mapCompleteChoreToState(CompleteChore event) async* {
+        _choresRepository.CompleteChore(event.chore);
   }
 
   @override

@@ -10,16 +10,14 @@ class Chore extends Equatable {
   final String description;
   final String creator;
 
-  Chore(this.creator, {this.mark = false, String description = '', String id})
-      : this.description = description ?? '',
-        this.id = id;
+  Chore(this.creator, this.mark, this.description,this.id);
 
   Chore copyWith({bool mark, String id, String description, String creator}) {
     return Chore(
-      creator ?? this.creator,
-      mark: mark ?? this.mark,
-      id: id ?? this.id,
-      description: description ?? this.description,
+      this.creator,
+      this.mark,
+      this.id,
+      this.description,
     );
   }
 
@@ -39,9 +37,9 @@ class Chore extends Equatable {
   static Chore fromEntity(ChoreEntity entity) {
     return Chore(
       entity.creator,
-      mark: entity.mark ?? false,
-      description: entity.description,
-      id: entity.id,
+      entity.mark,
+      entity.description,
+      entity.id,
     );
   }
 }

@@ -2,6 +2,7 @@
 import 'package:chore_repository/chore_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 import '../../widgets/appbar.dart';
@@ -59,10 +60,12 @@ class ChoreWidget extends StatelessWidget {
   //ChoreWidget(this.id,this.description);
   @override 
   Widget build(BuildContext context){
-    return ListView.builder(
+    return Container(
+      child:
+      ListView.builder(
     itemCount: chores.length,
     itemBuilder: (BuildContext context, i) {
-      return ChoreBox(
+      return ChoreBox( chores[i]
         /*title: Text(chores[i].id),
         onTap: () {
           BlocProvider.of<ChoresBloc>(context)
@@ -70,15 +73,19 @@ class ChoreWidget extends StatelessWidget {
                 */
           );
         }, // Delete Chore
-      );
+      ));
     }
 }
 
 class AddModal extends StatelessWidget {
 
+
+
 @override
 Widget build(BuildContext context) {
-          
+
+  final email = context.read<AuthenticationBloc>().state.user.email;
+    
   final description = TextEditingController();
  
   return AlertDialog(
@@ -91,69 +98,50 @@ Widget build(BuildContext context) {
         ),
         IconButton(
           icon: const Icon(Icons.add),
-          onPressed: () => context.read<ChoresBloc>().add(AddChore(Chore(description.text)))
+          onPressed: () => context.read<ChoresBloc>().add(AddChore(Chore(email,false,description.text,"test")))
           )
         ]
       )
       ),
   );
 }}
-class MyCustomForm extends StatefulWidget {
-  @override
-  _MyCustomFormState createState() => _MyCustomFormState();
-}
-class _MyCustomFormState extends State<MyCustomForm> {
- 
-  final description = TextEditingController();
-
-  @override
-  void dispose() {
-    description.dispose();
-    super.dispose();
-  }
-  @override
-  Widget build(BuildContext context) {
-        return Column(
-          children: [ 
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: description,
-                ),
-              ),
-              Container( 
-                child: Builder(builder: (context) =>IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () =>
-                  context.read<ChoresBloc>()
-                  .add(AddChore(Chore(description.text))),
-                 )
-                 )
-                )
-                ]
-      );
-  }
-}
-
 
 class ChoreBox extends StatelessWidget {
+final Chore chore;
 
+ChoreBox(this.chore);
 
 @override 
 Widget build(BuildContext context){
-
   return Card(
     child: Column (
-      
       children: [
-        Text("Testing"),
+        Text(chore.creator),
+        Text(chore.description),
+        Row(
+        children: <Widget>[ElevatedButton(
+          onPressed: () {
+            context.read<ChoresBloc>().add(CompleteChore(chore));
+            },
+          child: Text("Completed")
+        ),
+        ElevatedButton(
+          onPressed: () { 
+          context.read<ChoresBloc>().add(DeleteChore(chore));
+          },
+          child: Text("Delete"),
+        ),
+        ElevatedButton(
+          onPressed: () { 
+             context.read<ChoresBloc>().add(MarkChore(chore));
+           },
+          child: Text("Mark")
+        )]),
     ],)
    );
 
 
 }
-
-
 
 
 }
