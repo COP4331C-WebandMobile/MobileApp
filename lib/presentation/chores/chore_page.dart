@@ -33,7 +33,9 @@ class ChoresPage extends StatelessWidget {
                 ),
               ),
               Container( 
-                child: IconButton(
+                child: BlocBuilder<ChoresBloc,ChoresState>(
+                  builder: (context,state){
+                return IconButton(
                 key: const Key('homePage_logout_iconButton'),
                 icon: const Icon(Icons.add),
                 onPressed: (){
@@ -44,7 +46,7 @@ class ChoresPage extends StatelessWidget {
                   builder: (context)=>AddModal()
                 );
                 }
-              ))]
+              );}))]
       
           ),
         );
@@ -61,7 +63,6 @@ class ChoreWidget extends StatelessWidget {
   ChoreWidget(this.chores);
 
   //ChoreWidget(this.id,this.description);
-
   @override 
   Widget build(BuildContext context){
     return ListView.builder(

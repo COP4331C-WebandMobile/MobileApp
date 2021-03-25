@@ -19,9 +19,6 @@ class LandingCubit extends Cubit<LandingState> {
       (home) => emit(LandingState(home)), 
     );
   }
-  void changeState() {
-    emit(LandingState("new"));
-  }
   @override
   Future<void> close() {
     _homeSubscription.cancel();

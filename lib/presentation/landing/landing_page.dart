@@ -10,8 +10,6 @@ class LandingPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(builder: (_) => LandingPage());
   }
-
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -39,13 +37,11 @@ class LandingPage extends StatelessWidget {
              BlocProvider.of<AuthenticationBloc>(context)
             .state.user.email
           )
-
         ]
         )
     ))
 
-  );
-  
+  ); 
   }
 }
 
@@ -63,7 +59,6 @@ class JoinHome extends StatelessWidget{
   }
 
 }
-
 
 class DialogBox extends StatelessWidget{
 
