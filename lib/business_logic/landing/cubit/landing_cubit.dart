@@ -18,6 +18,7 @@ class LandingCubit extends Cubit<LandingState> {
     _homeSubscription = _homeRepository.home.listen(
       (home) => emit(LandingState(home)), 
     );
+     print("Testing");
   }
   @override
   Future<void> close() {

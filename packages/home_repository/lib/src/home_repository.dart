@@ -10,15 +10,10 @@ class HomeRepository {
   }) : _fireStore = fireStore ?? FirebaseFirestore.instance;
       
   Stream<String> get home{ 
-      
     return _fireStore.collection('users').doc(_email).snapshots().map((snapshot) => snapshot.data()["house_name"]);
-      
-     
   }
     
   }
-
-
 
   /*
   Future<void> CreateHouse({

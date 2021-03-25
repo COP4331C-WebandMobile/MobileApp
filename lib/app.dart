@@ -55,11 +55,11 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                    //final _homeRepository = HomeRepository(state.user.email);
-                   // return BlocProvider<LandingCubit>(
-                    //create: (context) => LandingCubit(homeRepository: _homeRepository),
+                  //final _homeRepository = HomeRepository(state.user.email);
+                   //return BlocProvider<LandingCubit>(
+                   // create: (context) => LandingCubit(homeRepository: _homeRepository),
                     //child: BlocListener<LandingCubit,LandingState>(
-                   // listener: (context, state){
+                    //listener: (context, state){
                     if (state.user.email==""){
                     _navigator.pushAndRemoveUntil<void>(
                     LandingPage.route(),
@@ -72,7 +72,7 @@ class _AppViewState extends State<AppView> {
                     (route) => false,
                     );
                     }
-                    //}));
+                   // }));
       
                     break;
 
