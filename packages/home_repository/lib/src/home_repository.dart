@@ -9,27 +9,20 @@ class HomeRepository {
     FirebaseFirestore fireStore,
   }) : _fireStore = fireStore ?? FirebaseFirestore.instance;
       
-  Stream<String> get home{ 
-    return _fireStore.collection('users').doc(_email).snapshots().map((snapshot) => snapshot.data()["house_name"]);
-  }
-    
+
+  Stream<String> home(){ 
+    try{
+      return _fireStore.collection('users').doc(_email).snapshots().map((snapshot){
+      return snapshot.data()["house_name"];}); 
+    }
+    on Exception catch(e){
+      print(e);
+    }
   }
 
-  /*
-  Future<void> CreateHouse({
-    @required String houseName,
-    @required String member,
-  }) 
-  {
-      CollectionReference houses = _firestore.collection('houses');
-      houses.doc(houseName).collection('roomates').doc('usernames').set({
-        'member': FieldValue.arrayUnion([member])
+  Future<void> addHome(String houseName) {
+    _fireStore.collection('users').doc(_email).set({
+      "house_name": houseName
       });
-
-      CollectionReference currentUser = _firestore.collection('users');
-
-      currentUser.doc(member).update({'house_name': houseName});
-
   }
-
-*/
+  }

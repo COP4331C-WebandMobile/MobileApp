@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:home_repository/home_repository.dart';
+
 part 'landing_state.dart';
 
 class LandingCubit extends Cubit<LandingState> {
@@ -12,14 +13,27 @@ class LandingCubit extends Cubit<LandingState> {
 
   LandingCubit({
     @required HomeRepository homeRepository,
-  })  : assert(HomeRepository != null),
-        _homeRepository = homeRepository,
-         super(LandingState("newState")){
-    _homeSubscription = _homeRepository.home.listen(
-      (home) => emit(LandingState(home)), 
-    );
-     print("Testing");
+  })  :   assert(homeRepository != null),
+         _homeRepository = homeRepository,
+         super( LandingState.loading()){
+            checkHome();
   }
+
+  void validate(String home) {
+
+    if(home =="") emit(LandingState.homeless());
+    else emit(LandingState.homeVerified(home));
+
+  }
+  void checkHome(){
+    _homeSubscription = _homeRepository.home().listen(
+    (home) => validate(home)); 
+  }
+
+  void AddHome(String houseName) {
+    _homeRepository.addHome(houseName);
+  }
+  
   @override
   Future<void> close() {
     _homeSubscription.cancel();

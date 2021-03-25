@@ -9,14 +9,14 @@ import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.da
 
 import 'business_logic/authentication/authentication.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
-import 'package:roomiesMobile/presentation/landing/landing_page.dart';
+import 'package:roomiesMobile/presentation/landing/house_loading.dart';
+
 import 'business_logic/landing/cubit/landing_cubit.dart';
 import 'presentation/login/login_page.dart';
 import 'presentation/splash_page.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
-
   const App({
     Key key,
     @required this.authenticationRepository,
@@ -54,26 +54,13 @@ class _AppViewState extends State<AppView> {
         return BlocListener<AuthenticationBloc, AuthenticationState>( //Keeps track of the state and shows the home page when authenticated
           listener: (context, state) {
             switch (state.status) {
+             
               case AuthenticationStatus.authenticated:
-                  //final _homeRepository = HomeRepository(state.user.email);
-                   //return BlocProvider<LandingCubit>(
-                   // create: (context) => LandingCubit(homeRepository: _homeRepository),
-                    //child: BlocListener<LandingCubit,LandingState>(
-                    //listener: (context, state){
-                    if (state.user.email==""){
+                  
                     _navigator.pushAndRemoveUntil<void>(
-                    LandingPage.route(),
+                    HouseLoading.route(),
                     (route) => false,
                     );
-                    } 
-                    else{
-                    _navigator.pushAndRemoveUntil<void>(
-                    HomePage.route(),
-                    (route) => false,
-                    );
-                    }
-                   // }));
-      
                     break;
 
               case AuthenticationStatus.unauthenticated:
@@ -81,7 +68,7 @@ class _AppViewState extends State<AppView> {
                   LoginPage.route(),
                   (route) => false,
                 );
-  
+
                 break;
 
               default:

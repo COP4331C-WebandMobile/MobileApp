@@ -79,7 +79,6 @@ User getUser(user) {
           houseName: "",
       );
   }
-
   Stream<User> get user {
     return _firebaseAuth.userChanges().map((firebaseUser){ 
       if(firebaseUser == null)
@@ -145,11 +144,14 @@ User getUser(user) {
       
       if(!tempUser.user.emailVerified)
       {
+       
         throw LogInEmailVerificationFailure();
       }
       }
       on Exception {
+     
         throw LogInWithEmailAndPasswordFailure();
+        
       }
     }
 

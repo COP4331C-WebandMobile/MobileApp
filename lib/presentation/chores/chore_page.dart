@@ -10,13 +10,11 @@ class ChoresPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChoresBloc>(
-          create: (context){
-            return ChoresBloc(
-              choresRepository: ChoresRepository(),
-            )..add(LoadChores());
-          },
+          create: (context) => ChoresBloc(
+            choresRepository: ChoresRepository(),
+            )..add(LoadChores()),
           child: Builder(
-          builder: (context) { 
+            builder: (context) { 
             return Scaffold(
             appBar: Bar(),
             body: Column(
@@ -33,23 +31,17 @@ class ChoresPage extends StatelessWidget {
                 ),
               ),
               Container( 
-                child: BlocBuilder<ChoresBloc,ChoresState>(
-                  builder: (context,state){
-                return IconButton(
-                key: const Key('homePage_logout_iconButton'),
-                icon: const Icon(Icons.add),
-                onPressed: (){
-                  BlocProvider.of<ChoresBloc>(context).add(AddChore(Chore('Name')));
-                  showDialog(context: context, builder: (context) => AddModal());
-                //    BlocProvider.of<ChoresBloc>(context)
-                //   .add(AddChore(Chore("testing")));
-                //   showDialog(
-                //   context: context,
-                //   builder: (context)=>AddModal()
-                // );
-                }
-              );}))]
-      
+                   child: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: (){
+                      showDialog(context: context, 
+                      builder: (_) => BlocProvider<ChoresBloc>.value(
+                          value: BlocProvider.of<ChoresBloc>(context),
+                          child: AddModal(),
+                      )
+                      );
+                      }      
+              ))]
           ),
         );
       }
@@ -70,17 +62,16 @@ class ChoreWidget extends StatelessWidget {
     return ListView.builder(
     itemCount: chores.length,
     itemBuilder: (BuildContext context, i) {
-      return ListTile(
-        title: Text(chores[i].id),
+      return ChoreBox(
+        /*title: Text(chores[i].id),
         onTap: () {
           BlocProvider.of<ChoresBloc>(context)
                 .add(DeleteChore(chores[i]));
+                */
+          );
         }, // Delete Chore
       );
-    },
-  );
-
-  }
+    }
 }
 
 class AddModal extends StatelessWidget {
@@ -88,17 +79,25 @@ class AddModal extends StatelessWidget {
 @override
 Widget build(BuildContext context) {
           
-return Dialog(
-  shape: RoundedRectangleBorder(
-    //borderRadius: BorderRadius.circular(),
-  ),
-  elevation: 3,
-  backgroundColor: Colors.transparent,
-  child:  Builder(builder: (context) =>MyCustomForm()) 
-);
-}
-}
-
+  final description = TextEditingController();
+ 
+  return AlertDialog(
+    content: Container(
+      child: Column(
+        children: <Widget>[ 
+        Text("Enter Description of Chore"),
+        TextField(
+          controller:description,
+        ),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => context.read<ChoresBloc>().add(AddChore(Chore(description.text)))
+          )
+        ]
+      )
+      ),
+  );
+}}
 class MyCustomForm extends StatefulWidget {
   @override
   _MyCustomFormState createState() => _MyCustomFormState();
@@ -114,24 +113,47 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
   @override
   Widget build(BuildContext context) {
-
-        //final ChoresBloc bloc = BlocProvider.of<ChoresBloc>(context);
-
-        return Column (
-        children: [ Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: description,
-        ),
-        ),
-        Container( 
+        return Column(
+          children: [ 
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: description,
+                ),
+              ),
+              Container( 
                 child: Builder(builder: (context) =>IconButton(
-                key: const Key('homePage_logout_iconButton'),
                 icon: const Icon(Icons.add),
                 onPressed: () =>
-                  BlocProvider.of<ChoresBloc>(context)
-                  .add(AddChore(Chore("testing"))),
-                )))]
+                  context.read<ChoresBloc>()
+                  .add(AddChore(Chore(description.text))),
+                 )
+                 )
+                )
+                ]
       );
   }
+}
+
+
+class ChoreBox extends StatelessWidget {
+
+
+@override 
+Widget build(BuildContext context){
+
+  return Card(
+    child: Column (
+      
+      children: [
+        Text("Testing"),
+    ],)
+   );
+
+
+}
+
+
+
+
 }
