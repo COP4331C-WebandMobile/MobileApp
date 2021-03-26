@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:messaging_repository/src/entities/message_entity.dart';
 import 'package:meta/meta.dart';
@@ -11,50 +12,42 @@ class Message extends Equatable{
   
   final String id;
   final String creator;
-  final String title;
-  final String description;
-  final String date;
+  final String body;
+  final Timestamp date;
   final MessageType type;
 
-  Message(this.creator, this.date, this.title, {this.type = MessageType.alert, String description = '', String id})
-      : this.description = description ?? '',
-        this.id = id;
+  Message(this.id, this.creator,this.body, this.date, this.type);
+ 
 
-  Message copyWith({String id, String creator, String title, String description, String date, MessageType type}) {
+  Message copyWith({String id, String creator, String body, Timestamp date, MessageType type}) {
       return Message(
+        id ?? this.id,
         creator ?? this.creator,
+        body ?? this.body,
         date ?? this.date,
-        title ?? this.title,
-        description: description ?? this.description,
-        id: id ?? this.id,
-        type: type ?? this.type,
+        type ?? this.type,
       );
   }
 
-
   @override
-  int get hashCode =>
-    creator.hashCode ^ title.hashCode ^ description.hashCode ^ date.hashCode ^ type.hashCode ^ id.hashCode;
-
-  @override
-  List<Object> get props => [id, creator, title, description, date, type];
+  List<Object> get props => [id, creator, body, date, type];
 
   @override
   String toString() {
-      return 'Message { id: $id, creator: $creator, title: $title, description: $description, date: $date, type: $type}';
+      return 'Message { id: $id, creator: $creator, body: $body, date: $date, type: $type}';
     }
   
   MessageEntity toEntity() {
-    return MessageEntity(id, creator, title, description, date, type);
+    return MessageEntity(id, creator, body, date, type);
   }
 
   static Message fromEntity(MessageEntity entity) {
     return Message(
-      entity.creator, 
-      entity.date, 
-      entity.title,
-      id: entity.id,
-      type: entity.type,
+        entity.id,
+        entity.creator,
+        entity.body,
+        entity.date,
+        entity.type
       );
   }
 

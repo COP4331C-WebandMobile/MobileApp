@@ -26,5 +26,5 @@ class LoginState extends Equatable {
       status: status ?? this.status,
     );
   }
-
+ 
 }
