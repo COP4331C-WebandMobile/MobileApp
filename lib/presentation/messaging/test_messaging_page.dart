@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:roomiesMobile/business_logic/Test/bloc/messaging_bloc.dart';
+import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
 
 class TestMessagePage extends StatelessWidget {
@@ -31,6 +32,27 @@ class _MyMessagePageState extends State<MyMessagePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Messages'),
+        centerTitle: true,
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              key: const Key('messagePage_add_iconButton'),
+              icon: const Icon(Icons.add),
+              color: Colors.white,
+              splashColor: Colors.white,
+              splashRadius: 20,
+              onPressed: (){print('Test');},
+            ),
+          ),
+        ],
+
+      ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         alignment: Alignment.center,
@@ -59,6 +81,8 @@ class _MyMessagePageState extends State<MyMessagePage> {
 
         ),
       ),
+      // Temporarily using SideBar until We decide what will be there.
+      drawer: SideBar(),
     );
   }
 
@@ -73,15 +97,15 @@ class MessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child:ListView.builder(
+    return 
+      ListView.builder(
       itemCount: messages.length,
       itemBuilder: (BuildContext context, i) {
         return Padding(padding: EdgeInsets.all(16),
         child: MessageWidget(messages[i]),
         );
       },
-    ),);
+    );
   }
 
 }
@@ -96,13 +120,7 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if(message.type == MessageType.alert)
     {
-        return MessageCard(
-          child: Column(
-            children: [
-              
-            ],
-          ),
-        );
+        return AlertWidget(message);
     }
     else
     {
@@ -113,6 +131,11 @@ class MessageWidget extends StatelessWidget {
 
 }
 
+// Alert card would simply have the alert logo on the card, the body would then be displayed regularly.
+// Question card would have an addition of a button to click on for responding.
+// Purchaes would list releavant info on seperate lines or so, such as Price:
+
+
 class AlertWidget extends StatelessWidget {
 
   final Message message;
@@ -121,25 +144,28 @@ class AlertWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CustomBoxWidget(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.account_circle_rounded),
-                Expanded(child: Text(message.creator)),
-                Icon(Icons.pets_outlined),
-              ],
+    return MessageCard(
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.supervised_user_circle),
+              const SizedBox(width: 8,),
+              Expanded(child: Text(message.body))
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text('- ' + message.creator),
             ),
-            ElevatedButton(onPressed: (){}, child: Text('Press me'),),
-          ],
-        )
-      ],
-    );
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text('Posted date'),
+            ),
+        ],
+      ),
+      );
   }
 
 }
