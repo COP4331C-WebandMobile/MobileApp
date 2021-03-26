@@ -40,6 +40,10 @@ dependencies:
     path: packages/chore_repository
   messaging_repository:
     path: packages/messaging_repository
+  roomate_repository:
+    path: packages/roomate_repository
+  reminder_repository:
+    path: packages/reminder_repository
     
     
 dev_dependencies:

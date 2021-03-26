@@ -20,10 +20,21 @@ class HomeRepository {
     }
   }
 
-  Future<void> addHome(String houseName) {
-    _fireStore.collection('users').doc(_email).set({
+  Future<void> addHome(String houseName) async {
+
+    final snapshot = await _fireStore.collection('houses').doc(houseName).get();
+    if(snapshot.exists) return;
+
+    _fireStore.collection('users').doc(_email).update({
       "house_name": houseName
       });
+
+
+   //_fireStore.collection('houses').doc(houseName).set(
+
+
+
+   //);
   }
   }
   
