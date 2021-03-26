@@ -24,9 +24,9 @@ class _MessageCardState extends State<MessageCard> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          margin: EdgeInsets.all(16),
+          margin: EdgeInsets.all(8),
           child: Container(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(4),
             child: widget.child,
             decoration: BoxDecoration(
               color: CustomColors.gold,
