@@ -4,7 +4,6 @@ import 'package:chore_repository/chore_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
 part 'chores_event.dart';
 part 'chores_state.dart';
 
@@ -37,7 +36,6 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
     }
 
   }
-
   Stream<ChoresState> _mapLoadChoresToState() async* {
     _choresSubscription?.cancel();
     _choresSubscription = _choresRepository.chores().listen(
