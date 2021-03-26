@@ -30,7 +30,9 @@ class SideBar extends StatelessWidget {
         onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => TestMessagePage()),
+              MaterialPageRoute(builder: (_) =>BlocProvider<LandingCubit>.value(
+                          value: BlocProvider.of<LandingCubit>(context),
+                          child: TestMessagePage()),),
               );
           // Update the state of the app.
           // ...
@@ -46,8 +48,7 @@ class SideBar extends StatelessWidget {
                           child: ChoresPage()),
               ));
           // Update the state of the app.
-          // ...
-          
+          // ... 
         },
       ),
        ListTile(
