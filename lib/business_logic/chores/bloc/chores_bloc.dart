@@ -15,13 +15,15 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
   ChoresBloc({@required ChoresRepository choresRepository})
       : assert(choresRepository != null),
         _choresRepository = choresRepository,
-        super(ChoresLoading());
+        super(ChoresLoading()){
+        _choresSubscription = _choresRepository.chores().listen((chores) => add(ChoresUpdated(chores)));
+        }
 
   @override
   Stream<ChoresState> mapEventToState(ChoresEvent event) async* {
-    if (event is LoadChores) {
-      yield* _mapLoadChoresToState();
-    } else if (event is AddChore) {
+    //if (event is LoadChores) {
+      //yield* _mapLoadChoresToState();
+    /*else*/ if (event is AddChore) {
       yield* _mapAddChoreToState(event);
     } else if (event is UpdateChore) {
       yield* _mapUpdateChoreToState(event);
@@ -36,12 +38,13 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
     }
 
   }
+  /*
   Stream<ChoresState> _mapLoadChoresToState() async* {
     _choresSubscription?.cancel();
     _choresSubscription = _choresRepository.chores().listen(
           (chores) => add(ChoresUpdated(chores)), //
         );
-  }
+  }*/
   Stream<ChoresState> _mapAddChoreToState(AddChore event) async* {
     _choresRepository.addNewChore(event.chore);
   }

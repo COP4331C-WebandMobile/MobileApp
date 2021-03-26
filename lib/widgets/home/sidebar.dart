@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
 import 'package:roomiesMobile/presentation/messaging/messaging_page.dart';
 
@@ -39,8 +41,10 @@ class SideBar extends StatelessWidget {
         onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChoresPage()),
-              );
+              MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
+                          value: BlocProvider.of<LandingCubit>(context),
+                          child: ChoresPage()),
+              ));
           // Update the state of the app.
           // ...
           

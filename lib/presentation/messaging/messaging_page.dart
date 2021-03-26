@@ -22,7 +22,7 @@ class MessagingPage extends StatelessWidget {
                   builder: (context, state) {
                     if(state.status == MessageStatus.updated)
                     {
-                      return MessagesList(state.messages);
+                    return MessagesList(state.messages);
                     }
                     else
                     {

@@ -30,11 +30,13 @@ class HomeRepository {
       });
 
 
-   //_fireStore.collection('houses').doc(houseName).set(
+   _fireStore.collection('houses').doc(houseName).collection('details').doc().set({
+     "creator": _email,
+   });
 
-
-
-   //);
+   _fireStore.collection('houses').doc(houseName).set({
+     "exists":true,
+  });
   }
   }
   

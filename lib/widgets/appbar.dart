@@ -6,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Bar extends StatelessWidget implements PreferredSizeWidget {
 
 Size get preferredSize => const Size.fromHeight(100);
-
-
 @override
 Widget build(BuildContext context) {
         return AppBar(
