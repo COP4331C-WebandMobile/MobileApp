@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
-import 'package:roomiesMobile/business_logic/Test/bloc/messaging_bloc.dart';
+import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
 

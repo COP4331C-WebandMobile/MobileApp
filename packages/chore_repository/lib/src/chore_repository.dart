@@ -14,7 +14,9 @@ class ChoresRepository {
     FirebaseFirestore fireStore,
     }) : _fireStore = fireStore ?? FirebaseFirestore.instance;
 
-
+    final choreCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection("chores");
+    final messageCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection('messages');
+  
   Future<void> addNewChore(Chore chore) {
     try{
       _fireStore.collection('houses').doc(_home).collection("chores").add(chore.toEntity().ChoreDocument());
@@ -51,12 +53,13 @@ class ChoresRepository {
   }
 
    Future<void> CompleteChore(Chore chore) {
+    final Timestamp thing = Timestamp.now();
 
     return _fireStore.collection('houses').doc(_home).collection("messages").add(
            {
             "body": chore.description,
-            "creator": chore.creator, 
-            "date" : "Dates",
+            "creator": chore.creator,
+            "date": thing,
             "type": "alert",
             });
         

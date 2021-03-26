@@ -7,7 +7,7 @@ import 'package:messaging_repository/src/models/message.dart';
 class FirebaseMessageRepository implements MessagingRepository {
   
   // Will need to pass the house name to our repo that way we can reference the correct messages collection...
-  final messageCollection = FirebaseFirestore.instance.collection('houses').doc('house_name').collection('messages');
+  final messageCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection('messages');
 
   @override
   Future<void> createNewMessage(Message message) {

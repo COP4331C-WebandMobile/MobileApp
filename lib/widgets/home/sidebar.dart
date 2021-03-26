@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
-import 'package:roomiesMobile/presentation/messaging/test_messaging_page.dart';
+import 'package:roomiesMobile/presentation/messaging/messages_page.dart';
 
 
 class SideBar extends StatelessWidget {
