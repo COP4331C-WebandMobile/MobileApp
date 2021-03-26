@@ -3,6 +3,7 @@ import 'package:chore_repository/chore_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
+import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 import '../../widgets/appbar.dart';
@@ -10,10 +11,13 @@ import '../../widgets/appbar.dart';
 class ChoresPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final home = context.read<LandingCubit>().state.home;
+
     return BlocProvider<ChoresBloc>(
           create: (context) => ChoresBloc(
-            choresRepository: ChoresRepository(),
-            )..add(LoadChores()),
+            choresRepository: ChoresRepository(home),
+            )/*..add(LoadChores())*/,
           child: Builder(
             builder: (context) { 
             return Scaffold(
@@ -65,26 +69,21 @@ class ChoreWidget extends StatelessWidget {
       ListView.builder(
     itemCount: chores.length,
     itemBuilder: (BuildContext context, i) {
+
       return ChoreBox( chores[i]
-        /*title: Text(chores[i].id),
-        onTap: () {
-          BlocProvider.of<ChoresBloc>(context)
-                .add(DeleteChore(chores[i]));
-                */
+     
           );
         }, // Delete Chore
       ));
     }
 }
-
 class AddModal extends StatelessWidget {
-
-
 
 @override
 Widget build(BuildContext context) {
 
   final email = context.read<AuthenticationBloc>().state.user.email;
+
     
   final description = TextEditingController();
  

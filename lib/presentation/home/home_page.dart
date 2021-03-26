@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: Bar(),
       body: Container(
-        child: Column(
+        child: Row(
         children:<Widget>[
           BlocProvider(
             create: (context)=> RoomatesCubit(roomateRepository: _roomateRepository),

@@ -7,35 +7,39 @@ import 'entities/entities.dart';
 class ChoresRepository {
 
    final FirebaseFirestore _fireStore ;
- 
+   final String _home; 
+   //var _fireStore.instance.collection('houses').doc(_home).collection("chores");
   
-   ChoresRepository({
+   ChoresRepository( this._home,{
     FirebaseFirestore fireStore,
     }) : _fireStore = fireStore ?? FirebaseFirestore.instance;
-      
 
     final choreCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection("chores");
     final messageCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection('messages');
   
   Future<void> addNewChore(Chore chore) {
     try{
-      choreCollection.add(chore.toEntity().ChoreDocument());
+      _fireStore.collection('houses').doc(_home).collection("chores").add(chore.toEntity().ChoreDocument());
     }
     on Exception {
       print(Exception());
     }
   }
+
   Future<void> deleteChore(Chore chore) async {
-    return choreCollection.doc(chore.id).delete();
+  
+    return _fireStore.collection('houses').doc(_home).collection("chores").doc(chore.id).delete();
   }
 
   Future<void> markChore(Chore chore) async {
-    return choreCollection.doc(chore.id).update({
+    return _fireStore.collection('houses').doc(_home).collection("chores").doc(chore.id).update({
       "mark": true,
       });
   }
-  Stream<List<Chore>> chores() {
-    return choreCollection.snapshots().map((snapshot) {
+
+
+   Stream<List<Chore>>chores(){
+    return _fireStore.collection('houses').doc(_home).collection("chores").snapshots().map((snapshot) {
       return snapshot.docs
           .map((doc) => Chore.fromEntity(ChoreEntity.fromSnapshot(doc)))
           .toList();
@@ -43,7 +47,7 @@ class ChoresRepository {
   }
 
   Future<void> updateChore(Chore update) {
-    return choreCollection
+    return _fireStore.collection('houses').doc(_home).collection("chores")
         .doc(update.id)
         .set(update.toEntity().ChoreDocument());
   }
@@ -51,12 +55,14 @@ class ChoresRepository {
    Future<void> CompleteChore(Chore chore) {
     final Timestamp thing = Timestamp.now();
 
-    return messageCollection.doc()
-        .set({
+    return _fireStore.collection('houses').doc(_home).collection("messages").add(
+           {
             "body": chore.description,
             "creator": chore.creator,
             "date": thing,
             "type": "alert",
             });
+        
   }
+  
 }
