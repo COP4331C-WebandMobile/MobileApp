@@ -21,6 +21,17 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+def localPropertyApiToken = localProperties.getProperty("MAPS_API_KEY")
+def systemEnvApiToken = System.getenv('MAPS_API_KEY')
+def MAPS_API_KEY = localPropertyApiToken != null ? localPropertyApiToken : systemEnvApiToken
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -45,6 +56,7 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [MAPS_API_KEY: MAPS_API_KEY]
     }
 
     buildTypes {

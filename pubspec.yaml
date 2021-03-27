@@ -32,6 +32,8 @@ dependencies:
   google_fonts: ^2.0.0
   formz: ^0.3.2
   pedantic: ^1.11.0
+  google_maps_flutter: ^2.0.1
+  location: ^4.1.1
   home_repository:
     path: packages/home_repository
   authentication_repository:
@@ -44,6 +46,8 @@ dependencies:
     path: packages/roomate_repository
   reminder_repository:
     path: packages/reminder_repository
+  map_repository:
+    path: packages/map_repository  
     
     
 dev_dependencies:
@@ -62,6 +66,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - config.JSON
     - assets/
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,16 +1,14 @@
 
 
-import 'package:equatable/equatable.dart';
+/*import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 class House extends Equatable {
 
-  final name;
-  final creator; 
-  final roomates;
-  final chores;
+  // Not sure but most likely there would be a Chore and House Item model.
+  // Which would mean we could store a list of Chore models and what not.
+  // But there would have to create a function to handle creating the chores then adding them to the chore list.
 
-<<<<<<< HEAD
 
   @override
   List<Object> get props => [];
@@ -19,11 +17,4 @@ class House extends Equatable {
   // Create an empty chores and house list
   // static empty house for the null case...
 
-<<<<<<< HEAD
 }8? */
-=======
-}8 */
->>>>>>> messaging
-=======
-}
->>>>>>> bc3c15a621e484e48c895de6881afe45083cd390
