@@ -36,7 +36,7 @@ class LandingPage extends StatelessWidget {
           ElevatedButton(
             onPressed: () => showDialog(
                   context: context,
-                  builder: (context)=>DialogBox()
+                  //builder: (context)=>DialogBox()
                 ),
             child: Text("Join Home")
           ),
@@ -57,9 +57,11 @@ class CreateHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   return AlertDialog(
-    content: Container(
+    content: FractionallySizedBox(
+      widthFactor: 0.3,
+      heightFactor: 0.3,
+      child:Container(
       child: Column(
-
         children: <Widget>[ 
         Text("Enter Name Of Home"),
         TextField(
@@ -73,7 +75,7 @@ class CreateHome extends StatelessWidget {
       )
       ),
 
-  );
+  ));
   }
 }
 
@@ -85,17 +87,5 @@ class JoinHome extends StatelessWidget{
 
 }
 
-class DialogBox extends StatelessWidget{
- @override
- Widget build(BuildContext context){
-  return Dialog(
-  shape: RoundedRectangleBorder(
-    //borderRadius: BorderRadius.circular(),
-  ),
-  elevation: 3,
-  backgroundColor: Colors.transparent,
 
-  );
-  }
-}
 

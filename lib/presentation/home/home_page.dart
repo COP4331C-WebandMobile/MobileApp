@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
@@ -23,27 +24,37 @@ class HomePage extends StatelessWidget {
     final _home = context.read<LandingCubit>().state.home;
     final _roomateRepository = RoomateRepository(_home);
     final _reminderRepository = ReminderRepository(_home);
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+
+    
 
     return Scaffold(
       appBar: Bar(),
       body: Container(
-        child: Row(
+        padding: EdgeInsets.all(32),
+        height: mediaQuery.size.height,
+        width: mediaQuery.size.width,
+        child: Column(
         children:<Widget>[
-          BlocProvider(
+            Expanded(
+            flex:3,
+            child: HouseInfo(),
+            ),
+
+          Expanded(
+            flex:2,
+            child:BlocProvider(
             create: (context)=> RoomatesCubit(roomateRepository: _roomateRepository),
-            child: SizedBox(
-              width:500,
-              height:500,
               child:RoomateList(),
             )),
-            BlocProvider(
-            create: (context)=> ReminderCubit(reminderRepository: _reminderRepository),
-            child: SizedBox(
-              width:300,
-              height:100,
+          
+            Expanded(
+            flex:8,
+            child:BlocProvider(
+              create: (context)=> ReminderCubit(reminderRepository: _reminderRepository),
               child:ReminderBox(),
-            )
-        )])),
+            )),
+        ])),
       drawer: SideBar()
     );
   }
@@ -55,15 +66,71 @@ class RoomateList extends StatelessWidget {
   
       builder:(context,state){
       return Container(
-        child:
-        ListView.builder(
-        itemCount: state.roomates.length,
-        itemBuilder: (BuildContext context, i) {
-        return RoomateIcon(state.roomates[i]);
-        }
-      ));});
+        margin: EdgeInsets.all(10),
+        color: CustomColors.gold,
+        child: Column(
+          children:[
+            
+          Expanded(
+            flex:1,
+            child: Row(
+              children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child:Text("Add")),
+                
+              Align( 
+                alignment: Alignment.topRight,
+                child:IconButton(
+                icon: const Icon(Icons.add_circle_outline_outlined),
+                onPressed: () => {},
+                ))
+            
+              ])),
+          Expanded(
+          flex: 4,
+          child: Container(     
+           
+            child:ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.roomates.length,
+              itemBuilder: (BuildContext context, i) {
+              return RoomateIcon(state.roomates[i]);
+            }
+      )
+      )
+      )
+      ]
+      )
+      )
+      ;
+      }
+      )
+      ;
   }
 }
+
+
+
+class HouseInfo extends StatelessWidget{
+  
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      child:Column(
+        children: [
+
+          CircleAvatar(),
+          Text("Address")
+        ],
+        )
+    );
+  }
+}
+
+
+
 class RoomateIcon extends StatelessWidget{
   
   final Roomate roomate; 
@@ -87,7 +154,7 @@ class ReminderText extends StatelessWidget{
 
   @override
  Widget build(BuildContext context){
-  return Card(
+  return  Card(
     child: Column (
       children: [
         Text(reminder.description),
@@ -104,12 +171,9 @@ class ReminderText extends StatelessWidget{
           },
           child: Text("Delete"),
         ),
-        ElevatedButton(
-          onPressed: () { 
-            // context.read<ChoresBloc>().add(MarkChore(chore));
-           },
-          child: Text("Mark")
-        )]),
+
+        Text("Frequency")
+     ]),
     ],)
    );
 
@@ -124,13 +188,39 @@ class ReminderBox extends StatelessWidget {
     return BlocBuilder<ReminderCubit,ReminderState>(
       builder:(context,state){
       return Container(
-        child:
-        ListView.builder(
-        itemCount: state.reminders.length,
-        itemBuilder: (BuildContext context, i) {
-        return ReminderText(state.reminders[i]);
+        color: CustomColors.gold,
+        padding: EdgeInsets.all(22),
+        margin: EdgeInsets.all(10),
+        child : Column(
+          children : <Widget>[
+          Expanded(
+          flex:2,
+          child: Row(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child:Text("Reminders")),
+              Align(
+                alignment: Alignment.topRight,
+                child:IconButton(
+                icon: const Icon(Icons.add_circle_outline_outlined),
+                onPressed: () => {},
+              ))
+            ],
+          )),
+          Expanded(
+            flex:8,
+              child:
+                ListView.builder(
+                itemCount: state.reminders.length,
+                itemBuilder: (BuildContext context, i) {
+                return ReminderText(state.reminders[i]);
+                }
+              )
+            )
+          ]));
         }
-      ));});
+      );
   }
 }
 

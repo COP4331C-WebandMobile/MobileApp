@@ -19,21 +19,52 @@ class RegisterForm extends StatelessWidget{
         }
       },
       child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
+        //alignment: const Alignment(0, -1 / 3),
+        child: Container(
+          padding: EdgeInsets.all(20),
+      
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _EmailInput(),
-            const SizedBox(height: 8.0),
+            Expanded(
+              child:
+              _EmailInput(),
+            ),
+
+            Expanded(
+            child:
             _PasswordInput(),
-            const SizedBox(height: 8.0),
+            ),
+
+            Expanded(
+            child:
             _ConfirmPasswordInput(),
-            const SizedBox(height: 8.0),
-            _SignUpButton(),
+            ),
+
+             Expanded(
+            child:
+            _FirstNameInput(),
+            ),
+
+
+           Expanded(
+            child:
+            _LastNameInput(),
+            ),
+
+
+            Expanded(
+            child: Row(
+              children:[Expanded(
+              child:_SignUpButton())]
+             )),
+            
+            
+          
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -57,6 +88,38 @@ class _EmailInput extends StatelessWidget {
     );
   }
 }
+
+class _FirstNameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+        return TextField(
+          key: const Key('signUpForm_emailInput_textField'),
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+          labelText: 'First Name',
+          helperText: '',
+     
+          ),
+        );
+  }
+}
+
+class _LastNameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+        return TextField(
+          key: const Key('signUpForm_emailInput_textField'),
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+          labelText: 'Last Name',
+          helperText: '',
+     
+          ),
+        );
+  }
+}
+
+
 
 class _PasswordInput extends StatelessWidget {
   @override
@@ -87,7 +150,7 @@ class _ConfirmPasswordInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.password != current.password ||
           previous.confirmedPassword != current.confirmedPassword,
-      builder: (context, state) {
+          builder: (context, state) {
         return TextField(
           key: const Key('signUpForm_confirmedPasswordInput_textField'),
           onChanged: (confirmPassword) => context
@@ -122,7 +185,7 @@ class _SignUpButton extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  primary: Colors.orangeAccent,
+                  primary: Colors.black,
                 ),
                 onPressed: state.status.isValidated
                     ? () => context.read<RegisterCubit>().signUpFormSubmitted()
