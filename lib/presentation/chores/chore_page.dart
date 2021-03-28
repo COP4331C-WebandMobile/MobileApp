@@ -21,10 +21,49 @@ class ChoresPage extends StatelessWidget {
           child: Builder(
             builder: (context) { 
             return Scaffold(
-            appBar: Bar(),
-            body: Column(
-            children: <Widget>[
-              Container( 
+              appBar: AppBar(
+                title: Text('Chores'),
+                centerTitle: true,
+                actions: [
+                Container(
+                  decoration: BoxDecoration(
+                  color: Colors.black,
+                  shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    key: const Key('messagePage_add_iconButton'),
+                    icon: const Icon(Icons.add),
+                    color: Colors.white,
+                    splashColor: Colors.white,
+                    splashRadius: 20,
+                    onPressed: (){
+                      showDialog(context: context, 
+                      builder: (_) => BlocProvider<ChoresBloc>.value(
+                          value: BlocProvider.of<ChoresBloc>(context),
+                          child: AddModal(),
+                      )
+                      );
+                      }  
+            ),
+          ),
+        ],
+      ),
+            bottomNavigationBar:BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Chore List',
+                
+              ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.business),
+              label: 'To Do',
+             
+              ),
+        
+        ],
+      ),
+            body: Container( 
                 child: BlocBuilder<ChoresBloc,ChoresState>(
                   builder: (context,state){
                     return Column(
@@ -34,19 +73,8 @@ class ChoresPage extends StatelessWidget {
                     );
                   }
                 ),
-              ),
-              Container( 
-                   child: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: (){
-                      showDialog(context: context, 
-                      builder: (_) => BlocProvider<ChoresBloc>.value(
-                          value: BlocProvider.of<ChoresBloc>(context),
-                          child: AddModal(),
-                      )
-                      );
-                      }      
-              ))]
+            
+              
           ),
         );
       }
@@ -67,8 +95,8 @@ class ChoreWidget extends StatelessWidget {
     return Container(
       child:
       ListView.builder(
-    itemCount: chores.length,
-    itemBuilder: (BuildContext context, i) {
+      itemCount: chores.length,
+      itemBuilder: (BuildContext context, i) {
 
       return ChoreBox( chores[i]
      

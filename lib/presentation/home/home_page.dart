@@ -26,7 +26,6 @@ class HomePage extends StatelessWidget {
     final _reminderRepository = ReminderRepository(_home);
     MediaQueryData mediaQuery = MediaQuery.of(context);
 
-    
 
     return Scaffold(
       appBar: Bar(),
@@ -75,22 +74,22 @@ class RoomateList extends StatelessWidget {
             flex:1,
             child: Row(
               children: [
-              Align(
+               Expanded(
+                child: Align(
                 alignment: Alignment.topLeft,
-                child:Text("Add")),
-                
-              Align( 
+                child:Text("Add"))),
+              Expanded(
+                child: Align( 
                 alignment: Alignment.topRight,
                 child:IconButton(
                 icon: const Icon(Icons.add_circle_outline_outlined),
                 onPressed: () => {},
-                ))
+                )))
             
               ])),
           Expanded(
           flex: 4,
           child: Container(     
-           
             child:ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: state.roomates.length,
@@ -120,7 +119,6 @@ class HouseInfo extends StatelessWidget{
     return Container(
       child:Column(
         children: [
-
           CircleAvatar(),
           Text("Address")
         ],
@@ -128,8 +126,6 @@ class HouseInfo extends StatelessWidget{
     );
   }
 }
-
-
 
 class RoomateIcon extends StatelessWidget{
   
@@ -197,15 +193,17 @@ class ReminderBox extends StatelessWidget {
           flex:2,
           child: Row(
             children: [
-              Align(
+              Expanded(
+                child:Align(
                 alignment: Alignment.topLeft,
-                child:Text("Reminders")),
-              Align(
+                child:Text("Reminders"))),
+              Expanded(
+                child:Align(
                 alignment: Alignment.topRight,
                 child:IconButton(
                 icon: const Icon(Icons.add_circle_outline_outlined),
                 onPressed: () => {},
-              ))
+              )))
             ],
           )),
           Expanded(

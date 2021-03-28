@@ -112,9 +112,9 @@ User getUser(user) {
           final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
-        );
-        
+        ); 
         newUser.user.sendEmailVerification();
+        
         addUser(
           email,
           firstName = firstName,

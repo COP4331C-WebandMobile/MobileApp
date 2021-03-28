@@ -119,8 +119,6 @@ class _LastNameInput extends StatelessWidget {
   }
 }
 
-
-
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

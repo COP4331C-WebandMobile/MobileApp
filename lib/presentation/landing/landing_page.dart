@@ -49,7 +49,6 @@ class LandingPage extends StatelessWidget {
     )));
   } 
 }
-
 class CreateHome extends StatelessWidget {
   
   final houseName = TextEditingController();

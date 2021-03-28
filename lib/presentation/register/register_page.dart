@@ -33,9 +33,10 @@ class RegisterPage extends StatelessWidget {
         
         child: Column(
           children: [
-
-          Text("Create An Account"),
-
+          Text(
+            "Create An Account",
+             style: TextStyle(fontSize: 30),
+             ),
           BlocProvider<RegisterCubit>(
           create: (_) => RegisterCubit(context.read<AuthenticationRepository>()), //call back
           child: Expanded(

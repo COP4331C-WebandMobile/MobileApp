@@ -49,5 +49,5 @@
             android:value="2" />
     </application>
 </manifest>
-    <uses-permissionandroid:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permissionandroid:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!--<uses-permissionandroid:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permissionandroid:name="android.permission.ACCESS_COARSE_LOCATION" /> -->

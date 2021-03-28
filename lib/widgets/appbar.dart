@@ -12,7 +12,8 @@ Widget build(BuildContext context) {
 
   return PreferredSize(
         preferredSize: Size.fromHeight(100.0), // here the desired height
-          child: AppBar(
+        child: AppBar(
+        backgroundColor: Colors.white,
         title: const Text('Roomies'),
         actions: <Widget>[
           IconButton(

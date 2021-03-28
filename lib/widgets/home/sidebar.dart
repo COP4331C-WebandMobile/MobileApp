@@ -12,21 +12,36 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
    return Drawer(
-  // Add a ListView to the drawer. This ensures the user can scroll
-  // through the options in the drawer if there isn't enough vertical
-  // space to fit everything.
-  child: ListView(
-    // Important: Remove any padding from the ListView.
-    padding: EdgeInsets.zero,
+  child: Container(
+    color: Colors.black,
+    child: Column(
     children: <Widget>[
-      DrawerHeader(
-        child: Text('Drawer Header'),
+      Expanded(
+        flex:4,
+        child:DrawerHeader(
+        child: Text(
+          'Roomies',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )
+          ),
         decoration: BoxDecoration(
-          color: Colors.blue,
+          color: Colors.black,
         ),
-      ),
-      ListTile(
-        title: Text('Messages'),
+      )),
+      Expanded(
+        flex: 8,
+        child:Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [ 
+        ListTile(
+        title: Text(
+          'Messages',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )),
         onTap: () {
             Navigator.push(
               context,
@@ -34,12 +49,16 @@ class SideBar extends StatelessWidget {
                           value: BlocProvider.of<LandingCubit>(context),
                           child: TestMessagePage()),),
               );
-          // Update the state of the app.
-          // ...
+  
         },
       ),
       ListTile(
-        title: Text('Chores'),
+        title: Text(
+          'Chores',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )),
         onTap: () {
             Navigator.push(
               context,
@@ -47,40 +66,66 @@ class SideBar extends StatelessWidget {
                           value: BlocProvider.of<LandingCubit>(context),
                           child: ChoresPage()),
               ));
-          // Update the state of the app.
-          // ... 
+        
         },
       ),
        ListTile(
-        title: Text('Locations'),
+        title: Text(
+          'Locations',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )),
         onTap: () {
-          // Update the state of the app.
-          // ...
+        
         },
       ),
        ListTile(
-        title: Text('Calendar'),
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )),
         onTap: () {
-          // Update the state of the app.
-          // ...
+        
         },
       ),
        ListTile(
-        title: Text('House Items'),
+        title: Text(
+          'Roomies',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )),
         onTap: () {
-          // Update the state of the app.
-          // ...
+       
         },
       ),
        ListTile(
-        title: Text('Settings'),
+        title: Text(
+          'Roomies',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            )),
         onTap: () {
-          // Update the state of the app.
-          // ...
+          
         },
       ),
     ],
-  ),
+  )),
+
+
+    Expanded(
+     flex:1,
+     child:
+     ElevatedButton(),
+      )
+  
+    ])
+
+)
 );
     
   
