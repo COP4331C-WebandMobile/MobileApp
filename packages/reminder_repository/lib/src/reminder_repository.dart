@@ -26,4 +26,16 @@ class ReminderRepository{
       //Update location
   }
 
+Future<void> createReminder(Reminder reminder) {
+
+    try{
+     _fireStore.collection('houses').doc(_home).collection("reminders").add(reminder.toEntity().ReminderDocument());
+    }
+    on Exception {
+      print(Exception());
+    }
+
+  
+}
+
 }

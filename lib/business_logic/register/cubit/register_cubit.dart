@@ -63,7 +63,11 @@ class RegisterCubit extends Cubit<RegisterState> {
       await _authenticationRepository.register(
         email: state.email.value,
         password: state.password.value,
-      );
+        //firstName: state.firstName,
+        //lastName: state.lastName,
+        //phoneNumber: state.phoneNumber,
+       );
+      await 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

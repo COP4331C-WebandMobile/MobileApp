@@ -1,20 +1,27 @@
 import '../entities/entities.dart';
+import 'package:equatable/equatable.dart';
 
-class Reminder{
+
+class Reminder extends Equatable{
+
+  @override
+  List<Object> get props => [frequency,description];
 
   final description;
-  final lastName;
- 
-  final lastLocation; 
+  final frequency;
 
-  Reminder(this.description,this.lastName,this.lastLocation);
 
-    static Reminder fromEntity(ReminderEntity entity) {
+  Reminder(this.description,this.frequency);
+
+  static Reminder fromEntity(ReminderEntity entity) {
     return Reminder(
-      entity.firstName,
-      entity.lastName,
-      entity.lastLocation,
+      entity.description,
+      entity.frequency,
     );
+  }
+
+  ReminderEntity toEntity() {
+    return ReminderEntity(description,frequency);
   }
 
 
