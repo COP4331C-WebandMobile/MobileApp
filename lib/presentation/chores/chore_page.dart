@@ -1,4 +1,3 @@
-
 import 'package:chore_repository/chore_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -8,167 +7,228 @@ import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 import '../../widgets/appbar.dart';
 
-class ChoresPage extends StatelessWidget {
+class ChoresPage extends StatefulWidget {
+  const ChoresPage({Key key}) : super(key: key);
+
+  @override
+  _ChoresState createState() => _ChoresState();
+}
+
+class ChoresContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Container(
+        child: BlocBuilder<ChoresBloc, ChoresState>(builder: (context, state) {
+      return Column(
+        children: <Widget>[Expanded(child: ChoreWidget(state.props, 0))],
+      );
+    }));
+  }
+}
 
+class _ChoresState extends State<ChoresPage> {
+  int _selectedIndex = 0;
+  static List<Widget> _widgetOptions = <Widget>[
+    ChoresContainer(),
+    ToDoContainer(),
+  ];
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final home = context.read<LandingCubit>().state.home;
 
     return BlocProvider<ChoresBloc>(
-          create: (context) => ChoresBloc(
-            choresRepository: ChoresRepository(home),
-            )/*..add(LoadChores())*/,
-          child: Builder(
-            builder: (context) { 
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Chores'),
-                centerTitle: true,
-                actions: [
-                Container(
-                  decoration: BoxDecoration(
-                  color: Colors.black,
-                  shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    key: const Key('messagePage_add_iconButton'),
-                    icon: const Icon(Icons.add),
-                    color: Colors.white,
-                    splashColor: Colors.white,
-                    splashRadius: 20,
-                    onPressed: (){
-                      showDialog(context: context, 
-                      builder: (_) => BlocProvider<ChoresBloc>.value(
+        create: (context) => ChoresBloc(
+              choresRepository: ChoresRepository(home),
+            ),
+        child: Builder(builder: (context) {
+          return Scaffold(
+            appBar: AppBarWidget(),
+            body: Center(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.list),
+                  label: 'All',
+                  backgroundColor: Colors.red,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.list),
+                  label: 'To do',
+                  backgroundColor: Colors.purple,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.analytics),
+                  label: 'Stats',
+                  backgroundColor: Colors.pink,
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.amber[800],
+              onTap: _onItemTapped,
+            ),
+          );
+        }));
+  }
+}
+
+class ToDoContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(//Based on context of the drop down build certain container
+        child: BlocBuilder<ChoresBloc, ChoresState>(builder: (context, state) {
+      return Column(
+        children: <Widget>[Expanded(child: ChoreWidget(state.props, 1))],
+      );
+    }));
+  }
+}
+
+class ChoreStatesContainer {}
+
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  Size get preferredSize => Size.fromHeight(60);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(title: Text('Chores'), centerTitle: true, actions: [
+      Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+              key: const Key('messagePage_add_iconButton'),
+              icon: const Icon(Icons.add),
+              color: Colors.white,
+              splashColor: Colors.white,
+              splashRadius: 20,
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider<ChoresBloc>.value(
                           value: BlocProvider.of<ChoresBloc>(context),
                           child: AddModal(),
-                      )
-                      );
-                      }  
-            ),
-          ),
-        ],
-      ),
-            bottomNavigationBar:BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Chore List',
-                
-              ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'To Do',
-             
-              ),
-        
-        ],
-      ),
-            body: Container( 
-                child: BlocBuilder<ChoresBloc,ChoresState>(
-                  builder: (context,state){
-                    return Column(
-                    children:<Widget>[SizedBox(
-                      height:500,
-                      child: ChoreWidget(state.props))],
-                    );
-                  }
-                ),
-            
-              
-          ),
-        );
-      }
-    )
-    );
-    }
+                        ));
+              }))
+    ]);
   }
-class ChoreWidget extends StatelessWidget {
-
-  final String id ="";
-  final String description="";
-  final List<Chore> chores;
-  ChoreWidget(this.chores);
-
-  //ChoreWidget(this.id,this.description);
-  @override 
-  Widget build(BuildContext context){
-    return Container(
-      child:
-      ListView.builder(
-      itemCount: chores.length,
-      itemBuilder: (BuildContext context, i) {
-
-      return ChoreBox( chores[i]
-     
-          );
-        }, // Delete Chore
-      ));
-    }
 }
+
+class ChoreWidget extends StatelessWidget {
+  List<Chore> markedList(chores, option) {
+    List<Chore> markedList = [];
+
+    if (option == 1) {
+      for (int i = 0; i < chores.length; i++) {
+        if (chores[i].mark == true) markedList.add(chores[i]);
+      }
+      return markedList;
+    } else
+      return chores;
+  }
+
+  final String id = "";
+  final option;
+  final String description = "";
+  List<Chore> chores;
+  ChoreWidget(chores, this.option) {
+    this.chores = markedList(chores, option);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: ListView.builder(
+      itemCount: chores.length,
+      // ignore: missing_return
+      itemBuilder: (BuildContext context, i) {
+        return ChoreBox(chores[i]);
+      }, // Delete Chore
+    ));
+  }
+}
+
 class AddModal extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final email = context.read<AuthenticationBloc>().state.user.email;
+    final description = TextEditingController();
 
-@override
-Widget build(BuildContext context) {
-
-  final email = context.read<AuthenticationBloc>().state.user.email;
-
-    
-  final description = TextEditingController();
- 
-  return AlertDialog(
-    content: Container(
-      child: Column(
-        children: <Widget>[ 
+    return AlertDialog(
+      content: Container(
+          child: Column(children: <Widget>[
         Text("Enter Description of Chore"),
         TextField(
-          controller:description,
+          controller: description,
         ),
         IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () => context.read<ChoresBloc>().add(AddChore(Chore(email,false,description.text,"test")))
-          )
-        ]
-      )
-      ),
-  );
-}}
-
-class ChoreBox extends StatelessWidget {
-final Chore chore;
-
-ChoreBox(this.chore);
-
-@override 
-Widget build(BuildContext context){
-  return Card(
-    child: Column (
-      children: [
-        Text(chore.creator),
-        Text(chore.description),
-        Row(
-        children: <Widget>[ElevatedButton(
-          onPressed: () {
-            context.read<ChoresBloc>().add(CompleteChore(chore));
-            },
-          child: Text("Completed")
-        ),
-        ElevatedButton(
-          onPressed: () { 
-          context.read<ChoresBloc>().add(DeleteChore(chore));
-          },
-          child: Text("Delete"),
-        ),
-        ElevatedButton(
-          onPressed: () { 
-             context.read<ChoresBloc>().add(MarkChore(chore));
-           },
-          child: Text("Mark")
-        )]),
-    ],)
-   );
-
-
+            icon: const Icon(Icons.add),
+            onPressed: () => context
+                .read<ChoresBloc>()
+                .add(AddChore(Chore(email, false, description.text, "test"))))
+      ])),
+    );
+  }
 }
 
+class ChoreBox extends StatelessWidget {
+  final Chore chore;
 
+  ChoreBox(this.chore);
+
+  @override
+  Widget build(BuildContext context) {
+    var starColor;
+    if (chore.mark == true) {
+      starColor = Colors.yellow;
+    } else
+      starColor = Colors.black;
+    return Card(
+        child: Container(
+      child: Row(children: [
+        Expanded(
+          child: Text(chore.description),
+        ),
+        Expanded(
+          child: Column(children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.check_box,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                context.read<ChoresBloc>().add(CompleteChore(chore));
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                context.read<ChoresBloc>().add(DeleteChore(chore));
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.star,
+                color: starColor,
+              ),
+              onPressed: () {
+                context.read<ChoresBloc>().add(MarkChore(chore));
+              },
+            )
+          ]),
+        )
+      ]),
+    ));
+  }
 }

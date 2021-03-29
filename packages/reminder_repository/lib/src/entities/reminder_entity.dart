@@ -4,21 +4,26 @@ import 'package:equatable/equatable.dart';
 class ReminderEntity{
 
 
-  final String firstName;
-  final String lastName;
-  final String lastLocation;
+  final description;
+  final frequency;
 
-  const ReminderEntity(this.firstName, this.lastName, this.lastLocation);
+  const ReminderEntity(this.description, this.frequency);
 
   @override
-  List<Object> get props => [firstName, lastName, lastLocation];
+  List<Object> get props => [description, frequency];
 
   static ReminderEntity fromSnapshot(DocumentSnapshot snap) {
     return ReminderEntity(
       snap.data()['description'],
-      snap.data()['last_name'],
-      snap.data()['last_location'],
+      snap.data()['frequency'],
     );
+  }
+
+   Map<String, Object> ReminderDocument() {
+    return {
+      "description": description,
+      "frequency": frequency,
+    };
   }
 }
 

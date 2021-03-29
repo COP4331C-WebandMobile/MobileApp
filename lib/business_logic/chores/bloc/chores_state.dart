@@ -1,9 +1,10 @@
 part of 'chores_bloc.dart';
 
+//enum status {ChoresLoaded,ToDo}
+
 @immutable
 abstract class ChoresState extends Equatable {
   const ChoresState();
-
   @override
   List<Chore> get props => [];
 }

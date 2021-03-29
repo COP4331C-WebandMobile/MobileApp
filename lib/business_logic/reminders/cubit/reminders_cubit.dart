@@ -15,11 +15,15 @@ class ReminderCubit extends Cubit<ReminderState> {
     @required ReminderRepository reminderRepository,
   })  :   assert(reminderRepository != null),
          _reminderRepository = reminderRepository,
-         super( ReminderState([Reminder("Testing","Testing","Tesitng")],status.loading)){
+         super( ReminderState([Reminder("None","None")],status.loading)){
             Reminders();
          }
   void Reminders(){
     _reminderSubscription = _reminderRepository.reminders().listen(
     (reminders) => emit(ReminderState(reminders,status.loaded)));
+  }
+
+  void CreateReminder(reminderDescription,frequency){
+    _reminderRepository.createReminder(Reminder(reminderDescription,frequency));
   }
 }

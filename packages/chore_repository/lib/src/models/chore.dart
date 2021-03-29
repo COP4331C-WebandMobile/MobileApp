@@ -25,10 +25,6 @@ class Chore extends Equatable {
   List<Object> get props => [mark, id, description, creator];
 
 
-  @override
-  String toString() {
-    return 'Chore { mark: $mark, creator: $creator, description: $description, id: $id }';
-  }
 
   ChoreEntity toEntity() {
     return ChoreEntity(creator, id, description, mark);
