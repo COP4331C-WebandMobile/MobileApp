@@ -37,13 +37,21 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       else
       {
         yield NoMessages('There were no messages to retrieve.');
-      }
-      
+      } 
+    }
+    else if(event is RespondToQuestion)
+    {
+      _messageRepository.respondToQuestion(event.id, event.creator, event.response);
     }
     
   }
 
-
+  // To prevent memory leak, manually cancel the subscription on closing.
+  @override
+  Future<void> close() {
+    _messagesSubscriptions?.cancel();
+    return super.close();
+  }  
 
 
 }

@@ -11,42 +11,17 @@ class MessageEntity extends Equatable {
   final String body;
   final Timestamp date;
   final MessageType type;
-  
+  final String cost;
 
-  const MessageEntity(this.id, this.creator, this.body, this.date, this.type);
-
-  Map<String, Object> toJson() {
-    return {
-      "id": id,
-      "creator": creator,
-      "body": body,
-      "date": date,
-      "type": type,
-    };
-  }
+  const MessageEntity(this.id, this.creator, this.body, this.date, this.type, this.cost);
   
   @override
-  List<Object> get props => [id, creator, body, date, type];
+  List<Object> get props => [id, creator, body, date, type, cost];
 
   @override
   String toString() {
   return 'MessageEntity { id: $id, creator: $creator, body: $body, date: $date, type: $type }';
    }
-
-  static MessageEntity fromJson(Map<String, Object> json)
-  {
-    // Resolves the string to one of the enumerated types.
-    MessageType _type = _getType(json['type'] as String);
-
-
-    return MessageEntity(
-      json['id'] as String,
-      json['creator'] as String,
-      json['body'] as String,
-      json['date'] as Timestamp,
-      _type,
-     );
-  }
 
   static MessageType _getType(String type)
   {
@@ -75,7 +50,8 @@ class MessageEntity extends Equatable {
       data['creator'],
       data['body'],
       data['date'],
-      _type
+      _type,
+      data['cost'],
     );
   }
 
@@ -86,6 +62,7 @@ class MessageEntity extends Equatable {
       "body": body,
       "date": date,
       "type": type,
+      "cost": cost,
     };
   }
 

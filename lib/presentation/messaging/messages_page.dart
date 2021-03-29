@@ -11,7 +11,7 @@ class TestMessagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MessagingBloc(FirebaseMessageRepository()),
+      create: (context) => MessagingBloc(FirebaseMessageRepository(houseName: 'NewHOused')),
       child: Scaffold(
         body: MyMessagePage(),
       ),
@@ -122,9 +122,14 @@ class MessageWidget extends StatelessWidget {
     {
         return AlertWidget(message);
     }
+    else if(message.type == MessageType.question)
+    {
+        
+        return QuestionWidget(message);
+    }
     else
     {
-        return Container();
+      return Container();
     }
 
   }
@@ -163,6 +168,46 @@ class AlertWidget extends StatelessWidget {
             alignment: Alignment.bottomRight,
             child: Text('Posted date'),
             ),
+        ],
+      ),
+      );
+  }
+
+}
+
+class QuestionWidget extends StatelessWidget {
+
+  final Message message;
+
+  QuestionWidget(this.message);
+    
+
+  @override
+  Widget build(BuildContext context) {
+
+    return MessageCard(
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.supervised_user_circle),
+              const SizedBox(width: 8,),
+              Expanded(child: Text(message.body))
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text('- ' + message.creator),
+            ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text('Posted date'),
+            ),
+          // Make button textbox appear and then allow input to submit...
+          ElevatedButton(
+            onPressed: (){ context.read<MessagingBloc>().add(RespondToQuestion(message.id, 'Gerg', 'What a stupid question.'));},
+            child: Text('Respond')),
         ],
       ),
       );

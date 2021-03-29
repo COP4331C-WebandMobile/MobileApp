@@ -53,13 +53,13 @@ class ChoresRepository {
   }
 
    Future<void> CompleteChore(Chore chore) {
-    final Timestamp thing = Timestamp.now();
+    final Timestamp date = Timestamp.now();
 
     return _fireStore.collection('houses').doc(_home).collection("messages").add(
            {
             "body": chore.description,
             "creator": chore.creator,
-            "date": thing,
+            "date": date,
             "type": "alert",
             });
         

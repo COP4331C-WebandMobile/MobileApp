@@ -2,6 +2,8 @@
 import 'dart:async';
 import 'models/models.dart';
 
+class InvalidHouseNameException implements Exception {}
+
 abstract class MessagingRepository {
 
   Future<void> createNewMessage(Message message);

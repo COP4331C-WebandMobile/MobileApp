@@ -17,3 +17,15 @@ class GetMessages extends MessagingEvent {
   List<Object> get props => [messages];
 
 }
+
+class RespondToQuestion extends MessagingEvent {
+
+  final String id;
+  final String creator;
+  final String response;
+
+  const RespondToQuestion(this.id, this.creator, this.response);
+
+  @override
+  List<Object> get props => [id, creator, response];
+}

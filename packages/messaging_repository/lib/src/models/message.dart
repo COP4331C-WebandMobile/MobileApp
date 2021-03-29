@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:messaging_repository/src/entities/message_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -15,22 +16,24 @@ class Message extends Equatable{
   final String body;
   final Timestamp date;
   final MessageType type;
+  final String cost;
 
-  Message(this.id, this.creator,this.body, this.date, this.type);
+  Message(this.id, this.creator,this.body, this.type, {this.date, this.cost});
  
-
   Message copyWith({String id, String creator, String body, Timestamp date, MessageType type}) {
       return Message(
         id ?? this.id,
         creator ?? this.creator,
         body ?? this.body,
-        date ?? this.date,
         type ?? this.type,
+        date: this.date,
+        // Possible assert that they cant be null...
+        cost: cost,
       );
   }
 
   @override
-  List<Object> get props => [id, creator, body, date, type];
+  List<Object> get props => [id, creator, body, date, type, cost];
 
   @override
   String toString() {
@@ -38,7 +41,7 @@ class Message extends Equatable{
     }
   
   MessageEntity toEntity() {
-    return MessageEntity(id, creator, body, date, type);
+    return MessageEntity(id, creator, body, date, type, cost);
   }
 
   static Message fromEntity(MessageEntity entity) {
@@ -46,8 +49,9 @@ class Message extends Equatable{
         entity.id,
         entity.creator,
         entity.body,
-        entity.date,
-        entity.type
+        entity.type,
+        date: entity.date,
+        cost: entity.cost
       );
   }
 
