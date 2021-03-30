@@ -32,7 +32,7 @@ dependencies:
   google_fonts: ^2.0.0
   formz: ^0.3.2
   pedantic: ^1.11.0
-  #google_maps_flutter: ^2.0.1
+  google_maps_flutter: ^2.0.2
   home_repository:
     path: packages/home_repository
   authentication_repository:
