@@ -4,9 +4,6 @@ import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
-
-import '../../business_logic/authentication/authentication.dart';
-import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 import '../../widgets/home/sidebar.dart';
 import 'package:reminder_repository/reminder_repository.dart';
 import 'package:roomate_repository/roomate_repository.dart';
@@ -103,7 +100,6 @@ class RoomateList extends StatelessWidget {
 class HouseInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         child: Row(children: [
       Align(
@@ -138,7 +134,6 @@ class RoomateIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return CircleAvatar(
         child: TextButton(
       child: Text(roomate.firstName[0]),
@@ -250,7 +245,7 @@ class CreateReminder extends StatelessWidget {
             icon: const Icon(Icons.add),
             onPressed: () => context
                 .read<ReminderCubit>()
-                .CreateReminder(reminderDescription.text, "Daily")),
+                .createReminder(reminderDescription.text, "Daily")),
       ])),
     ));
   }

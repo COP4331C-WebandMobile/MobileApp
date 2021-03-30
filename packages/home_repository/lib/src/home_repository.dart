@@ -15,7 +15,8 @@ class HomeRepository {
       return _fireStore.collection('users').doc(_email).snapshots().map((snapshot){
       return snapshot.data()["house_name"];}); 
     }
-    on Exception catch(e){
+    on Exception catch(e)
+    {
       print(e);
     }
   }

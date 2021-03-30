@@ -2,7 +2,7 @@ part of 'roomates_cubit.dart';
 
 enum status {loaded, loading}
 
-class RoomatesState{
+class RoomatesState extends Equatable {
 
   final List<Roomate> roomates;
   final status; 

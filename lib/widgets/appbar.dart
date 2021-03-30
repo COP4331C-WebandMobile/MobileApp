@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Bar extends StatelessWidget implements PreferredSizeWidget  {
 
-MediaQueryData mediaQuery;
 @override
 Widget build(BuildContext context) {
 

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
+import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
@@ -25,6 +26,47 @@ class MyMessagePage extends StatefulWidget {
   State<StatefulWidget> createState() => _MyMessagePageState();
 }
 
+// Going to have to be stateful since it will have different display based on selected type to create.
+class CreateMessageModal extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    final creator = context.read<AuthenticationBloc>().state.user.email;
+    final body = TextEditingController();
+
+    return AlertDialog(
+      content: Container(
+        // TODO: Eventually fix any MediaQuery either to be used or finding a better option.
+        height: MediaQuery.of(context).size.height / 2,
+        child: Column( 
+          children: [
+            Text('Create New Message'),
+            const SizedBox(height: 32,),
+            TextField(
+                controller: body,
+                decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Content',
+                helperText: '',
+                hintText: 'I have a test today!',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: (){
+                context.read<MessagingBloc>().add(CreateMessage(Message('NewMessage', creator, body.text, MessageType.alert)));
+              }, 
+              child: Text('Post')
+            ),
+          ],),
+      ),
+    );
+  }
+}
+
+
 class _MyMessagePageState extends State<MyMessagePage> {
 
 
@@ -47,7 +89,13 @@ class _MyMessagePageState extends State<MyMessagePage> {
               color: Colors.white,
               splashColor: Colors.white,
               splashRadius: 20,
-              onPressed: (){print('Test');},
+              onPressed: (){
+                showDialog(
+                  context: context, 
+                  builder: (_) => BlocProvider<MessagingBloc>.value(
+                    value: BlocProvider.of<MessagingBloc>(context),
+                    child: CreateMessageModal(),));
+              },
             ),
           ),
         ],

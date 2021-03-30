@@ -1,9 +1,6 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../business_logic/authentication/authentication.dart';
-import 'package:home_repository/home_repository.dart';
 import '../../business_logic/landing/cubit/landing_cubit.dart';
 
 class LandingPage extends StatelessWidget {
@@ -30,6 +27,7 @@ class LandingPage extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () => showDialog(
                               context: context,
+                              builder: (context) => Container(),
                               //builder: (context)=>DialogBox()
                             ),
                         child: Text("Join Home")),
@@ -60,7 +58,7 @@ class CreateHome extends StatelessWidget {
         IconButton(
             icon: const Icon(Icons.add),
             onPressed: () =>
-                context.read<LandingCubit>().AddHome(houseName.text))
+                context.read<LandingCubit>().addHome(houseName.text))
       ])),
     ));
   }
@@ -69,6 +67,5 @@ class CreateHome extends StatelessWidget {
 class JoinHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
   }
 }

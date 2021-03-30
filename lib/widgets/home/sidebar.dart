@@ -9,7 +9,6 @@ import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Drawer(
         child: Container(
             color: Colors.black,
