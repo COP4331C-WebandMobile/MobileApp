@@ -27,7 +27,10 @@ class LandingPage extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () => showDialog(
                               context: context,
-                              builder: (context) => Container(),
+                              builder: (_) => BlocProvider<LandingCubit>.value(
+                                value: BlocProvider.of<LandingCubit>(context),
+                                child: JoinHome(),
+                              ),        
                               //builder: (context)=>DialogBox()
                             ),
                         child: Text("Join Home")),
@@ -65,7 +68,26 @@ class CreateHome extends StatelessWidget {
 }
 
 class JoinHome extends StatelessWidget {
+
+  final houseName = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+        return AlertDialog(
+        content: FractionallySizedBox(
+      widthFactor: 0.3,
+      heightFactor: 0.3,
+      child: Container(
+          child: Column(children: <Widget>[
+        Text("Type a Valid Home Name"),
+        TextField(
+          controller: houseName,
+        ),
+        IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () =>
+                context.read<LandingCubit>().joinHome(houseName.text))
+      ])),
+    ));
   }
 }

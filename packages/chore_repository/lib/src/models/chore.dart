@@ -27,7 +27,7 @@ class Chore extends Equatable {
 
 
   ChoreEntity toEntity() {
-    return ChoreEntity(creator, id, description, mark);
+    return ChoreEntity(description, id, creator, mark);
   }
 
   static Chore fromEntity(ChoreEntity entity) {

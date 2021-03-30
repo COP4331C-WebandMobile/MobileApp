@@ -161,7 +161,6 @@ class MessagesList extends StatelessWidget {
       },
     );
   }
-
 }
 
 class MessageWidget extends StatelessWidget {

@@ -40,6 +40,10 @@ class LandingCubit extends Cubit<LandingState> {
     _homeRepository.addHome(houseName);
   }
   
+  void joinHome(String houseName) {
+    _homeRepository.joinHome(houseName);
+  }
+
   @override
   Future<void> close() {
     _homeSubscription.cancel();
