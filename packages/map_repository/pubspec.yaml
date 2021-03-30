@@ -2,7 +2,6 @@ name: map_repository
 description: A new Flutter package project.
 version: 0.0.1
 author:
-homepage:
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -12,10 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_maps_flutter: ^2.0.1
+  
+  #google_maps_flutter: ^2.0.2
   location: ^4.1.1
   cloud_firestore: ^1.0.1
   firebase_core: ^1.0.1
+  equatable: ^2.0.0
+  meta: ^1.3.0
 
 dev_dependencies:
   flutter_test:
