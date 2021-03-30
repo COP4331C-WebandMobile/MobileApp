@@ -27,14 +27,14 @@ class _MessageCardState extends State<MessageCard> {
           margin: EdgeInsets.all(8),
           child: Container(
             padding: EdgeInsets.all(4),
-            child: widget.child,
+            child:widget.child,
+            ),
             decoration: BoxDecoration(
               color: CustomColors.gold,
               border: widget.borderStyle ?? Border.all(),
               borderRadius: BorderRadius.circular(16)
             ),
           ),
-        )
       ],
 
     );

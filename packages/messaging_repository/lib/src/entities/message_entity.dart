@@ -26,13 +26,13 @@ class MessageEntity extends Equatable {
   static MessageType _getType(String type)
   {
     switch (type) {
-      case 'alert':
+      case 'MessageType.alert':
         return MessageType.alert;
         break;
-      case 'question':
+      case 'MessageType.question':
         return MessageType.question;
         break;
-      case 'purchase':
+      case 'MessageType.purchase':
         return MessageType.purchase;
         break;
       default:
@@ -61,7 +61,7 @@ class MessageEntity extends Equatable {
       "creator": creator,
       "body": body,
       "date": date,
-      "type": type,
+      "type": type.toString(),
       "cost": cost,
     };
   }

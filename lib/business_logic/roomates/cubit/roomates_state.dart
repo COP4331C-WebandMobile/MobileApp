@@ -9,7 +9,7 @@ class RoomatesState extends Equatable {
 
   RoomatesState(this.roomates,this.status);
   @override
-  List<Object> get props => [roomates,status];
+  List<Object> get props => [roomates, status];
 }
 
 //const LandingState.loading() : this._();

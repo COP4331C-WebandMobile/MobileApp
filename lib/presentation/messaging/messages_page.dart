@@ -188,11 +188,7 @@ class MessageWidget extends StatelessWidget {
 
 }
 
-// Alert card would simply have the alert logo on the card, the body would then be displayed regularly.
-// Question card would have an addition of a button to click on for responding.
-// Purchaes would list releavant info on seperate lines or so, such as Price:
-
-
+// TODO: I plan to better generalize the widgets so its neater.
 class AlertWidget extends StatelessWidget {
 
   final Message message;
@@ -209,7 +205,12 @@ class AlertWidget extends StatelessWidget {
             children: [
               Icon(Icons.supervised_user_circle),
               const SizedBox(width: 8,),
-              Expanded(child: Text(message.body))
+              Expanded(child: Text(message.body)),
+              // TODO: Need to figure out why the icons dont align. Wtf?            
+              IconButton(
+                  icon: Icon(Icons.remove_circle_outline_outlined), 
+                  onPressed: (){ context.read<MessagingBloc>().add(DeleteMessage(message));}
+                ),    
             ],
           ),
           Align(

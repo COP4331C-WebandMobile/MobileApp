@@ -24,8 +24,10 @@ class FirebaseMessageRepository implements MessagingRepository {
 
 
   @override
-  Future<void> createNewMessage(Message message) {
-    return messageCollection.add(message.toEntity().toDocument());
+  Future<void> createNewMessage(Message message) async {
+    
+    // Generates a timestamp of the current time when creating a new message.
+    return await messageCollection.add(message.copyWith(date: Timestamp.now()).toEntity().toDocument());
   }
 
   // Parameters: 
@@ -34,9 +36,6 @@ class FirebaseMessageRepository implements MessagingRepository {
   //    - response: The response being made to a question.
   Future<void> respondToQuestion(String targetId, String creator, String body) async {
 
-    // Pass a message to the response.
-    // The message can be converted to a JSON and stored in the string array of our target message.
-    // So we would have an array of messages essentially.
     CollectionReference responses = messageCollection.doc(targetId).collection('/responses');
     
     return await responses.doc().set({'creator': 'Guy', 'body': 'This is a test.'});
@@ -49,6 +48,8 @@ class FirebaseMessageRepository implements MessagingRepository {
 
   @override
   Future<void> editMessage(Message message) {
+    message.copyWith(date: Timestamp.now());
+
     return messageCollection.doc(message.id).update(message.toEntity().toDocument());
   }
 

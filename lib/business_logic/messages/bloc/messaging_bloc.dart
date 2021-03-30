@@ -28,7 +28,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       // Loads
       yield MessagingLoading();
       
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(milliseconds: 100));
 
       if(event.messages.isNotEmpty)
       {

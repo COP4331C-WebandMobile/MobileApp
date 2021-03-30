@@ -26,7 +26,7 @@ class Message extends Equatable{
         creator ?? this.creator,
         body ?? this.body,
         type ?? this.type,
-        date: this.date,
+        date: date ?? this.date,
         // Possible assert that they cant be null...
         cost: cost,
       );
