@@ -127,9 +127,13 @@ class MessageWidget extends StatelessWidget {
         
         return QuestionWidget(message);
     }
+    else if(message.type == MessageType.purchase)
+    {
+      return PurchaseWidget(message);
+    }
     else
     {
-      return Container();
+      return Text('*Invalid Message type*');
     }
 
   }
@@ -181,7 +185,6 @@ class QuestionWidget extends StatelessWidget {
 
   QuestionWidget(this.message);
     
-
   @override
   Widget build(BuildContext context) {
 
@@ -215,6 +218,39 @@ class QuestionWidget extends StatelessWidget {
 
 }
 
+class PurchaseWidget extends StatelessWidget {
+
+  final Message message;
+
+  PurchaseWidget(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return MessageCard(
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.supervised_user_circle),
+              const SizedBox(width: 8,),
+              Expanded(child: Text(message.body))
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text('- ' + message.creator),
+            ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text('Posted date'),
+            ),
+        ],
+      ),
+      );
+  }
+
+}
 
 class CustomBoxWidget extends StatelessWidget {
 
