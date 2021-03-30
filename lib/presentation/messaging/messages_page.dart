@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
+import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
@@ -11,8 +12,10 @@ class TestMessagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String houseName = context.read<LandingCubit>().state.home;
+
     return BlocProvider(
-      create: (context) => MessagingBloc(FirebaseMessageRepository(houseName: 'NewHOused')),
+      create: (context) => MessagingBloc(FirebaseMessageRepository(houseName: houseName)),
       child: Scaffold(
         body: MyMessagePage(),
       ),
@@ -124,7 +127,10 @@ class _MyMessagePageState extends State<MyMessagePage> {
             {
               return MessagesList(state.messages);
             }
-            return Container();
+
+            return Container(
+              child: Text('There are no messages for this home.'),
+            );
           }
 
         ),
@@ -267,6 +273,8 @@ class QuestionWidget extends StatelessWidget {
 
 }
 
+// Can have it take fields like 'What was bought:' 'Cost:' 'Who owes'
+// Then this will create a message formatted using those fields.
 class PurchaseWidget extends StatelessWidget {
 
   final Message message;

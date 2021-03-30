@@ -142,6 +142,7 @@ User getUser(user) {
           password: password,
         );
       
+      
       if(!tempUser.user.emailVerified)
       {
        

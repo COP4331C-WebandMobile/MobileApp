@@ -18,7 +18,8 @@ class HouseLoading extends StatelessWidget {
   Widget build(BuildContext context) {
   return BlocProvider(
     create: (context) => LandingCubit(homeRepository: HomeRepository(context.read<AuthenticationBloc>().state.user.email)),
-    child:  BlocListener <LandingCubit,LandingState>( 
+    // TODO: This must be null and is being checked against. Need to fix later.
+    child:  BlocListener <LandingCubit,LandingState> ( 
       listener: (context,state) {
         if(state.status == HomeStatus.Loading) { 
         }

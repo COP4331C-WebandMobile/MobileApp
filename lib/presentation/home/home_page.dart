@@ -90,6 +90,7 @@ class RoomateList extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: state.roomates.length,
                         itemBuilder: (BuildContext context, i) {
+                          // TODO: I believe this is null, so maybe its not getting intialized properly.
                           return RoomateIcon(state.roomates[i]);
                         })))
           ]));

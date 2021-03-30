@@ -39,7 +39,7 @@ class _ChoresState extends State<ChoresPage> {
   @override
   Widget build(BuildContext context) {
     final home = context.read<LandingCubit>().state.home;
-
+    print(home);
     return BlocProvider<ChoresBloc>(
         create: (context) => ChoresBloc(
               choresRepository: ChoresRepository(home),

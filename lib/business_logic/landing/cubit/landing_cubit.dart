@@ -21,8 +21,14 @@ class LandingCubit extends Cubit<LandingState> {
 
   void validate(String home) {
 
-    if(home =="") emit(LandingState.homeless());
-    else emit(LandingState.homeVerified(home));
+    if(home =="")
+    {
+      emit(LandingState.homeless());
+    }
+    else 
+    {
+      emit(LandingState.homeVerified(home));
+    }
 
   }
   void checkHome(){
