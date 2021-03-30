@@ -34,6 +34,9 @@ dependencies:
   pedantic: ^1.11.0
   google_maps_flutter: ^2.0.1
   location: ^4.1.1
+  
+  
+  
   home_repository:
     path: packages/home_repository
   authentication_repository:

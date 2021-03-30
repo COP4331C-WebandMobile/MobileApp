@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
+import 'package:roomiesMobile/presentation/landing/map/map_page.dart';
 import 'package:roomiesMobile/presentation/messaging/messages_page.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
@@ -62,7 +63,7 @@ class SideBar extends StatelessWidget {
                                     BlocProvider<LandingCubit>.value(
                                         value: BlocProvider.of<LandingCubit>(
                                             context),
-                                        child: ChoresPage()),
+                                           child: ChoresPage()),
                               ));
                         },
                       ),
@@ -72,7 +73,7 @@ class SideBar extends StatelessWidget {
                               fontSize: 20,
                               color: Colors.white,
                             )),
-                        onTap: () {},
+                        onTap: () => {} 
                       ),
                       ListTile(
                         title: Text('Settings',
