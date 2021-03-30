@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:roomiesMobile/presentation/landing/landing_page.dart';
 
@@ -19,8 +18,9 @@ class HouseLoading extends StatelessWidget {
 
   return BlocProvider(
     create: (context) => LandingCubit(homeRepository: HomeRepository(context.read<AuthenticationBloc>().state.user.email)),
-    child:  BlocListener <LandingCubit,LandingState>( 
-      listener: (context,state) async {
+    // TODO: This must be null and is being checked against. Need to fix later.
+    child:  BlocListener <LandingCubit,LandingState> ( 
+      listener: (context,state) {
         if(state.status == HomeStatus.Loading) { 
         }
 

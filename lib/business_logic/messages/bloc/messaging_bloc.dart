@@ -28,7 +28,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       // Loads
       yield MessagingLoading();
       
-      await Future.delayed(Duration(seconds: 1));
+      //await Future.delayed(Duration(milliseconds: 100));
 
       if(event.messages.isNotEmpty)
       {
@@ -41,7 +41,16 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     }
     else if(event is RespondToQuestion)
     {
+       // Will cause a change to the messages which will create a GetMessages event, so no need to yield a state.
       _messageRepository.respondToQuestion(event.id, event.creator, event.response);
+    }
+    else if(event is CreateMessage)
+    {
+      _messageRepository.createNewMessage(event.message);
+    }
+    else if(event is DeleteMessage)
+    {
+      _messageRepository.deleteMessage(event.message);
     }
     
   }

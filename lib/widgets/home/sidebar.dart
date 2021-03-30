@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
-import 'package:roomiesMobile/presentation/landing/map/map_page.dart';
+import 'package:roomiesMobile/presentation/home/home_page.dart';
+import 'package:roomiesMobile/presentation/location/location_page.dart';
 import 'package:roomiesMobile/presentation/messaging/messages_page.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
@@ -10,7 +11,6 @@ import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Drawer(
         child: Container(
             color: Colors.black,
@@ -32,6 +32,23 @@ class SideBar extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      ListTile(
+                        title: Text('Home',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            )),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider<LandingCubit>.value(
+                                  value: BlocProvider.of<LandingCubit>(context),
+                                  child: HomePage()),
+                            ),
+                          );
+                        },
+                      ),
                       ListTile(
                         title: Text('Messages',
                             style: TextStyle(
@@ -73,7 +90,9 @@ class SideBar extends StatelessWidget {
                               fontSize: 20,
                               color: Colors.white,
                             )),
-                        onTap: () => {} 
+                        onTap: () {
+                          Navigator.push(context, LocationPage.route());
+                        },
                       ),
                       ListTile(
                         title: Text('Settings',

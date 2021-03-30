@@ -29,3 +29,21 @@ class RespondToQuestion extends MessagingEvent {
   @override
   List<Object> get props => [id, creator, response];
 }
+
+class CreateMessage extends MessagingEvent {
+
+  final Message message;
+  const CreateMessage(this.message);
+  
+  @override
+  List<Object> get props => [message];
+
+}
+
+class DeleteMessage extends MessagingEvent {
+  final Message message;
+  const DeleteMessage(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

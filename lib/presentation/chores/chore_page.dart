@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
-import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
-import '../../widgets/appbar.dart';
 
 class ChoresPage extends StatefulWidget {
   const ChoresPage({Key key}) : super(key: key);
@@ -41,7 +39,7 @@ class _ChoresState extends State<ChoresPage> {
   @override
   Widget build(BuildContext context) {
     final home = context.read<LandingCubit>().state.home;
-
+    print(home);
     return BlocProvider<ChoresBloc>(
         create: (context) => ChoresBloc(
               choresRepository: ChoresRepository(home),
@@ -123,7 +121,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class ChoreWidget extends StatelessWidget {
-  List<Chore> markedList(chores, option) {
+    List<Chore> markedList(chores, option) {
     List<Chore> markedList = [];
 
     if (option == 1) {
@@ -167,7 +165,19 @@ class AddModal extends StatelessWidget {
           child: Column(children: <Widget>[
         Text("Enter Description of Chore"),
         TextField(
+          maxLines: null,
           controller: description,
+          decoration: InputDecoration(
+              
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+              border: OutlineInputBorder(),
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Content',
+              helperText: '',
+              hintText: 'Wash clothes!',
+            ),
         ),
         IconButton(
             icon: const Icon(Icons.add),

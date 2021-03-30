@@ -2,7 +2,7 @@ part of 'reminders_cubit.dart';
 
 enum status {loaded, loading}
 
-class ReminderState{
+class ReminderState extends Equatable {
 
   final List<Reminder> reminders;
   final status; 
@@ -11,7 +11,7 @@ class ReminderState{
  
 
   @override
-  List<Object> get props => [reminders,status];
+  List<Object> get props => [reminders, status];
   
 }
 

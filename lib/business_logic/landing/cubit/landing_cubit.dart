@@ -21,8 +21,14 @@ class LandingCubit extends Cubit<LandingState> {
 
   void validate(String home) {
 
-    if(home =="") emit(LandingState.homeless());
-    else emit(LandingState.homeVerified(home));
+    if(home =="")
+    {
+      emit(LandingState.homeless());
+    }
+    else 
+    {
+      emit(LandingState.homeVerified(home));
+    }
 
   }
   void checkHome(){
@@ -30,10 +36,14 @@ class LandingCubit extends Cubit<LandingState> {
     (home) => validate(home)); 
   }
 
-  void AddHome(String houseName) {
+  void addHome(String houseName) {
     _homeRepository.addHome(houseName);
   }
   
+  void joinHome(String houseName) {
+    _homeRepository.joinHome(houseName);
+  }
+
   @override
   Future<void> close() {
     _homeSubscription.cancel();

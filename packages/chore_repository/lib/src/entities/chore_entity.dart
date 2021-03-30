@@ -30,7 +30,7 @@ class ChoreEntity extends Equatable {
     );
   }
 
-  Map<String, Object> ChoreDocument() {
+  Map<String, Object> toDocument() {
     return {
       "mark": mark,
       "description": description,

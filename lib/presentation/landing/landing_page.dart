@@ -1,9 +1,6 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../business_logic/authentication/authentication.dart';
-import 'package:home_repository/home_repository.dart';
 import '../../business_logic/landing/cubit/landing_cubit.dart';
 
 class LandingPage extends StatelessWidget {
@@ -30,6 +27,10 @@ class LandingPage extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () => showDialog(
                               context: context,
+                              builder: (_) => BlocProvider<LandingCubit>.value(
+                                value: BlocProvider.of<LandingCubit>(context),
+                                child: JoinHome(),
+                              ),        
                               //builder: (context)=>DialogBox()
                             ),
                         child: Text("Join Home")),
@@ -60,15 +61,33 @@ class CreateHome extends StatelessWidget {
         IconButton(
             icon: const Icon(Icons.add),
             onPressed: () =>
-                context.read<LandingCubit>().AddHome(houseName.text))
+                context.read<LandingCubit>().addHome(houseName.text))
       ])),
     ));
   }
 }
 
 class JoinHome extends StatelessWidget {
+
+  final houseName = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+        return AlertDialog(
+        content: FractionallySizedBox(
+      widthFactor: 0.3,
+      heightFactor: 0.3,
+      child: Container(
+          child: Column(children: <Widget>[
+        Text("Type a Valid Home Name"),
+        TextField(
+          controller: houseName,
+        ),
+        IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () =>
+                context.read<LandingCubit>().joinHome(houseName.text))
+      ])),
+    ));
   }
 }

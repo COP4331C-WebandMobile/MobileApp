@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class ReminderEntity{
+class ReminderEntity extends Equatable {
 
 
   final description;
@@ -19,7 +19,7 @@ class ReminderEntity{
     );
   }
 
-   Map<String, Object> ReminderDocument() {
+   Map<String, Object> toDocument() {
     return {
       "description": description,
       "frequency": frequency,

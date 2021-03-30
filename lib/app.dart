@@ -1,17 +1,9 @@
-
-
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:home_repository/home_repository.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/primary-theme.dart';
-
 import 'business_logic/authentication/authentication.dart';
-import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:roomiesMobile/presentation/landing/house_loading.dart';
-
-import 'business_logic/landing/cubit/landing_cubit.dart';
 import 'presentation/login/login_page.dart';
 import 'presentation/splash_page.dart';
 

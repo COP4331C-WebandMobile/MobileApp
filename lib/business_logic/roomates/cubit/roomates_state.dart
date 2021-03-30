@@ -2,14 +2,14 @@ part of 'roomates_cubit.dart';
 
 enum status {loaded, loading}
 
-class RoomatesState{
+class RoomatesState extends Equatable {
 
   final List<Roomate> roomates;
   final status; 
 
   RoomatesState(this.roomates,this.status);
   @override
-  List<Object> get props => [roomates,status];
+  List<Object> get props => [roomates, status];
 }
 
 //const LandingState.loading() : this._();

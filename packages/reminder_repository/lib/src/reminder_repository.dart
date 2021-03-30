@@ -19,23 +19,23 @@ class ReminderRepository{
           .map((doc) => Reminder.fromEntity(ReminderEntity.fromSnapshot(doc)))
           .toList();
       });}
-    on Exception catch(e){
+    on Exception catch(e)
+    {
       print(e);
     }
       //return list of roomates for the house
       //Update location
   }
 
-Future<void> createReminder(Reminder reminder) {
+Future<void> createReminder(Reminder reminder) async {
 
     try{
-     _fireStore.collection('houses').doc(_home).collection("reminders").add(reminder.toEntity().ReminderDocument());
+     await _fireStore.collection('houses').doc(_home).collection("reminders").add(reminder.toEntity().toDocument());
     }
     on Exception {
       print(Exception());
     }
 
-  
 }
 
 }

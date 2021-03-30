@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:reminder_repository/reminder_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:reminder_repository/reminder_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 part 'reminders_state.dart';
@@ -16,14 +16,21 @@ class ReminderCubit extends Cubit<ReminderState> {
   })  :   assert(reminderRepository != null),
          _reminderRepository = reminderRepository,
          super( ReminderState([Reminder("None","None")],status.loading)){
-            Reminders();
+            reminders();
          }
-  void Reminders(){
+  void reminders(){
     _reminderSubscription = _reminderRepository.reminders().listen(
     (reminders) => emit(ReminderState(reminders,status.loaded)));
   }
 
-  void CreateReminder(reminderDescription,frequency){
+  void createReminder(reminderDescription,frequency){
     _reminderRepository.createReminder(Reminder(reminderDescription,frequency));
   }
+
+    @override
+  Future<void> close() {
+    _reminderSubscription?.cancel();
+    return super.close();
+  }
+
 }
