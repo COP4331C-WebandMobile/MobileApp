@@ -8,31 +8,30 @@ class LocationPage extends StatelessWidget {
     return MaterialPageRoute(builder: (_) => LocationPage());
   }
 
-
+  
   @override
   Widget build(BuildContext context) {
     
     final mapRepo = MapRepository();
-
   
     return Scaffold(
-      body: Padding (
-        padding: EdgeInsets.only(bottom: 128, top: 128,right: 64, left: 64),
-        child:  GoogleMap(
-        myLocationButtonEnabled: true,
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          bearing: 192.8334901395799,
-          target: LatLng(28.3886683, -81.3926717),
-          tilt: 59.440717697143555,
-          zoom: 19.151926040649414
-        ),
-      ),
+      body: Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition:  CameraPosition(target: LatLng(20, 30), zoom: 5),
+            ),
+          ),
+          Center(child: ElevatedButton(onPressed: (){mapRepo.recordUserLocation();}, child: Text('Get Location'))),
+        ],
       ),
 
-    
-    );
-
+  
+      );      
+  
   }
 
 }

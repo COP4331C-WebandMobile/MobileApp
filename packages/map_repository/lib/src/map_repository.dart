@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 import 'package:map_repository/src/entities/user_location_entity.dart';
 
 class PermissionDeniedException implements Exception {}
@@ -8,12 +9,13 @@ class PermissionDeniedException implements Exception {}
 class MapRepository {
 
 final Location _location;
+
 final FirebaseFirestore _firestore;
 
 MapRepository() : this._firestore = FirebaseFirestore.instance, this._location = Location.instance;
 
 Future<UserLocationEntity> _getCurrentLocation() async {
-
+  
   var permission = await _location.requestPermission();
   var service = await _location.serviceEnabled();
 

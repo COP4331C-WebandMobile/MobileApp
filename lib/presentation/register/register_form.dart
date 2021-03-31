@@ -44,7 +44,7 @@ class RegisterForm extends StatelessWidget{
         //alignment: const Alignment(0, -1 / 3),
         child: Container(
           padding: EdgeInsets.all(20),
-          
+
           child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -85,12 +85,8 @@ class RegisterForm extends StatelessWidget{
               children:[
                 Expanded(
               child:_SignUpButton())]
-<<<<<<< HEAD
-             )),          
-=======
              )),
             
->>>>>>> 5aaa84d8fb10ef7cb946894aa9316600daa2993d
           ],
         ),
       ),
