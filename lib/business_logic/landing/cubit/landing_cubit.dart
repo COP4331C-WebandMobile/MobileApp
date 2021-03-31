@@ -36,8 +36,8 @@ class LandingCubit extends Cubit<LandingState> {
     (home) => validate(home)); 
   }
 
-  void addHome(String houseName) {
-    _homeRepository.addHome(houseName);
+  void addHome(String houseName,String password) {
+    _homeRepository.addHome(houseName,password);
   }
   
   void joinHome(String houseName) {

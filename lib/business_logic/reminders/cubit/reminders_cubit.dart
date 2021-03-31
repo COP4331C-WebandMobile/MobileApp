@@ -15,7 +15,7 @@ class ReminderCubit extends Cubit<ReminderState> {
     @required ReminderRepository reminderRepository,
   })  :   assert(reminderRepository != null),
          _reminderRepository = reminderRepository,
-         super( ReminderState([Reminder("None","None")],status.loading)){
+         super( ReminderState([Reminder("None","None","None")],status.loading)){
             reminders();
          }
   void reminders(){
@@ -24,8 +24,17 @@ class ReminderCubit extends Cubit<ReminderState> {
   }
 
   void createReminder(reminderDescription,frequency){
-    _reminderRepository.createReminder(Reminder(reminderDescription,frequency));
+    _reminderRepository.createReminder(Reminder(reminderDescription,frequency,"New"));
   }
+
+   void completeReminder(user,reminder){
+    _reminderRepository.completeReminder(user,reminder);
+  }
+
+    void deleteReminder(reminder){
+    _reminderRepository.deleteReminder(reminder);
+  }
+
 
     @override
   Future<void> close() {

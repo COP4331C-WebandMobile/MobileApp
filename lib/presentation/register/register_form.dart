@@ -82,9 +82,15 @@ class RegisterForm extends StatelessWidget{
 
             Expanded(
             child: Row(
-              children:[Expanded(
+              children:[
+                Expanded(
               child:_SignUpButton())]
+<<<<<<< HEAD
              )),          
+=======
+             )),
+            
+>>>>>>> 5aaa84d8fb10ef7cb946894aa9316600daa2993d
           ],
         ),
       ),

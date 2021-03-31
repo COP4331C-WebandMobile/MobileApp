@@ -12,14 +12,24 @@ class Roomate{
 
   Roomate(this.firstName,this.lastName,this.email, this.phoneNumber, this.lastLocation);
 
-  static Roomate fromEntity(RoomateEntity entity) {
+  static Roomate fromEntity(email, RoomateEntity entity) {
     return Roomate(
       entity.firstName,
       entity.lastName,
-      entity.email,
+      email,
       entity.phoneNumber,
       entity.lastLocation,
     );
+  }
+
+   Map<String, Object> toDocument() {
+    return {
+      "email":email,
+      "first_name": firstName,
+      "last_name": lastName,
+      "phone_number": phoneNumber,
+  
+    };
   }
 
 } 
