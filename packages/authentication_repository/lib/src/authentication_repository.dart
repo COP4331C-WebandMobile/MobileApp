@@ -59,15 +59,6 @@ class AuthenticationRepository {
     }
   }
 
-  // Stream of User which will emit the current user whenever authentication state changes.
-  // If user isn't authenticated then the empty user is returned.
-  // Stream<User> get user {
-  //   return _firebaseAuth.authStateChanges().map((firebaseUser) {
-  //     return firebaseUser == null ? User.empty : firebaseUser.toUser;
-  //   });
-  // }
-
-  // Subscribes to more changes since 'userChanges' is a superset of 'authStateChanges'
 
 User getUser(user) {
       return User(
@@ -113,6 +104,8 @@ User getUser(user) {
           email: email,
           password: password,
         ); 
+
+        
         newUser.user.sendEmailVerification();
         
         addUser(
