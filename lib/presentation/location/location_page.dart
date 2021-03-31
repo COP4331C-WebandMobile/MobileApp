@@ -15,7 +15,7 @@ class LocationPage extends StatelessWidget {
     final mapRepo = MapRepository();
 
     
-
+    
     return Scaffold(
       body: Padding (
         padding: EdgeInsets.only(bottom: 128, top: 128,right: 64, left: 64),
