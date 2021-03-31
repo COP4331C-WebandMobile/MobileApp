@@ -233,7 +233,8 @@ class ChoreBox extends StatelessWidget {
                 color: starColor,
               ),
               onPressed: () {
-                context.read<ChoresBloc>().add(MarkChore(chore));
+                if(chore.mark == false) context.read<ChoresBloc>().add(MarkChore(chore));
+                else context.read<ChoresBloc>().add(UnMarkChore(chore));
               },
             )
           ]),

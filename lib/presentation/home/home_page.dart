@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
+import 'package:roomiesMobile/presentation/roomate_profile/roomate_profile_page.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../widgets/home/sidebar.dart';
 import 'package:reminder_repository/reminder_repository.dart';
@@ -12,6 +14,7 @@ class HomePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(builder: (_) => HomePage());
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +83,15 @@ class RoomateList extends StatelessWidget {
                           alignment: Alignment.topRight,
                           child: IconButton(
                               icon:
-                                  const Icon(Icons.add_circle_outline_outlined),
-                              onPressed: () => {})))
+                              const Icon(Icons.add_circle_outline_outlined),
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                      BlocProvider<RoomatesCubit>.value(
+                                          value: BlocProvider.of<RoomatesCubit>(
+                                              context),
+                                          child: AddRoomate())),
+                            )))
                 ])),
             Expanded(
                 flex: 4,
@@ -138,8 +148,11 @@ class RoomateIcon extends StatelessWidget {
     return CircleAvatar(
         child: TextButton(
       child: Text(roomate.firstName[0]),
-      onPressed: () => {},
-    ));
+      onPressed: () =>   Navigator.push(
+                            context,MaterialPageRoute(
+                              builder: (_) => ProfilePage(roomate)),
+                                 //Navigate to profile page
+    )));
   }
 }
 
@@ -156,12 +169,12 @@ class ReminderText extends StatelessWidget {
         Row(children: <Widget>[
           ElevatedButton(
               onPressed: () {
-                //context.read<RemindersBloc>().add(CompleteChore(chore));
+                context.read<ReminderCubit>().completeReminder(context.read<AuthenticationBloc>().state.user.email,reminder);
               },
-              child: Text("Completed")),
+              child: Text("Complete")),
           ElevatedButton(
             onPressed: () {
-              //context.read<ChoresBloc>().add(DeleteChore(chore));
+              context.read<ReminderCubit>().deleteReminder(reminder);
             },
             child: Text("Delete"),
           ),
@@ -225,6 +238,34 @@ class ReminderBox extends StatelessWidget {
     });
   }
 }
+
+
+
+class AddRoomate extends StatelessWidget {
+  final roomateEmail = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        content: FractionallySizedBox(
+      widthFactor: 0.3,
+      heightFactor: 0.3,
+      child: Container(
+          child: Column(children: <Widget>[
+        Text("Enter Roomate Email"),
+        TextField(
+          controller: roomateEmail,
+        ),
+        IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => context
+                .read<RoomatesCubit>()
+                .AddRoomate(roomateEmail.text)),
+      ])),
+    ));
+  }
+}
+
 
 class CreateReminder extends StatelessWidget {
   final reminderDescription = TextEditingController();

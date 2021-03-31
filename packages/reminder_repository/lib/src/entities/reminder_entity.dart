@@ -6,8 +6,9 @@ class ReminderEntity extends Equatable {
 
   final description;
   final frequency;
+  final id;
 
-  const ReminderEntity(this.description, this.frequency);
+  const ReminderEntity(this.description,this.id, this.frequency);
 
   @override
   List<Object> get props => [description, frequency];
@@ -15,6 +16,7 @@ class ReminderEntity extends Equatable {
   static ReminderEntity fromSnapshot(DocumentSnapshot snap) {
     return ReminderEntity(
       snap.data()['description'],
+      snap.id,
       snap.data()['frequency'],
     );
   }

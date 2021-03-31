@@ -33,6 +33,8 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
       yield* _mapChoresUpdateToState(event);
     }else if (event is MarkChore) {
       yield* _mapMarkChoreToState(event);
+    }else if (event is UnMarkChore) {
+      yield* _mapUnMarkChoreToState(event);
     }else if (event is CompleteChore) {
       yield* _mapCompleteChoreToState(event);
     }
@@ -45,6 +47,13 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
           (chores) => add(ChoresUpdated(chores)), //
         );
   }*/
+
+
+
+  Stream<ChoresState> _mapUnMarkChoreToState(UnMarkChore event) async* {
+    _choresRepository.UnMarkChore(event.chore);
+  }
+
   Stream<ChoresState> _mapAddChoreToState(AddChore event) async* {
     _choresRepository.addNewChore(event.chore);
   }

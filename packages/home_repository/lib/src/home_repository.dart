@@ -28,7 +28,7 @@ class HomeRepository {
     }
   }
 
-  Future<void> addHome(String houseName) async {
+  Future<void> addHome(String houseName,String password) async {
     final snapshot = await _fireStore.collection('houses').doc(houseName).get();
     if (snapshot.exists) return;
 
@@ -37,17 +37,11 @@ class HomeRepository {
         .doc(_email)
         .update({"house_name": houseName});
 
-    _fireStore
-        .collection('houses')
-        .doc(houseName)
-        .collection('details')
-        .doc()
-        .set({
-      "creator": _email,
-    });
+   
 
     _fireStore.collection('houses').doc(houseName).set({
-      "exists": true,
+      "creator": _email,
+      "password":password,
     });
   }
 
@@ -62,7 +56,7 @@ class HomeRepository {
       house.get().then((snapShot) {
         if(snapShot.exists)
         {
-          print(snapShot.data());
+       
           return _fireStore.collection('users').doc(_email).update({"house_name": houseName});
         }
         else

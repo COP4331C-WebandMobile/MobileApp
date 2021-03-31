@@ -55,6 +55,16 @@ class ChoresUpdated extends ChoresEvent {
   List<Object> get props => [chores];
 }
 
+class UnMarkChore extends ChoresEvent {
+  final chore;
+
+  const UnMarkChore(this.chore);
+
+  @override
+  List<Object> get props => [chore];
+}
+
+
 class MarkChore extends ChoresEvent {
 
   final Chore chore;

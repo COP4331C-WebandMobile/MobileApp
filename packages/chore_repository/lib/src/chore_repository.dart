@@ -8,18 +8,18 @@ class ChoresRepository {
 
    final FirebaseFirestore _fireStore ;
    final String _home; 
-   //var _fireStore.instance.collection('houses').doc(_home).collection("chores");
+   //var _fireStore.instance.collection('chore').doc(_home).collection("chores");
   
    ChoresRepository( this._home,{
     FirebaseFirestore fireStore,
     }) : _fireStore = fireStore ?? FirebaseFirestore.instance;
 
-    final choreCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection("chores");
-    final messageCollection = FirebaseFirestore.instance.collection('houses').doc('NewHOused').collection('messages');
+    final choreCollection = FirebaseFirestore.instance.collection('chore').doc('NewHOused').collection("chores");
+    final messageCollection = FirebaseFirestore.instance.collection('chore').doc('NewHOused').collection('messages');
   
   Future<void> addNewChore(Chore chore) async {
     try{
-      return await _fireStore.collection('houses').doc(_home).collection("chores").add(chore.toEntity().toDocument());
+      return await _fireStore.collection('chore').doc(_home).collection("chores").add(chore.toEntity().toDocument());
     }
     on Exception {
       print(Exception());
@@ -28,18 +28,24 @@ class ChoresRepository {
 
   Future<void> deleteChore(Chore chore) async {
   
-    return await _fireStore.collection('houses').doc(_home).collection("chores").doc(chore.id).delete();
+    return await _fireStore.collection('chore').doc(_home).collection("chores").doc(chore.id).delete();
   }
 
   Future<void> markChore(Chore chore) async {
-    return await _fireStore.collection('houses').doc(_home).collection("chores").doc(chore.id).update({
+    return await _fireStore.collection('chore').doc(_home).collection("chores").doc(chore.id).update({
       "mark": true,
+      });
+  }
+
+   Future<void> UnMarkChore(Chore chore) async {
+    return await _fireStore.collection('chore').doc(_home).collection("chores").doc(chore.id).update({
+      "mark": false,
       });
   }
 
 
    Stream<List<Chore>>chores(){
-    return _fireStore.collection('houses').doc(_home).collection("chores").snapshots().map((snapshot) {
+    return _fireStore.collection('chore').doc(_home).collection("chores").snapshots().map((snapshot) {
       return snapshot.docs
           .map((doc) => Chore.fromEntity(ChoreEntity.fromSnapshot(doc)))
           .toList();
@@ -47,7 +53,7 @@ class ChoresRepository {
   }
 
   Future<void> updateChore(Chore update) async {
-    return await _fireStore.collection('houses').doc(_home).collection("chores")
+    return await _fireStore.collection('chore').doc(_home).collection("chores")
         .doc(update.id)
         .set(update.toEntity().toDocument());
   }

@@ -12,7 +12,6 @@ final FirebaseFirestore _firestore;
 
 MapRepository() : this._firestore = FirebaseFirestore.instance, this._location = Location.instance;
 
-
 Future<UserLocationEntity> _getCurrentLocation() async {
 
   var permission = await _location.requestPermission();
@@ -26,7 +25,6 @@ Future<UserLocationEntity> _getCurrentLocation() async {
   if (permission == PermissionStatus.granted && service == true) {
     
     LocationData locationData = await _location.getLocation();
-
 
     return UserLocationEntity(
       'gregfreitas1997@gmail.com',
@@ -63,7 +61,6 @@ Future<UserLocationEntity> _getCurrentLocation() async {
           });
         }
       });
-
 
     }
     on Exception

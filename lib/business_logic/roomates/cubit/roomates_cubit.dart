@@ -7,7 +7,7 @@ part 'roomates_state.dart';
 
 class RoomatesCubit extends Cubit<RoomatesState> {
 
-   StreamSubscription _roomateSubscription;
+   StreamSubscription _roomatesSubscription;
    final _roomateRepository;
 
     RoomatesCubit({
@@ -18,13 +18,17 @@ class RoomatesCubit extends Cubit<RoomatesState> {
             roomates();
          }
   void roomates() {
-    _roomateSubscription = _roomateRepository.roomates().listen(
+    _roomatesSubscription = _roomateRepository.roomates().listen(
     (roomates) => emit(RoomatesState(roomates,status.loaded)));
   }
+    void AddRoomate(email){
+    _roomateRepository.addRoomate(email);
+  }
 
+  
   @override
   Future<void> close() {
-      _roomateSubscription.cancel();
+      _roomatesSubscription.cancel();
       return super.close();
     }
 }

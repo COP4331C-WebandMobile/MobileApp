@@ -14,7 +14,7 @@ class ReminderRepository{
       
   Stream<List<Reminder>> reminders() {
     try{
-      return _fireStore.collection('houses').doc(_home).collection('reminders').snapshots().map((snapshot){
+      return _fireStore.collection('reminders').doc(_home).collection('reminders').snapshots().map((snapshot){
        return snapshot.docs
           .map((doc) => Reminder.fromEntity(ReminderEntity.fromSnapshot(doc)))
           .toList();
@@ -26,16 +26,40 @@ class ReminderRepository{
       //return list of roomates for the house
       //Update location
   }
-
 Future<void> createReminder(Reminder reminder) async {
-
     try{
-     await _fireStore.collection('houses').doc(_home).collection("reminders").add(reminder.toEntity().toDocument());
+     await _fireStore.collection('reminders').doc(_home).collection("reminders").add(reminder.toEntity().toDocument());
     }
     on Exception {
       print(Exception());
     }
 
 }
+
+Future<void> deleteReminder(Reminder reminder) async {
+    try{
+      print(reminder.id);
+      await _fireStore.collection('reminders').doc(_home).collection("reminders").doc(reminder.id).delete();
+    }
+    on Exception {
+      print(Exception());
+    }
+
+}
+
+
+Future<void> completeReminder(String user,Reminder reminder) {
+    final Timestamp date = Timestamp.now();
+
+    return _fireStore.collection('message').doc(_home).collection("messages").add(
+           {
+            "body": (reminder.description + ' completed.'),
+            "creator":user,
+            "date": date,
+            "type": "MessageType.alert",
+            });
+        
+  }
+
 
 }
