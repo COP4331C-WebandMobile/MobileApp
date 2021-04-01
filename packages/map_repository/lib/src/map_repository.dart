@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:map_repository/map_repository.dart';
 import 'package:map_repository/src/entities/user_location_entity.dart';
 
 class PermissionDeniedException implements Exception {}
@@ -66,7 +67,16 @@ class MapRepository {
 
   Future<List<geo.Location>> getHomeLocation(String address) async {
     List<geo.Location> locations = await geo.locationFromAddress(address);
-    
+
+    // Iterate over locations
+    // creating a new List
+    List<HouseLocation> houses;
+
+    for (int i = 0; i < locations.length; i++) {
+      GeoPoint data = GeoPoint(locations[i].latitude, locations[i].longitude);
+      //id, address, Geopoint
+      houses.add(HouseLocation('Random', address, data));
+    }
 
     return locations;
   }
