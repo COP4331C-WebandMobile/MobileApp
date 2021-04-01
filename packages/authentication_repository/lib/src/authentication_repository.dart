@@ -23,157 +23,146 @@ class LogOutFailure implements Exception {}
 class PasswordResetFailure implements Exception {}
 
 class AuthenticationRepository {
-  
   final auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final FirebaseFirestore _fireStore;
-  
+
   AuthenticationRepository({
     auth.FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignIn,
     FirebaseFirestore fireStore,
-  }) : _firebaseAuth = firebaseAuth ?? auth.FirebaseAuth.instance,
-       _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
-       _fireStore = fireStore ?? FirebaseFirestore.instance;
+  })  : _firebaseAuth = firebaseAuth ?? auth.FirebaseAuth.instance,
+        _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
+        _fireStore = fireStore ?? FirebaseFirestore.instance;
 
-    //waits till not NULL
-  
-  Future <void> addUser(
+  //waits till not NULL
+
+  Future<void> addUser(
     String email,
     String firstName,
     String lastName,
-    String phoneNumber, 
+    String phoneNumber,
     String house,
-    ) async{
-    try {
-    CollectionReference users = _fireStore.collection('users');
-    await users.doc(email).set({
-      'first_name': firstName,
-      'last_name': lastName,
-      'phone_number': phoneNumber,
-      'house_name': house,
+  ) async {
+    try 
+    {
+      CollectionReference users = _fireStore.collection('users');
+
+      await users.doc(email).set({
+        'first_name': firstName,
+        'last_name': lastName,
+        'phone_number': phoneNumber,
+        'house_name': house,
       });
-    }
-    on Exception{
-      AddUserFailure();
+
+    } 
+    on Exception 
+    {
+      print('Failed to add User.');
     }
   }
 
-
-User getUser(user) {
-      return User(
-          id: user.uid,
-          email: user.email,
-          isVerified: user.emailVerified,
-          name: user.displayName,
-          photo: user.photoURL,
-          houseName: "",
-      );
+  User getUser(user) {
+    return User(
+      id: user.uid,
+      email: user.email,
+      isVerified: user.emailVerified,
+      name: user.displayName,
+      photo: user.photoURL,
+      houseName: "",
+    );
   }
+
   Stream<User> get user {
-    return _firebaseAuth.userChanges().map((firebaseUser){ 
-      if(firebaseUser == null)
-      {
+    return _firebaseAuth.userChanges().map((firebaseUser) {
+      if (firebaseUser == null) {
         return User.empty;
-      }
-      else
-      {
-        if(!firebaseUser.emailVerified)
-        {
+      } else {
+        if (!firebaseUser.emailVerified) {
           return User.empty;
-        }
-        else
-        {
-        return getUser(firebaseUser);
+        } else {
+          return getUser(firebaseUser);
         }
       }
     });
   }
 
   Future<void> register({
-    @required String email, 
+    @required String email,
     @required String password,
     String firstName,
     String lastName,
     String phoneNumber,
-    
-    }) async {
-      assert (email != null && password != null);
-      try {
-          final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        ); 
+  }) async {
+    assert(email != null && password != null);
 
-        
-        newUser.user.sendEmailVerification();
-        
-        addUser(
-          email,
-          firstName = firstName,
-          lastName = lastName,
-          phoneNumber = phoneNumber,
-          "",
-          );
-  
-      }
-      on Exception catch(e){
-        print(e);
-        throw SignUpFailure();
-      }
+    // Ensures that emails are lowercase when stored in our database.
+    email = email.toLowerCase();
+
+    try {
+
+      final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      
+      newUser.user.sendEmailVerification();
+
+      await addUser(
+        email, 
+        firstName, 
+        lastName, 
+        phoneNumber, 
+        "");
+
+    } 
+    on Exception 
+    {
+      throw SignUpFailure();
     }
+  }
 
-    Future<void> loginStandard({
-      @required String email,
-      @required String password,
-    }) async {
-      assert(email != null && password != null);
+  Future<void> loginStandard({
+    @required String email,
+    @required String password,
+  }) async {
+    assert(email != null && password != null);
 
-      try {
-        var tempUser = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-      
-      
-      if(!tempUser.user.emailVerified)
-      {
-       
+    try {
+      var tempUser = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (!tempUser.user.emailVerified) {
         throw LogInEmailVerificationFailure();
       }
-      }
-      on Exception {
-     
-        throw LogInWithEmailAndPasswordFailure();
-        
-      }
+    } on Exception {
+      throw LogInWithEmailAndPasswordFailure();
     }
+  }
 
-    Future<void> logOut() async {
-      try {
-        await Future.wait([
-          _firebaseAuth.signOut(),
-          _googleSignIn.signOut(),
-        ]);
-      }
-      on Exception {
-        throw LogOutFailure();
-      }
+  Future<void> logOut() async {
+    try {
+      await Future.wait([
+        _firebaseAuth.signOut(),
+        _googleSignIn.signOut(),
+      ]);
+    } on Exception {
+      throw LogOutFailure();
     }
+  }
 
   // Sends an email to reset password.
   Future<void> passwordReset({
     @required String email,
-  })
-  async {
+  }) async {
     assert(email != null);
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
-    }
-    on Exception {
+    } on Exception {
       throw PasswordResetFailure();
     }
-
   }
 
 void changeEmail(String email) {

@@ -8,14 +8,14 @@ class LocationPage extends StatelessWidget {
     return MaterialPageRoute(builder: (_) => LocationPage());
   }
 
-
+  
   @override
   Widget build(BuildContext context) {
     
     final mapRepo = MapRepository();
-
   
     return Scaffold(
+<<<<<<< HEAD
       body: Padding (
         padding: EdgeInsets.only(bottom: 12, top: 12,right: 6, left: 6),
         child:  GoogleMap(
@@ -28,11 +28,25 @@ class LocationPage extends StatelessWidget {
           zoom: 19.151926040649414
         ),
       ),
+=======
+      body: Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition:  CameraPosition(target: LatLng(20, 30), zoom: 5),
+            ),
+          ),
+          Center(child: ElevatedButton(onPressed: (){mapRepo.recordUserLocation();}, child: Text('Get Location'))),
+        ],
+>>>>>>> 99e970174e053c43b8bbbdc4646c3cbd87372440
       ),
 
-    
-    );
-
+  
+      );      
+  
   }
 
 }
