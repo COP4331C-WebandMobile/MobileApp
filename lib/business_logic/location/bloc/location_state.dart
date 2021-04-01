@@ -8,3 +8,9 @@ abstract class LocationState extends Equatable {
 }
 
 class LocationInitial extends LocationState {}
+
+class LoadingLocations extends LocationState {}
+
+class FailedToRetreiveLocations extends LocationState {}
+
+class SuccessfullyRetreivedLocations extends LocationState {}
