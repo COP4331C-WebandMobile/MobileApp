@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:map_repository/map_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -32,11 +30,23 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
     else if(event is QueryAdresses)
     {
+
+      List<dynamic> adresses = await _mapRepository.getHomeLocation(event.houseAdress);
+
+      yield LoadingLocations();
       
+      if(adresses.isEmpty)
+      {
+        yield FailedToRetreiveLocations();
+      }
+      else
+      {
+        yield SuccessfullyRetreivedLocations();
+      }  
     }
     else if(event is RetreieveUserLocation)
     {
-
+      
 
     }
 
