@@ -50,23 +50,19 @@ class ProfilePage extends StatelessWidget {
 
 class HeaderBox extends StatelessWidget {
 
-
-    final Roomate roomate;
+  final Roomate roomate;
   HeaderBox(this.roomate);
-
 
   @override
   Widget build(BuildContext context) {
   
       return  Container(
-              //margin: EdgeInsets.all(20),
-              padding: EdgeInsets.all(20),
+             
+              padding: EdgeInsets.all(50),
               decoration: BoxDecoration(
               color: CustomColors.gold,
-              border: Border.all(
-              color: Colors.black,
-              width: 8,
-              )),
+              
+              ),
               child: Row(
 
               children: [
@@ -88,7 +84,7 @@ class PhoneBox extends StatelessWidget {
   
       return  Container(
               margin: EdgeInsets.all(20),
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(30),
               decoration: BoxDecoration(
               color: CustomColors.gold,
               border: Border.all(
@@ -96,10 +92,10 @@ class PhoneBox extends StatelessWidget {
               width: 8,
               )),
               child: Row(
-
               children: [
                 Icon(Icons.phone),
-                Text(roomate.phoneNumber),
+                Text("   " + roomate.phoneNumber),
+                
             ]));
             
   }
@@ -116,7 +112,7 @@ class EmailBox extends StatelessWidget {
   
       return  Container(
               margin: EdgeInsets.all(20),
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(30),
               decoration: BoxDecoration(
               color: CustomColors.gold,
               border: Border.all(
@@ -127,7 +123,7 @@ class EmailBox extends StatelessWidget {
 
               children: [
                 Icon(Icons.email),
-                Text(roomate.email),
+                Text("   " + roomate.email),
               ]));
             
   }

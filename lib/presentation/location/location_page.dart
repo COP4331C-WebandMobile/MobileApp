@@ -17,7 +17,7 @@ class LocationPage extends StatelessWidget {
   
     return Scaffold(
       body: Padding (
-        padding: EdgeInsets.only(bottom: 128, top: 128,right: 64, left: 64),
+        padding: EdgeInsets.only(bottom: 12, top: 12,right: 6, left: 6),
         child:  GoogleMap(
         myLocationButtonEnabled: true,
         mapType: MapType.normal,

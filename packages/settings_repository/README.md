@@ -1,4 +1,4 @@
-# settings
+# settings_repository
 
 A new Flutter package project.
 

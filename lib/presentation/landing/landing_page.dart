@@ -97,7 +97,7 @@ class JoinHome extends StatelessWidget {
         IconButton(
             icon: const Icon(Icons.add),
             onPressed: () =>
-                context.read<LandingCubit>().joinHome(houseName.text))
+                context.read<LandingCubit>().joinHome(houseName.text,password.text))
       ])),
     ));
   }

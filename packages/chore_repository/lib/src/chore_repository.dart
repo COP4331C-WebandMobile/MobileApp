@@ -8,7 +8,6 @@ class ChoresRepository {
 
    final FirebaseFirestore _fireStore ;
    final String _home; 
-   //var _fireStore.instance.collection('chore').doc(_home).collection("chores");
   
    ChoresRepository( this._home,{
     FirebaseFirestore fireStore,
@@ -68,7 +67,6 @@ class ChoresRepository {
             "date": date,
             "type": "MessageType.alert",
             });
-        
   }
   
 }

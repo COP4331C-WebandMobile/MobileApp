@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
+import 'package:roomate_repository/roomate_repository.dart';
+
 
 class InvalidHomeName implements Exception {}
 
@@ -45,7 +47,7 @@ class HomeRepository {
     });
   }
 
-  Future<void> joinHome(String houseName) {
+  Future<void> joinHome(String houseName,String password) {
 
     try {
 
@@ -56,8 +58,12 @@ class HomeRepository {
       house.get().then((snapShot) {
         if(snapShot.exists)
         {
-       
-          return _fireStore.collection('users').doc(_email).update({"house_name": houseName});
+          print(snapShot.data()["password"]);
+           if(snapShot.data()["password"] == password){
+           _fireStore.collection('users').doc(_email).update({"house_name": houseName});
+           RoomateRepository(houseName).addRoomate(_email);
+           }
+           else return;
         }
         else
         {

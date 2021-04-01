@@ -12,12 +12,12 @@ class Reminder extends Equatable{
   final id;
 
 
-  Reminder(this.id,this.description,this.frequency);
+  Reminder(this.description,this.frequency,this.id);
 
   static Reminder fromEntity(ReminderEntity entity) {
     return Reminder(
-      entity.id,
       entity.description,
+      entity.id,
       entity.frequency,
     
     );

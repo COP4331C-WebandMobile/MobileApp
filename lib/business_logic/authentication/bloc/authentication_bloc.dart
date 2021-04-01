@@ -32,7 +32,7 @@ class AuthenticationBloc
       yield _mapAuthenticationUserChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       unawaited(_authenticationRepository.logOut());
-    }
+    } 
   }
 
   @override
@@ -44,9 +44,6 @@ class AuthenticationBloc
   AuthenticationState _mapAuthenticationUserChangedToState(
     AuthenticatedUserChanged event,
   ) {
-    // return event.user != User.empty
-    //     ? AuthenticationState.authenticated(event.user)
-    //     : const AuthenticationState.unathenticated();
     if(event.user != User.empty && event.user.isVerified)
     {
       return AuthenticationState.authenticated(event.user);
@@ -56,4 +53,14 @@ class AuthenticationBloc
       return const AuthenticationState.unathenticated();
     }
   }
+
+  void changeEmail(String email){
+     _authenticationRepository.changeEmail(email);
+  }
+
+   void changePassword(String password){
+     _authenticationRepository.changePassword(password);
+  }
+
+
 }

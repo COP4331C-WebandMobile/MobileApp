@@ -28,13 +28,14 @@ class RoomateRepository{
 
 
   Future<void> addRoomate(String email) async {
-    final snapshot = await _fireStore.collection('users').doc(email).get();
-    if (!snapshot.exists) return;
+    final snapshot = await _fireStore.collection('roomates').doc(_home).collection('roomates').doc(email).get();
+    if (snapshot.exists) return;
 
-    RoomateEntity entity =  RoomateEntity.fromSnapshot(snapshot);
- 
-    await _fireStore.collection('roomates').doc(_home).collection('roomates').add(Roomate.fromEntity(email,entity).toDocument());
- 
+     RoomateEntity entity =  RoomateEntity.fromSnapshot(snapshot);
+
+     _fireStore.collection('roomates').doc(_home).collection('roomates').doc(email).set(
+     Roomate.fromEntity(email,entity).toDocument());
+   
 }
 
 }
