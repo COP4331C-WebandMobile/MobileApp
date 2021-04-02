@@ -24,12 +24,12 @@ class RetreieveUserLocation extends LocationEvent {
 
 class QueryAdresses extends LocationEvent {
 
-  final String houseAdress;
+  final String providedAdress;
 
-  const QueryAdresses(this.houseAdress);
+  const QueryAdresses(this.providedAdress);
 
   @override
-  List<Object> get props => [houseAdress];
+  List<Object> get props => [providedAdress];
 }
 
 class GetRoomateLocations extends LocationEvent {

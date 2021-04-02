@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,7 +12,22 @@ class HouseLocationEntity extends Equatable {
   @override
   List<Object> get props => [id, address, longLat];
   
-   
+
+// TODO: Need to figure out how to generate the id.
+static HouseLocationEntity fromJson(Map<String, Object> json)
+{ 
+  
+  var cord = json['coordinates'] as Map<String, Object>;
+
+  return HouseLocationEntity(
+    'temp',
+    json["matchedAddress"] as String,
+    GeoPoint(cord['x'] as double, cord['y'] as double),
+  );
+}
+
+
+
  static HouseLocationEntity fromSnapshot(DocumentSnapshot snap) {
     
     var data = snap.data();

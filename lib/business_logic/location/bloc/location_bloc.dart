@@ -30,19 +30,23 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
     else if(event is QueryAdresses)
     {
-
-      List<dynamic> adresses = await _mapRepository.getHomeLocation(event.houseAdress);
-
-      yield LoadingLocations();
       
-      if(adresses.isEmpty)
+      yield LoadingLocations();
+
+      try {
+
+        List<HouseLocation> adresses = await _mapRepository.fetchAdresses(event.providedAdress);
+
+        print('Did we make it here?');
+        yield SuccessfullyRetreivedLocations(adresses);
+      }
+      on Exception catch(e)
       {
+        print('Or here?');
+
         yield FailedToRetreiveLocations();
       }
-      else
-      {
-        yield SuccessfullyRetreivedLocations();
-      }  
+     
     }
     else if(event is RetreieveUserLocation)
     {
