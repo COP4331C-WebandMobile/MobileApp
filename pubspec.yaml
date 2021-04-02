@@ -47,6 +47,8 @@ dependencies:
     path: packages/reminder_repository
   map_repository:
     path: packages/map_repository
+  settings_repository:
+    path: packages/settings_repository
     
     
 dev_dependencies:

@@ -5,6 +5,7 @@ import 'package:roomiesMobile/presentation/chores/chore_page.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:roomiesMobile/presentation/location/location_page.dart';
 import 'package:roomiesMobile/presentation/messaging/messages_page.dart';
+import 'package:roomiesMobile/presentation/settings/settings_page.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 
@@ -100,7 +101,17 @@ class SideBar extends StatelessWidget {
                               fontSize: 20,
                               color: Colors.white,
                             )),
-                        onTap: () {},
+                        onTap: () {
+                           Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    BlocProvider<LandingCubit>.value(
+                                        value: BlocProvider.of<LandingCubit>(
+                                            context),
+                                           child: SettingsPage()),
+                              ));
+                        },
                       ),
                       ListTile(
                         title: Text('Roomies',

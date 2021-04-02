@@ -40,8 +40,8 @@ class LandingCubit extends Cubit<LandingState> {
     _homeRepository.addHome(houseName,password);
   }
   
-  void joinHome(String houseName) {
-    _homeRepository.joinHome(houseName);
+  void joinHome(String houseName,String password) {
+    _homeRepository.joinHome(houseName,password);
   }
 
   @override

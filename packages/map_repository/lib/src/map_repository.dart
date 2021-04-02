@@ -5,9 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:map_repository/map_repository.dart';
-import 'package:map_repository/src/entities/house_location_entity.dart';
 import 'package:map_repository/src/entities/user_location_entity.dart';
 import 'package:http/http.dart' as http;
+
+import 'entities/house_location_entity.dart';
 
 
 
@@ -111,22 +112,5 @@ class MapRepository {
     } on Exception {
       print('Failed to retreive current location.');
     }
-  }
-
-  Future<List<HouseLocation>> getHomeLocation(String address) async {
-    
-    List<geo.Location> locations = await geo.locationFromAddress(address);
-
-    List<HouseLocation> houses = [];
-
-    for(int i = 0; i < locations.length; i++)
-    {
-      print(locations[i].toString());
-
-      houses.add(HouseLocation('House $i', 'Wont know yet.', GeoPoint(locations[i].latitude, locations[i].longitude)));
-    }
-
-
-    return houses;
   }
 }

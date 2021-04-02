@@ -164,7 +164,23 @@ class AuthenticationRepository {
       throw PasswordResetFailure();
     }
   }
+
+void changeEmail(String email) {
+  var user = _firebaseAuth.currentUser;
+
+  user.updateEmail(email);
+  }
+
+
+void changePassword(String newPassword){
+
+var user = _firebaseAuth.currentUser;
+user.updatePassword(newPassword);
+
 }
+  
+  
+}  
 /*extension on auth.User {
   User get toUser {
     return User(

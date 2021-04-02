@@ -38,9 +38,5 @@ class LocationPage extends StatelessWidget {
         },
         listener: (context, event) {
           
-        },
-      ),
-      ),
-    );
-  }
-}
+        })));
+  } }

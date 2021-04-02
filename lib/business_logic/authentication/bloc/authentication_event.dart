@@ -16,6 +16,17 @@ class AuthenticatedUserChanged extends AuthenticationEvent {
   List<Object> get props => [user];
 }
 
+class AuthenticationChangeEmail extends AuthenticationEvent {
+  
+  final String email;
+
+  const AuthenticationChangeEmail(this.email);
+
+  @override
+  List<Object> get props => [email];
+}
+
+
 class AuthenticationLogoutRequested extends AuthenticationEvent {
   
 }
