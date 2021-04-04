@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-import 'package:roomate_repository/roomate_repository.dart';
 
 
 class InvalidHomeName implements Exception {}
@@ -61,7 +60,7 @@ class HomeRepository {
           print(snapShot.data()["password"]);
            if(snapShot.data()["password"] == password){
            _fireStore.collection('users').doc(_email).update({"house_name": houseName});
-           RoomateRepository(houseName).addRoomate(_email);
+           //RoomateRepository(houseName).addRoomate(_email);
            }
            else return;
         }

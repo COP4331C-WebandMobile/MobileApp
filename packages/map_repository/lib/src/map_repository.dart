@@ -32,11 +32,16 @@ class MapRepository {
 
     try {
 
-      final Map<String, String> queryParameters = {"format": 'json',"benchmark": 'Public_AR_Current', "address": inputText};
+      final Map<String, String> queryParameters = {"format": 'json',"benchmark": 'Public_AR_Census2020', "address": inputText};
       const String path = '/geocoder/locations/onelineaddress';
       const String authority = 'geocoding.geo.census.gov';
 
       final response = await http.get(Uri.https(authority, path, queryParameters));
+
+      if(response.statusCode != 200)
+      {
+        throw Exception();
+      }
 
       final List<dynamic> matchedAdresses = jsonDecode(response.body)['result']['addressMatches'];
 
@@ -63,8 +68,9 @@ class MapRepository {
   }
 
 
-  Future<UserLocationEntity> _getCurrentLocation() async {
-    var permission = await _location.requestPermission();
+  Future<UserLocationEntity> _getCurrentLocation(String id) async {
+    final permission = await _location.requestPermission();
+    
     var service = await _location.serviceEnabled();
 
 
@@ -77,7 +83,7 @@ class MapRepository {
       LocationData locationData = await _location.getLocation();
 
       return UserLocationEntity(
-        'gregfreitas1997@gmail.com',
+        id,
         GeoPoint(locationData.latitude, locationData.longitude),
         Timestamp.now(),
       );
@@ -86,11 +92,11 @@ class MapRepository {
     }
   }
 
-  Future<void> recordUserLocation() async {
+  Future<void> recordUserLocation(String id) async {
     try {
-      var userData = await _getCurrentLocation();
+      final userData = await _getCurrentLocation(id);
 
-      var docRef = _firestore
+      final docRef = _firestore
           .collection('location')
           .doc('Home')
           .collection('locations')

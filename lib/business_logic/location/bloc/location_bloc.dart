@@ -50,7 +50,18 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
     else if(event is RetreieveUserLocation)
     {
-      
+      yield LoadingLocations();
+
+      try {
+        await _mapRepository.recordUserLocation(event.id);
+
+        // Yield successful retreived user location.
+      }
+      on Exception
+      {
+
+      }
+
 
     }
 
