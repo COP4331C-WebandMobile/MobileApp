@@ -10,69 +10,74 @@ import 'package:http/http.dart' as http;
 
 import 'entities/house_location_entity.dart';
 
-
-
 class NoAddressesFoundException implements Exception {}
 
-
 class PermissionDeniedException implements Exception {}
+
+class InvalidHouseNameException implements Exception {}
 
 class MapRepository {
   final Location _location;
   final FirebaseFirestore _firestore;
-
-  
+  CollectionReference locationCollection;
+  String houseName;
 
   MapRepository()
       : this._firestore = FirebaseFirestore.instance,
         this._location = Location.instance;
 
+  /* try {
+
+      locationCollection = FirebaseFirestore.instance.collection('location').doc(houseName).collection('locations');
+    }
+    on Exception {
+      throw InvalidHouseNameException();
+    }*/
 
   Future<List<HouseLocation>> fetchAdresses(String inputText) async {
-
     try {
-
-      final Map<String, String> queryParameters = {"format": 'json',"benchmark": 'Public_AR_Census2020', "address": inputText};
+      final Map<String, String> queryParameters = {
+        "format": 'json',
+        "benchmark": 'Public_AR_Census2020',
+        "address": inputText
+      };
       const String path = '/geocoder/locations/onelineaddress';
       const String authority = 'geocoding.geo.census.gov';
 
-      final response = await http.get(Uri.https(authority, path, queryParameters));
+      final response =
+          await http.get(Uri.https(authority, path, queryParameters));
 
-      if(response.statusCode != 200)
-      {
+      if (response.statusCode != 200) {
         throw Exception();
       }
 
-      final List<dynamic> matchedAdresses = jsonDecode(response.body)['result']['addressMatches'];
+      final List<dynamic> matchedAdresses =
+          jsonDecode(response.body)['result']['addressMatches'];
 
-      if(matchedAdresses.isEmpty)
-      {
+      if (matchedAdresses.isEmpty) {
         throw NoAddressesFoundException();
       }
-      
+
       List<HouseLocation> houseLocations = [];
 
       // Each element will be an address match, so a Map<String, Object>
       matchedAdresses.forEach((element) {
-        houseLocations.add(HouseLocation.fromEntity(HouseLocationEntity.fromJson(element)));
+        houseLocations.add(
+            HouseLocation.fromEntity(HouseLocationEntity.fromJson(element)));
       });
 
       return houseLocations;
-    }
-    on Exception catch(exception)
-    {
-      print('$exception was thrown because there was no addresses obtained from the query.');
+    } on Exception catch (exception) {
+      print(
+          '$exception was thrown because there was no addresses obtained from the query.');
       throw NoAddressesFoundException();
     }
-    
   }
-
 
   Future<UserLocationEntity> _getCurrentLocation(String id) async {
     final permission = await _location.requestPermission();
-    
-    var service = await _location.serviceEnabled();
 
+    var service = await _location.serviceEnabled();
 
     // If location is disabled, request it.
     if (service == false) {
@@ -118,5 +123,14 @@ class MapRepository {
     } on Exception {
       print('Failed to retreive current location.');
     }
+  }
+
+  Stream<List<UserLocation>> userLocations() {
+    return locationCollection.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) =>
+              UserLocation.fromEntity(UserLocationEntity.fromSnapshot(doc)))
+          .toList();
+    });
   }
 }
