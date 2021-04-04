@@ -26,7 +26,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     MediaQueryData mediaQuery = MediaQuery.of(context);
-    SettingsRepository _settingsRepository = SettingsRepository(context.read<AuthenticationBloc>().state.user.email);
+    var email = context.read<AuthenticationBloc>().state.user.email;
+    var home = context.read<LandingCubit>().state.home;
+    SettingsRepository _settingsRepository = SettingsRepository(home,email);
 
     return Scaffold(
       appBar: Bar(),
@@ -42,7 +44,9 @@ class SettingsPage extends StatelessWidget {
           children: [
     
           HeaderBox(),
-          PhoneBox(),
+          FirstName(),
+          LastName(),
+          PhoneNumber(),
           EmailBox(),
           
           //ChoreBox(roomate),
@@ -55,13 +59,11 @@ class SettingsPage extends StatelessWidget {
 }
 class HeaderBox extends StatelessWidget {
 
-
-
   @override
   Widget build(BuildContext context) {
 
     final firstName = context.read<SettingsCubit>().state.user.firstName;
-    final lastName = context.read<SettingsCubit>().state.user.firstName;
+    final lastName = context.read<SettingsCubit>().state.user.lastName;
   
       return  Container(    
               padding: EdgeInsets.all(50),
@@ -81,30 +83,96 @@ class HeaderBox extends StatelessWidget {
   }
 
 }
-class PhoneBox extends StatelessWidget {
+class FirstName extends StatelessWidget {
 
   
   @override
   Widget build(BuildContext context) {
 
-    final phoneNumber = context.read<SettingsCubit>().state.user.firstName;
+    final firstName = context.read<SettingsCubit>().state.user.firstName;
 
-  
+    final firstNameController = TextEditingController();
+
       return  Card(
               margin: EdgeInsets.all(20),
               child:  ExpansionTile(
-                title:Text(phoneNumber),
+                title:Text(firstName),
                 children: <Widget>[
-                TextField(),
+                TextField(
+                  controller:firstNameController,
+                ),
                 IconButton(
                   icon: Icon(Icons.check),
                   onPressed: (){
+                    context.read<SettingsCubit>().changeFirstName(firstNameController.text);
+
                   },
                 )
                 ],
               ));     
   }
 }
+
+class LastName extends StatelessWidget {
+
+  
+  @override
+  Widget build(BuildContext context) {
+
+    final lastName = context.read<SettingsCubit>().state.user.lastName;
+
+    final lastNameController = TextEditingController();
+
+      return  Card(
+              margin: EdgeInsets.all(20),
+              child:  ExpansionTile(
+                title:Text(lastName),
+                children: <Widget>[
+                TextField(
+                  controller:lastNameController,
+                ),
+                IconButton(
+                  icon: Icon(Icons.check),
+                  onPressed: (){
+                    context.read<SettingsCubit>().changeLastName(lastNameController.text);
+
+                  },
+                )
+                ],
+              ));     
+  }
+}
+
+class PhoneNumber extends StatelessWidget {
+
+  
+  @override
+  Widget build(BuildContext context) {
+
+    final phoneNumber = context.read<SettingsCubit>().state.user.phoneNumber;
+
+    final phoneNumberController = TextEditingController();
+
+      return  Card(
+              margin: EdgeInsets.all(20),
+              child:  ExpansionTile(
+                title:Text(phoneNumber),
+                children: <Widget>[
+                TextField(
+                  controller:phoneNumberController,
+                ),
+                IconButton(
+                  icon: Icon(Icons.check),
+                  onPressed: (){
+                    context.read<SettingsCubit>().changePhoneNumber(phoneNumberController.text);
+
+                  },
+                )
+                ],
+              ));     
+  }
+}
+
 
 class EmailBox extends StatelessWidget {
 

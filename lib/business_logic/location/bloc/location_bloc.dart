@@ -30,7 +30,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
     else if(event is QueryAdresses)
     {
-      
+  
       yield LoadingLocations();
 
       try {

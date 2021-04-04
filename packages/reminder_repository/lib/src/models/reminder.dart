@@ -17,8 +17,9 @@ class Reminder extends Equatable{
   static Reminder fromEntity(ReminderEntity entity) {
     return Reminder(
       entity.description,
-      entity.id,
-      entity.frequency,
+        entity.frequency,
+      entity.id
+    
     
     );
   }

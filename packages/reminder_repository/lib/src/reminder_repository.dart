@@ -37,6 +37,7 @@ Future<void> createReminder(Reminder reminder) async {
 }
 
 Future<void> deleteReminder(Reminder reminder) async {
+
     try{
       print(reminder.id);
       await _fireStore.collection('reminders').doc(_home).collection("reminders").doc(reminder.id).delete();
