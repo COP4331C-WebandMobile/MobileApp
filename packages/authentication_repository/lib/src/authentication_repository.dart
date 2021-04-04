@@ -44,8 +44,7 @@ class AuthenticationRepository {
     String phoneNumber,
     String house,
   ) async {
-    try 
-    {
+    try {
       CollectionReference users = _fireStore.collection('users');
 
       await users.doc(email).set({
@@ -54,10 +53,7 @@ class AuthenticationRepository {
         'phone_number': phoneNumber,
         'house_name': house,
       });
-
-    } 
-    on Exception 
-    {
+    } on Exception {
       print('Failed to add User.');
     }
   }
@@ -100,24 +96,15 @@ class AuthenticationRepository {
     email = email.toLowerCase();
 
     try {
-
       final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      
+
       newUser.user.sendEmailVerification();
 
-      await addUser(
-        email, 
-        firstName, 
-        lastName, 
-        phoneNumber, 
-        "");
-
-    } 
-    on Exception 
-    {
+      await addUser(email, firstName, lastName, phoneNumber, "");
+    } on Exception {
       throw SignUpFailure();
     }
   }
@@ -165,21 +152,16 @@ class AuthenticationRepository {
     }
   }
 
-void changeEmail(String email) {
-  var user = _firebaseAuth.currentUser;
+  void changeEmail(String email) {
+    var user = _firebaseAuth.currentUser;
 
-  user.updateEmail(email);
+    user.updateEmail(email);
   }
 
-
-void changePassword(String newPassword){
-
-var user = _firebaseAuth.currentUser;
-user.updatePassword(newPassword);
-
-}
-  
-  
+  void changePassword(String newPassword) {
+    var user = _firebaseAuth.currentUser;
+    user.updatePassword(newPassword);
+  }
 }  
 /*extension on auth.User {
   User get toUser {

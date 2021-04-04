@@ -15,13 +15,13 @@ class LandingCubit extends Cubit<LandingState> {
     @required HomeRepository homeRepository,
   })  :   assert(homeRepository != null),
          _homeRepository = homeRepository,
-         super( LandingState.loading()){
+         super(LandingState.loading()){
             checkHome();
   }
 
   void validate(String home) {
 
-    if(home =="")
+    if(home=="")
     {
       emit(LandingState.homeless());
     }
@@ -36,12 +36,30 @@ class LandingCubit extends Cubit<LandingState> {
     (home) => validate(home)); 
   }
 
-  void addHome(String houseName,String password) {
-    _homeRepository.addHome(houseName,password);
+  Future<void> addHome(String houseName,String password) async {
+    try { 
+      await _homeRepository.addHome(houseName,password);
+     }
+    on HomeExists {
+      emit(LandingState.error("A home with that name already exists"));
+    } 
+    on ServerError {
+      emit(LandingState.error("Internal Server Error"));
+    }
   }
   
-  void joinHome(String houseName,String password) {
-    _homeRepository.joinHome(houseName,password);
+  Future <void> joinHome(String houseName,String password) async {
+   
+   try{
+    await _homeRepository.joinHome(houseName,password);
+   } on InvalidPassword{
+      emit(LandingState.error("Incorrect Password"));
+   } on InvalidHomeName{
+      emit(LandingState.error("Home Does not Exist"));
+
+   } on ServerError{
+      emit(LandingState.error("Internal Server Error"));
+   }
   }
 
   @override
@@ -49,5 +67,9 @@ class LandingCubit extends Cubit<LandingState> {
     _homeSubscription.cancel();
     return super.close();
   }
+
+
+ 
+
 }
  

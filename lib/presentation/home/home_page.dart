@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
             child: Column(children: <Widget>[
               Expanded(
                 flex: 3,
-                child: HouseInfo(),
+                child: HouseInfo(_home),
               ),
               Expanded(
                   flex: 2,
@@ -69,7 +69,7 @@ class RoomateList extends StatelessWidget {
           ),
           child: Column(children: [
             Expanded(
-                flex: 1,
+                flex: 2,
                 child: Row(children: [
                   Expanded(
                       child: Align(
@@ -109,6 +109,9 @@ class RoomateList extends StatelessWidget {
 }
 
 class HouseInfo extends StatelessWidget {
+
+  final home;
+  const HouseInfo(this.home);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -122,7 +125,7 @@ class HouseInfo extends StatelessWidget {
       Column(
         children: [
           Text(
-            "House Name",
+            home,
             style: TextStyle(
               fontSize: 30,
             ),
@@ -165,20 +168,33 @@ class ReminderText extends StatelessWidget {
     return Card(
         child: Column(
       children: [
-        Text(reminder.description),
+        Row(children:[
+         Expanded(child: Text(
+           reminder.description,
+           style: TextStyle(fontSize: 20),)),
+         Expanded(child: 
+         Row( children: [
+         Icon(Icons.calendar_today_outlined),
+         Text(reminder.frequency)
+         ]),
+         )
+         ]),
         Row(children: <Widget>[
-          ElevatedButton(
+          IconButton(
+              icon: Icon(Icons.delete),   
               onPressed: () {
-                context.read<ReminderCubit>().completeReminder(context.read<AuthenticationBloc>().state.user.email,reminder);
+                context.read<ReminderCubit>().deleteReminder(reminder);
+               
               },
-              child: Text("Complete")),
-          ElevatedButton(
+          ), 
+          IconButton(
+             icon: Icon(Icons.check),   
             onPressed: () {
-              context.read<ReminderCubit>().deleteReminder(reminder);
+               context.read<ReminderCubit>().completeReminder(context.read<AuthenticationBloc>().state.user.email,reminder);
             },
-            child: Text("Delete"),
+            
           ),
-          Text("Frequency")
+         
         ]),
       ],
     ));
@@ -267,7 +283,17 @@ class AddRoomate extends StatelessWidget {
 }
 
 
-class CreateReminder extends StatelessWidget {
+class CreateReminder extends StatefulWidget {
+  const CreateReminder({Key key}) : super(key: key);
+
+  @override
+  _CreateReminderState createState() => _CreateReminderState();
+}
+
+
+class _CreateReminderState extends State<CreateReminder> {
+
+  String dropdownValue = 'Daily';
   final reminderDescription = TextEditingController();
 
   @override
@@ -282,32 +308,7 @@ class CreateReminder extends StatelessWidget {
         TextField(
           controller: reminderDescription,
         ),
-        MyStatefulWidget(),
-        IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => context
-                .read<ReminderCubit>()
-                .createReminder(reminderDescription.text, "Daily")),
-      ])),
-    ));
-  }
-}
-
-/// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key key}) : super(key: key);
-
-  @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
-}
-
-/// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  String dropdownValue = 'Daily';
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
+        DropdownButton<String>(
       value: dropdownValue,
       icon: const Icon(Icons.arrow_downward),
       iconSize: 24,
@@ -329,9 +330,21 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           child: Text(value),
         );
       }).toList(),
-    );
+    ),
+        IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => context
+                .read<ReminderCubit>()
+                .createReminder(reminderDescription.text, dropdownValue)),
+      ])),
+    ));
   }
 }
+
+
+/// This is the stateful widget that the main application instantiates.
+
+//
 
 class Bar extends StatelessWidget implements PreferredSizeWidget {
   

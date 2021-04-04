@@ -22,6 +22,31 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
 
+  void changeFirstName (String firstName) {
+
+    _settingsRepository.changeFirstName(firstName);
+
+
+
+  }
+
+  void changeLastName(String lastName) {
+
+    _settingsRepository.changeLastName(lastName);
+
+
+
+  }
+
+  void changePhoneNumber(String phoneNumber){
+
+    _settingsRepository.changePhoneNumber(phoneNumber);
+
+
+
+  }
+
+
 
 
    
