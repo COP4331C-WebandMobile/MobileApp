@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:location/location.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 import 'package:map_repository/map_repository.dart';
 import 'package:map_repository/src/entities/user_location_entity.dart';
 import 'package:http/http.dart' as http;
@@ -24,15 +22,16 @@ class MapRepository {
 
   MapRepository()
       : this._firestore = FirebaseFirestore.instance,
-        this._location = Location.instance;
-
-  /* try {
-
-      locationCollection = FirebaseFirestore.instance.collection('location').doc(houseName).collection('locations');
-    }
-    on Exception {
+        this._location = Location.instance {
+    try {
+      locationCollection = FirebaseFirestore.instance
+          .collection('location')
+          .doc(houseName)
+          .collection('locations');
+    } on Exception {
       throw InvalidHouseNameException();
-    }*/
+    }
+  }
 
   Future<List<HouseLocation>> fetchAdresses(String inputText) async {
     try {
