@@ -1,8 +1,11 @@
 import 'package:chore_repository/chore_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:roomate_repository/roomate_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
+import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
+import 'package:roomiesMobile/business_logic/statistics/cubit/statistics_cubit.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 
 class ChoresPage extends StatefulWidget {
@@ -29,6 +32,7 @@ class _ChoresState extends State<ChoresPage> {
   static List<Widget> _widgetOptions = <Widget>[
     ChoresContainer(),
     ToDoContainer(),
+    StatContainer(),
   ];
   void _onItemTapped(int index) {
     setState(() {
@@ -77,6 +81,72 @@ class _ChoresState extends State<ChoresPage> {
   }
 }
 
+class StatContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var roomates = context.read<RoomatesCubit>().state.roomates;
+    roomates.sort((a, b) => b.totalChores.compareTo(a.totalChores));
+
+    return Container(
+        child: ListView.builder(
+      itemCount: roomates.length,
+      // ignore: missing_return
+      itemBuilder: (BuildContext context, i) {
+        return StatBox(roomates[i]);
+      }, // Delete Chore
+    ));
+  }
+}
+
+class StatBox extends StatelessWidget {
+  final Roomate roomate;
+  const StatBox(this.roomate);
+
+  @override
+  Widget build(BuildContext context) {
+    var home = context.read<LandingCubit>().state.home;
+
+    return Card(
+        margin: EdgeInsets.all(20),
+        child: ExpansionTile(
+            title: Text(roomate.firstName +
+                " " +
+                roomate.lastName +
+                " Chores Completed " +
+                roomate.totalChores.toString()),
+            children: <Widget>[
+              Container(
+                  height: 250,
+                  width: 250,
+                  child: BlocBuilder(
+                      bloc: StatsCubit(home, roomate.email),
+                      builder: (context, state) {
+                        if (state.status == StatStatus.Loaded) {
+                          return ListView.builder(
+                              itemCount: state.stats.length,
+                              itemBuilder: (BuildContext context, i) {
+                                return StatDescription(state.stats[i]);
+                              });
+                        }
+                        return Text("Loading");
+                      }))
+            ]));
+  }
+}
+
+class StatDescription extends StatelessWidget {
+  final Stat stat;
+  const StatDescription(this.stat);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Text(
+      "Chore : " + stat.description + " Times Completed:  " + stat.completed.toString(),
+    );
+  }
+}
+
 class ToDoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -121,7 +191,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class ChoreWidget extends StatelessWidget {
-    List<Chore> markedList(chores, option) {
+  List<Chore> markedList(chores, option) {
     List<Chore> markedList = [];
 
     if (option == 1) {
@@ -168,16 +238,14 @@ class AddModal extends StatelessWidget {
           maxLines: null,
           controller: description,
           decoration: InputDecoration(
-              
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-              border: OutlineInputBorder(),
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Content',
-              helperText: '',
-              hintText: 'Wash clothes!',
-            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+            border: OutlineInputBorder(),
+            filled: true,
+            fillColor: Colors.white,
+            labelText: 'Content',
+            helperText: '',
+            hintText: 'Wash clothes!',
+          ),
         ),
         IconButton(
             icon: const Icon(Icons.add),
@@ -203,21 +271,15 @@ class ChoreBox extends StatelessWidget {
       starColor = Colors.black;
     return Card(
         child: Container(
+      padding: EdgeInsets.all(10),
       child: Row(children: [
         Expanded(
-          child: Text(chore.description),
+          flex: 5,
+          child: Text(chore.description, style: TextStyle(fontSize: 30)),
         ),
         Expanded(
-          child: Column(children: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.check_box,
-                color: Colors.green,
-              ),
-              onPressed: () {
-                context.read<ChoresBloc>().add(CompleteChore(chore));
-              },
-            ),
+          flex: 3,
+          child: Row(children: <Widget>[
             IconButton(
               icon: Icon(
                 Icons.delete,
@@ -233,10 +295,22 @@ class ChoreBox extends StatelessWidget {
                 color: starColor,
               ),
               onPressed: () {
-                if(chore.mark == false) context.read<ChoresBloc>().add(MarkChore(chore));
-                else context.read<ChoresBloc>().add(UnMarkChore(chore));
+                if (chore.mark == false)
+                  context.read<ChoresBloc>().add(MarkChore(chore));
+                else
+                  context.read<ChoresBloc>().add(UnMarkChore(chore));
               },
-            )
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.check_box,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                context.read<ChoresBloc>().add(CompleteChore(chore,
+                    context.read<AuthenticationBloc>().state.user.email));
+              },
+            ),
           ]),
         )
       ]),

@@ -75,7 +75,7 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
   }
 
    Stream<ChoresState> _mapCompleteChoreToState(CompleteChore event) async* {
-        _choresRepository.completeChore(event.chore);
+        _choresRepository.completeChore(event.chore,event.email);
   }
 
   @override

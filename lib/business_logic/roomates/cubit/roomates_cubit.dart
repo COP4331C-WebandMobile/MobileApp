@@ -14,7 +14,7 @@ class RoomatesCubit extends Cubit<RoomatesState> {
     @required RoomateRepository roomateRepository,
   })  :   assert(roomateRepository != null),
          _roomateRepository = roomateRepository,
-         super( RoomatesState([Roomate("Testing","Testing","Testing","Testing","Tesitng")],status.loading)){
+         super( RoomatesState([Roomate("Testing","Testing","Testing","Testing","Tesitng",0)],status.loading)){
             roomates();
          }
   void roomates() {

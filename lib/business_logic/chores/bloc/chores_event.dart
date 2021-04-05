@@ -79,10 +79,12 @@ class MarkChore extends ChoresEvent {
 class CompleteChore extends ChoresEvent {
 
   final Chore chore;
+  final email;
 
-  const CompleteChore(this.chore);
+  const CompleteChore(this.chore,this.email);
 
   @override
-  List<Object> get props => [chore];
+  List<Object> get props => [chore,email];
 
 }
+

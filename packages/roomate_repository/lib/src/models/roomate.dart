@@ -8,9 +8,9 @@ class Roomate{
   final email;
   final phoneNumber;
   final lastLocation;
+  final totalChores;
  
-
-  Roomate(this.firstName,this.lastName,this.email, this.phoneNumber, this.lastLocation);
+  Roomate(this.firstName,this.lastName,this.email, this.phoneNumber, this.lastLocation,this.totalChores);
 
   static Roomate fromEntity(email, RoomateEntity entity) {
     return Roomate(
@@ -19,6 +19,7 @@ class Roomate{
       email,
       entity.phoneNumber,
       entity.lastLocation,
+      entity.totalChores
     );
   }
 
@@ -28,7 +29,7 @@ class Roomate{
       "first_name": firstName,
       "last_name": lastName,
       "phone_number": phoneNumber,
-  
+      "total_chores":0,
     };
   }
 

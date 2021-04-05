@@ -7,8 +7,9 @@ class RoomateEntity extends Equatable {
   final lastName;
   final phoneNumber;
   final lastLocation;
+  final totalChores;
  
-  const RoomateEntity(this.firstName, this.lastName,this.phoneNumber, this.lastLocation);
+  const RoomateEntity(this.firstName, this.lastName,this.phoneNumber, this.lastLocation,this.totalChores);
 
   @override
   List<Object> get props => [firstName, lastName, phoneNumber];
@@ -19,6 +20,7 @@ class RoomateEntity extends Equatable {
       snap.data()['last_name'],
       snap.data()['phone_number'],
       snap.data()['last_location'],
+      snap.data()['total_chores'],
     );
   }
 }

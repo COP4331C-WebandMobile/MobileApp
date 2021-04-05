@@ -1,3 +1,5 @@
+import 'package:roomate_repository/roomate_repository.dart';
+import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:roomiesMobile/presentation/landing/landing_page.dart';
 
@@ -32,11 +34,22 @@ class HouseLoading extends StatelessWidget {
         }
         if(state.status == HomeStatus.HomeVerified) {
 
+          final _roomateRepository = RoomateRepository(state.home);
+
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
-                         value: BlocProvider.of<LandingCubit>(context),
-                         child: HomePage()))
-              );
+              MaterialPageRoute(builder: (_) => MultiBlocProvider(
+                providers:[
+                         BlocProvider<LandingCubit>.value(
+                         value: BlocProvider.of<LandingCubit>(context)),
+
+                         BlocProvider<RoomatesCubit>(
+                         create: (context) => RoomatesCubit(roomateRepository: _roomateRepository)
+                         )
+                    
+                 ],
+                 child: HomePage()
+
+              )));
         }
            
        if(state.status==HomeStatus.Homeless) {

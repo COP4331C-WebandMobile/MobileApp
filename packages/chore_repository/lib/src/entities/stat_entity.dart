@@ -5,25 +5,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class ChoreEntity extends Equatable {
+class StatEntity extends Equatable {
   final bool mark;
   final String id;
   final String creator;
   final String description;
 
-  const ChoreEntity(this.description, this.id, this.creator, this.mark);
+  const StatEntity(this.description, this.id, this.creator, this.mark);
 
   @override
   List<Object> get props => [mark, id, creator, description];
 
 
 
-  static ChoreEntity fromSnapshot(DocumentSnapshot snap) {
-    return ChoreEntity(
-      snap.data()['description'],
+  static StatEntity fromSnapshot(DocumentSnapshot snap) {
+    return StatEntity(
+      snap.data()['first_name'],
       snap.id,
-      snap.data()['creator'],
-      snap.data()['mark'],
+      snap.data()['last_name'],
+      snap.data()['email'],
     );
   }
 

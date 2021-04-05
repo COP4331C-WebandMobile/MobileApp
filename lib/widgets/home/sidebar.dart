@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
+import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:roomiesMobile/presentation/location/location_page.dart';
@@ -43,11 +44,23 @@ class SideBar extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => BlocProvider<LandingCubit>.value(
-                                  value: BlocProvider.of<LandingCubit>(context),
-                                  child: HomePage()),
-                            ),
-                          );
+                             builder: (_) =>
+                                    MultiBlocProvider(
+                                    providers: [
+                                        BlocProvider<LandingCubit>.value(
+                                        value: BlocProvider.of<LandingCubit>(
+                                            context),
+                                        ),
+                                        BlocProvider<RoomatesCubit>.value(
+                                        value: BlocProvider.of<RoomatesCubit>(
+                                            context),
+                                        )
+                                        
+                                        ],
+                                        child: HomePage())));
+                        
+                            
+                  
                         },
                       ),
                       ListTile(
@@ -60,11 +73,20 @@ class SideBar extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => BlocProvider<LandingCubit>.value(
-                                  value: BlocProvider.of<LandingCubit>(context),
-                                  child: TestMessagePage()),
-                            ),
-                          );
+                               builder: (_) =>
+                                    MultiBlocProvider(
+                                    providers: [
+                                        BlocProvider<LandingCubit>.value(
+                                        value: BlocProvider.of<LandingCubit>(
+                                            context),
+                                        ),
+                                        BlocProvider<RoomatesCubit>.value(
+                                        value: BlocProvider.of<RoomatesCubit>(
+                                            context),
+                                        )
+                                        
+                                        ],
+                                        child: TestMessagePage())));
                         },
                       ),
                       ListTile(
@@ -78,11 +100,21 @@ class SideBar extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (_) =>
-                                    BlocProvider<LandingCubit>.value(
+                                    MultiBlocProvider(
+                                    providers: [
+                                        BlocProvider<LandingCubit>.value(
                                         value: BlocProvider.of<LandingCubit>(
                                             context),
-                                           child: ChoresPage()),
-                              ));
+                                        ),
+                                        BlocProvider<RoomatesCubit>.value(
+                                        value: BlocProvider.of<RoomatesCubit>(
+                                            context),
+                                        )
+                                        
+                                        ],
+                                        child: ChoresPage())));
+                        
+      
                         },
                       ),
                       ListTile(
@@ -105,30 +137,23 @@ class SideBar extends StatelessWidget {
                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    BlocProvider<LandingCubit>.value(
+                               builder: (_) =>
+                                    MultiBlocProvider(
+                                    providers: [
+                                        BlocProvider<LandingCubit>.value(
                                         value: BlocProvider.of<LandingCubit>(
                                             context),
-                                           child: SettingsPage()),
-                              ));
+                                        ),
+                                        BlocProvider<RoomatesCubit>.value(
+                                        value: BlocProvider.of<RoomatesCubit>(
+                                            context),
+                                        )
+                                        
+                                        ],
+                                        child: SettingsPage())));
                         },
                       ),
-                      ListTile(
-                        title: Text('Roomies',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            )),
-                        onTap: () {},
-                      ),
-                      ListTile(
-                        title: Text('Roomies',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            )),
-                        onTap: () {},
-                      ),
+                   
                     ],
                   )),
               Expanded(
