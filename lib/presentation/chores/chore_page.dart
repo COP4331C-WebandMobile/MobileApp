@@ -6,6 +6,7 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/statistics/cubit/statistics_cubit.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 
 class ChoresPage extends StatefulWidget {
@@ -92,7 +93,7 @@ class StatContainer extends StatelessWidget {
       itemCount: roomates.length,
       // ignore: missing_return
       itemBuilder: (BuildContext context, i) {
-        return StatBox(roomates[i]);
+        return StatBox(roomates[i], i + 1);
       }, // Delete Chore
     ));
   }
@@ -100,37 +101,57 @@ class StatContainer extends StatelessWidget {
 
 class StatBox extends StatelessWidget {
   final Roomate roomate;
-  const StatBox(this.roomate);
+  final int rank;
+  const StatBox(this.roomate, this.rank);
 
   @override
   Widget build(BuildContext context) {
     var home = context.read<LandingCubit>().state.home;
+    var firstName = roomate.firstName;
+    var lastName = roomate.lastName;
+    var totalChores = roomate.totalChores;
 
     return Card(
         margin: EdgeInsets.all(20),
-        child: ExpansionTile(
-            title: Text(roomate.firstName +
-                " " +
-                roomate.lastName +
-                " Chores Completed " +
-                roomate.totalChores.toString()),
-            children: <Widget>[
-              Container(
-                  height: 250,
-                  width: 250,
-                  child: BlocBuilder(
-                      bloc: StatsCubit(home, roomate.email),
-                      builder: (context, state) {
-                        if (state.status == StatStatus.Loaded) {
-                          return ListView.builder(
-                              itemCount: state.stats.length,
-                              itemBuilder: (BuildContext context, i) {
-                                return StatDescription(state.stats[i]);
-                              });
-                        }
-                        return Text("Loading");
-                      }))
-            ]));
+        child: Column(children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: Row(children: [
+                CircleAvatar(child: Text(rank.toString())),
+                Text("  " + firstName + " " + lastName + " Has Completed ",
+                    style: TextStyle(
+                      fontSize: 20,
+                    )),
+                Text(totalChores.toString(),
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 20,
+                    )),
+                Text(" Chores",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ))
+              ])),
+          ExpansionTile(
+              title: Text("Details", style: TextStyle(fontSize: 20)),
+              children: <Widget>[
+                Container(
+                    height: 250,
+                    width: 250,
+                    child: BlocBuilder(
+                        bloc: StatsCubit(home, roomate.email),
+                        builder: (context, state) {
+                          if (state.status == StatStatus.Loaded) {
+                            return ListView.builder(
+                                itemCount: state.stats.length,
+                                itemBuilder: (BuildContext context, i) {
+                                  return StatDescription(state.stats[i]);
+                                });
+                          }
+                          return Text("No Stats Available");
+                        }))
+              ])
+        ]));
   }
 }
 
@@ -141,9 +162,23 @@ class StatDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Text(
-      "Chore : " + stat.description + " Times Completed:  " + stat.completed.toString(),
-    );
+    return Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: CustomColors.gold,
+          border: Border.all(
+            color: Colors.black,
+            width: 3,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Text(stat.description + "   ", style: TextStyle(fontSize: 20)),
+            CircleAvatar(child: Text(stat.completed.toString())),
+          ],
+        ));
   }
 }
 
@@ -230,29 +265,40 @@ class AddModal extends StatelessWidget {
     final email = context.read<AuthenticationBloc>().state.user.email;
     final description = TextEditingController();
 
-    return AlertDialog(
-      content: Container(
+    return Dialog(
+      child: Container(
+          height: 200,
+          width: 200,
           child: Column(children: <Widget>[
-        Text("Enter Description of Chore"),
-        TextField(
-          maxLines: null,
-          controller: description,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-            border: OutlineInputBorder(),
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Content',
-            helperText: '',
-            hintText: 'Wash clothes!',
-          ),
-        ),
-        IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => context
-                .read<ChoresBloc>()
-                .add(AddChore(Chore(email, false, description.text, "test"))))
-      ])),
+            Text("Enter Description of Chore",
+                style: TextStyle(
+                  fontSize: 20,
+                )),
+            TextField(
+              maxLines: null,
+              controller: description,
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Content',
+                helperText: '',
+                hintText: 'Wash clothes!',
+              ),
+            ),
+            Align(
+                alignment: Alignment.bottomRight,
+                child: IconButton(
+                    icon: const Icon(
+                      Icons.add_circle_outline_rounded,
+                      size: 40,
+                      color: Colors.green,
+                    ),
+                    onPressed: () => context.read<ChoresBloc>().add(AddChore(
+                        Chore(email, false, description.text, "test")))))
+          ])),
     );
   }
 }

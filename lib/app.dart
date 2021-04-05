@@ -50,7 +50,7 @@ class _AppViewState extends State<AppView> {
               case AuthenticationStatus.authenticated:
                   
                     _navigator.pushAndRemoveUntil<void>(
-                    HouseLoading.route(),
+                     HouseLoading.route(),
                     (route) => false,
                     );
                     break;

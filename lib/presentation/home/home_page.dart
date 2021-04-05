@@ -15,23 +15,23 @@ class HomePage extends StatelessWidget {
     return MaterialPageRoute(builder: (_) => HomePage());
   }
 
-
   @override
   Widget build(BuildContext context) {
     final _home = context.read<LandingCubit>().state.home;
     final _roomateRepository = RoomateRepository(_home);
     final _reminderRepository = ReminderRepository(_home);
+
     MediaQueryData mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
         appBar: Bar(),
         body: Container(
-            padding: EdgeInsets.all(32),
+            padding: EdgeInsets.all(5),
             height: mediaQuery.size.height,
             width: mediaQuery.size.width,
             child: Column(children: <Widget>[
               Expanded(
-                flex: 3,
+                flex: 2,
                 child: HouseInfo(_home),
               ),
               Expanded(
@@ -42,11 +42,11 @@ class HomePage extends StatelessWidget {
                     child: RoomateList(),
                   )),
               Expanded(
-                  flex: 8,
+                  flex: 7,
                   child: BlocProvider(
                     create: (context) =>
                         ReminderCubit(reminderRepository: _reminderRepository),
-                    child: ReminderBox(),
+                    child: ReminderList(),
                   )),
             ])),
         drawer: SideBar());
@@ -58,58 +58,67 @@ class RoomateList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RoomatesCubit, RoomatesState>(builder: (context, state) {
       return Container(
-          margin: EdgeInsets.all(2),
+          margin: EdgeInsets.all(3),
+          padding: EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: CustomColors.gold,
             border: Border.all(
               color: Colors.black,
-              width: 8,
+              width: 1,
             ),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(children: [
             Expanded(
-                flex: 2,
+                flex: 3,
                 child: Row(children: [
                   Expanded(
-                      child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Roomates",
-                              style: TextStyle(
-                                fontSize: 20,
-                              )))),
+                      child: Row(children: [
+                    Icon(Icons.people),
+                    Text(" Roomies",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ))
+                  ])),
                   Expanded(
                       child: Align(
                           alignment: Alignment.topRight,
                           child: IconButton(
-                              icon:
-                              const Icon(Icons.add_circle_outline_outlined),
-                              onPressed: () => showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                      BlocProvider<RoomatesCubit>.value(
-                                          value: BlocProvider.of<RoomatesCubit>(
-                                              context),
-                                          child: AddRoomate())),
-                            )))
+                            icon: const Icon(Icons.add_circle_outline_outlined),
+                            onPressed: () => showDialog(
+                                context: context,
+                                builder: (_) =>
+                                    BlocProvider<RoomatesCubit>.value(
+                                        value: BlocProvider.of<RoomatesCubit>(
+                                            context),
+                                        child: AddRoomate())),
+                          )))
                 ])),
             Expanded(
                 flex: 4,
-                child: Container(
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: state.roomates.length,
-                        itemBuilder: (BuildContext context, i) {
-                          // TODO: I believe this is null, so maybe its not getting intialized properly.
-                          return RoomateIcon(state.roomates[i]);
-                        })))
+                child: Builder(
+
+                    // ignore: missing_return
+                    builder: (context) {
+                  if (state.status == RoomateStatus.Loaded) {
+                    return Container(
+                        padding: EdgeInsets.all(5),
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.roomates.length,
+                            itemBuilder: (BuildContext context, i) {
+                              // TODO: I believe this is null, so maybe its not getting intialized properly.
+                              return RoomateIcon(state.roomates[i]);
+                            }));
+                  } else
+                    return Text("Loading");
+                })),
           ]));
     });
   }
 }
 
 class HouseInfo extends StatelessWidget {
-
   final home;
   const HouseInfo(this.home);
   @override
@@ -121,6 +130,7 @@ class HouseInfo extends StatelessWidget {
           child: Icon(
             Icons.house_sharp,
             size: 132,
+            color: Colors.black,
           )),
       Column(
         children: [
@@ -148,14 +158,29 @@ class RoomateIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-        child: TextButton(
-      child: Text(roomate.firstName[0]),
-      onPressed: () =>   Navigator.push(
-                            context,MaterialPageRoute(
-                              builder: (_) => ProfilePage(roomate)),
-                                 //Navigate to profile page
-    )));
+    return Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.black,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(12)),
+        margin: EdgeInsets.all(3),
+        height: 100,
+        width: 80,
+        child: Column(children: [
+          Expanded(
+              child: IconButton(
+                  icon: Icon(Icons.face_sharp, size: 30),
+                  onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ProfilePage(roomate)),
+                        //Navigate to profile page
+                      ))),
+          Padding(padding: EdgeInsets.all(5)),
+          Expanded(child: Text(roomate.firstName + " " + roomate.lastName)),
+        ]));
   }
 }
 
@@ -165,68 +190,78 @@ class ReminderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Column(
-      children: [
-        Row(children:[
-         Expanded(child: Text(
-           reminder.description,
-           style: TextStyle(fontSize: 20),)),
-         Expanded(child: 
-         Row( children: [
-         Icon(Icons.calendar_today_outlined),
-         Text(reminder.frequency)
-         ]),
-         )
-         ]),
-        Row(children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.delete),   
+    return Container(
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.black,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(12)),
+        child: Column(children: [
+          Row(children: [
+            Expanded(
+                child: Text(
+              reminder.description,
+              style: TextStyle(fontSize: 30),
+            ))
+          ]),
+          Row(children: [
+            Icon(Icons.calendar_today_outlined, color: Colors.blue),
+            Text(reminder.frequency),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              alignment: Alignment.bottomRight,
               onPressed: () {
                 context.read<ReminderCubit>().deleteReminder(reminder);
-               
               },
-          ), 
-          IconButton(
-             icon: Icon(Icons.check),   
-            onPressed: () {
-               context.read<ReminderCubit>().completeReminder(context.read<AuthenticationBloc>().state.user.email,reminder);
-            },
-            
-          ),
-         
-        ]),
-      ],
-    ));
+            ),
+            IconButton(
+              icon: Icon(Icons.check, color: Colors.green),
+              onPressed: () {
+                context.read<ReminderCubit>().completeReminder(
+                    context.read<AuthenticationBloc>().state.user.email,
+                    reminder);
+              },
+            ),
+          ])
+        ]));
   }
 }
 
-class ReminderBox extends StatelessWidget {
+class ReminderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReminderCubit, ReminderState>(builder: (context, state) {
-      return Container(
-          margin: EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: CustomColors.gold,
-            border: Border.all(
-              color: Colors.black,
-              width: 8,
-            ),
-            borderRadius: BorderRadius.circular(12),
+    return Container(
+        margin: EdgeInsets.all(2),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: CustomColors.gold,
+          border: Border.all(
+            color: Colors.black,
+            width: 2,
           ),
-          child: Column(children: <Widget>[
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: BlocBuilder<ReminderCubit, ReminderState>(
+            builder: (context, state) {
+          return Column(children: <Widget>[
             Expanded(
-                flex: 2,
+                flex: 1,
                 child: Row(
                   children: [
                     Expanded(
                         child: Align(
                             alignment: Alignment.topLeft,
-                            child: Text("Reminders",
-                                style: TextStyle(
-                                  fontSize: 28,
-                                )))),
+                            child: Row(children: [
+                              Icon(Icons.calendar_today_rounded, size: 30),
+                              Text("Reminders",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  )),
+                            ]))),
                     Expanded(
                         child: Align(
                             alignment: Alignment.topRight,
@@ -243,19 +278,24 @@ class ReminderBox extends StatelessWidget {
                             )))
                   ],
                 )),
-            Expanded(
-                flex: 8,
-                child: ListView.builder(
-                    itemCount: state.reminders.length,
-                    itemBuilder: (BuildContext context, i) {
-                      return ReminderText(state.reminders[i]);
-                    }))
-          ]));
-    });
+            // ignore: missing_return
+            Builder(builder: (context) {
+              if (state.status == ReminderStatus.Loaded) {
+                return Expanded(
+                    flex: 8,
+                    child: Container(
+                        child: ListView.builder(
+                            itemCount: state.reminders.length,
+                            itemBuilder: (BuildContext context, i) {
+                              return ReminderText(state.reminders[i]);
+                            })));
+              } else
+                return Text("");
+            }),
+          ]);
+        }));
   }
 }
-
-
 
 class AddRoomate extends StatelessWidget {
   final roomateEmail = TextEditingController();
@@ -274,14 +314,12 @@ class AddRoomate extends StatelessWidget {
         ),
         IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => context
-                .read<RoomatesCubit>()
-                .AddRoomate(roomateEmail.text)),
+            onPressed: () =>
+                context.read<RoomatesCubit>().AddRoomate(roomateEmail.text)),
       ])),
     ));
   }
 }
-
 
 class CreateReminder extends StatefulWidget {
   const CreateReminder({Key key}) : super(key: key);
@@ -290,72 +328,89 @@ class CreateReminder extends StatefulWidget {
   _CreateReminderState createState() => _CreateReminderState();
 }
 
-
 class _CreateReminderState extends State<CreateReminder> {
-
   String dropdownValue = 'Daily';
   final reminderDescription = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-        content: FractionallySizedBox(
-      widthFactor: 0.3,
-      heightFactor: 0.3,
+    return Dialog(
       child: Container(
+          height: 400,
+          width: 300,
           child: Column(children: <Widget>[
-        Text("Enter Reminder Description"),
-        TextField(
-          controller: reminderDescription,
-        ),
-        DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String newValue) {
-        setState(() {
-          dropdownValue = newValue;
-        });
-      },
-      items: <String>['Daily', 'Weekly', 'Monthly']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ),
-        IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => context
-                .read<ReminderCubit>()
-                .createReminder(reminderDescription.text, dropdownValue)),
-      ])),
-    ));
+            Text("Enter Reminder Description",
+                style: TextStyle(
+                  fontSize: 20,
+                )),
+            TextField(
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Content',
+                helperText: '',
+                hintText: 'Turn Of Lights!',
+              ),
+              controller: reminderDescription,
+            ),
+            Text("How Often ?",
+                style: TextStyle(
+                  fontSize: 20,
+                )),
+            DropdownButton<String>(
+              value: dropdownValue,
+              icon: const Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                });
+              },
+              items: <String>['Daily', 'Weekly', 'Monthly']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: IconButton(
+                  icon: const Icon(
+                    Icons.add_circle_outline_rounded,
+                    size: 40,
+                    color: Colors.green,
+                  ),
+                  onPressed: () => context
+                      .read<ReminderCubit>()
+                      .createReminder(reminderDescription.text, dropdownValue)),
+            )
+          ])),
+    );
   }
 }
-
 
 /// This is the stateful widget that the main application instantiates.
 
 //
 
 class Bar extends StatelessWidget implements PreferredSizeWidget {
-  
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text('Roomies'),
-      actions: <Widget>[
-      ]
-    );
+        backgroundColor: Colors.white,
+        title: const Text('Roomies'),
+        actions: <Widget>[]);
   }
 
   Size get preferredSize => Size.fromHeight(60);

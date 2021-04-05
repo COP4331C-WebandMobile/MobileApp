@@ -14,18 +14,17 @@ class RoomatesCubit extends Cubit<RoomatesState> {
     @required RoomateRepository roomateRepository,
   })  :   assert(roomateRepository != null),
          _roomateRepository = roomateRepository,
-         super( RoomatesState([Roomate("Testing","Testing","Testing","Testing","Tesitng",0)],status.loading)){
+         super( RoomatesState.loading()){
             roomates();
          }
   void roomates() {
     _roomatesSubscription = _roomateRepository.roomates().listen(
-    (roomates) => emit(RoomatesState(roomates,status.loaded)));
+    (roomates) => emit(RoomatesState.loaded(roomates)));
   }
-    void AddRoomate(email){
+    Future<void> AddRoomate(email){
     _roomateRepository.addRoomate(email);
   }
 
-  
   @override
   Future<void> close() {
       _roomatesSubscription.cancel();

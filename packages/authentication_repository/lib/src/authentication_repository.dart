@@ -52,9 +52,10 @@ class AuthenticationRepository {
         'last_name': lastName,
         'phone_number': phoneNumber,
         'house_name': house,
+        'total_chores':0,
       });
     } on Exception {
-      print('Failed to add User.');
+      throw AddUserFailure();
     }
   }
 
@@ -163,16 +164,3 @@ class AuthenticationRepository {
     user.updatePassword(newPassword);
   }
 }  
-/*extension on auth.User {
-  User get toUser {
-    return User(
-      id: uid,
-      email: email,
-      isVerified: emailVerified,
-      name: displayName,
-      photo: photoURL,
-      houseName:"Test",
-    );
-  }
-
-}*/

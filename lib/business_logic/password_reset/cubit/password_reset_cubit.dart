@@ -7,13 +7,11 @@ import 'package:roomiesMobile/business_logic/authentication/authentication.dart'
 part 'password_reset_state.dart';
 
 class PasswordResetCubit extends Cubit<PasswordResetState> {
-
   final AuthenticationRepository _authenticationRepository;
 
-  PasswordResetCubit(this._authenticationRepository) 
-    : assert(_authenticationRepository != null),
-    super(const PasswordResetState());
-
+  PasswordResetCubit(this._authenticationRepository)
+      : assert(_authenticationRepository != null),
+        super(const PasswordResetState());
 
   void emailChanged(String value) {
     final email = Email.dirty(value);
@@ -25,9 +23,7 @@ class PasswordResetCubit extends Cubit<PasswordResetState> {
   }
 
   Future<void> requestPasswordReset() async {
-
-    if(!state.status.isValidated)
-    {
+    if (!state.status.isValidated) {
       return;
     }
 
@@ -37,15 +33,8 @@ class PasswordResetCubit extends Cubit<PasswordResetState> {
       await _authenticationRepository.passwordReset(email: state.email.value);
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-
-    }
-    on Exception {
+    } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
-
-
   }
-
-
-
 }

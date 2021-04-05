@@ -24,34 +24,29 @@ class HouseLoading extends StatelessWidget {
     create: (context) => LandingCubit(homeRepository: HomeRepository(context.read<AuthenticationBloc>().state.user.email)),
     // TODO: This must be null and is being checked against. Need to fix later.
     child:  BlocListener <LandingCubit,LandingState> ( 
+
       listener: (context,state) {
         if(state.status == HomeStatus.Loading) { 
             MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
                          value: BlocProvider.of<LandingCubit>(context),
                          child: SplashPage())
               );
-
         }
         if(state.status == HomeStatus.HomeVerified) {
-
           final _roomateRepository = RoomateRepository(state.home);
-
           Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => MultiBlocProvider(
                 providers:[
                          BlocProvider<LandingCubit>.value(
                          value: BlocProvider.of<LandingCubit>(context)),
-
                          BlocProvider<RoomatesCubit>(
                          create: (context) => RoomatesCubit(roomateRepository: _roomateRepository)
-                         )
-                    
+                         )  
                  ],
                  child: HomePage()
 
               )));
-        }
-           
+        }     
        if(state.status==HomeStatus.Homeless) {
              Navigator.push(
               context,

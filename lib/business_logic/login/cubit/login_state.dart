@@ -1,7 +1,6 @@
 part of 'login_cubit.dart';
 
 class LoginState extends Equatable {
-
   final Email email;
   final Password password;
   final FormzStatus status;
@@ -26,5 +25,4 @@ class LoginState extends Equatable {
       status: status ?? this.status,
     );
   }
- 
 }

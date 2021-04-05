@@ -61,8 +61,6 @@ class HomeRepository {
     }
   }
 
-
-
   Future<void> joinHome(String houseName, String password) async {
     try {
       CollectionReference houseCollection = _fireStore.collection('houses');
