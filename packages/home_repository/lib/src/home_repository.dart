@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
-import 'package:roomate_repository/roomate_repository.dart';
+//import 'package:roomate_repository/roomate_repository.dart';
 
 
 
@@ -50,7 +50,7 @@ class HomeRepository {
       "password": password,
     });
 
-    await RoomateRepository(houseName).addRoomate(_email);
+    //await RoomateRepository(houseName).addRoomate(_email);
 
 
     } on HomeExists{
@@ -75,7 +75,8 @@ class HomeRepository {
                 .doc(_email)
                 .update({"house_name": houseName});
 
-            RoomateRepository(houseName).addRoomate(_email);
+            //RoomateRepository(houseName).addRoomate(_email);
+            
           } else
             throw InvalidPassword();
         } else {

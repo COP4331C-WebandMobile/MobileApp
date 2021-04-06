@@ -7,10 +7,13 @@ abstract class LocationState extends Equatable {
   List<Object> get props => [];
 }
 
+// Just for an intial state.
 class LocationInitial extends LocationState {}
 
 class LoadingLocations extends LocationState {}
 
-class FailedToRetreiveLocations extends LocationState {}
+class FailedToGetLocations extends LocationState {}
 
-class SuccessfullyRetreivedLocations extends LocationState { final List<HouseLocation> locations; const SuccessfullyRetreivedLocations(this.locations);}
+class SuccessfulToGetLocations extends LocationState { final List<HouseLocation> locations; const SuccessfulToGetLocations(this.locations);}
+
+class SuccessfulToGetRoomates extends LocationState { final List<UserLocation> locations; const SuccessfulToGetRoomates(this.locations);}

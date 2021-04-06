@@ -22,7 +22,7 @@ static HouseLocationEntity fromJson(Map<String, Object> json)
   return HouseLocationEntity(
     'temp',
     json["matchedAddress"] as String,
-    GeoPoint(cord['x'] as double, cord['y'] as double),
+    GeoPoint(cord['y'] as double, cord['x'] as double),
   );
 }
 

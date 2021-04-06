@@ -13,20 +13,20 @@ abstract class LocationEvent extends Equatable {
 }
 
 
-class RetreieveUserLocation extends LocationEvent {
+class GetUserLocation extends LocationEvent {
   final String id;
 
-  const RetreieveUserLocation(this.id);
+  const GetUserLocation(this.id);
 
   @override
   List<Object> get props => [id];
 }
 
 class QueryAdresses extends LocationEvent {
-
+  
   final String providedAdress;
 
-  const QueryAdresses(this.providedAdress);
+  const QueryAdresses(this.providedAdress); 
 
   @override
   List<Object> get props => [providedAdress];

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_repository/map_repository.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:roomiesMobile/business_logic/authentication/authentication.dart';
+import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/location/bloc/location_bloc.dart';
 
 class LocationPage extends StatelessWidget {
@@ -13,7 +14,7 @@ class LocationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LocationBloc>(
-        create: (context) => LocationBloc(mapRepository: MapRepository()),
+        create: (context) => LocationBloc(mapRepository: MapRepository(houseName: context.read<LandingCubit>().state.home)),
         child: MyWrapper());
   }
 }
@@ -59,20 +60,40 @@ class MyWrapper extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: 550,
+                          height: 500,
                           width: 300,
                           child: _MyMapState(),
                         ),
                         ElevatedButton(
                             onPressed: () {
                               context.read<LocationBloc>().add(
-                                  RetreieveUserLocation(context
+                                  GetUserLocation(context
                                       .read<AuthenticationBloc>()
                                       .state
                                       .user
                                       .email));
+                              
                             },
                             child: Text('Check In Location')),
+                            // This will have a side scroll view of the roomate logos to get the location of each last known and animate to it in the map
+                            //
+                        Container(
+                          width: 300,
+                          height: 50,
+                          color: Colors.white,
+                          // Each thing built will be an icon/logo for the roomates. Clicking will zoom on the last known location of them.
+                          // Need to have access to those locations or query it again.
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, i) {
+                              return Container(
+                                child: Center(child: Text('$i'),),
+                                color: Colors.red,
+                              );
+                
+                            },
+                          )                      
+                        )
                       ],
                     )
                   ],
@@ -88,7 +109,8 @@ class MyWrapper extends StatelessWidget {
 // }
 
 class _MyMapState extends StatelessWidget {
-  List<Marker> myMarker = [Marker(markerId: MarkerId('New'), position: LatLng(45,45))];
+  //final List<Marker> myMarker = <Marker>[];
+  List<Marker> myMarker = [];
   GoogleMapController controller;
 
   @override
@@ -96,31 +118,74 @@ class _MyMapState extends StatelessWidget {
     return BlocConsumer<LocationBloc, LocationState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is SuccessfullyRetreivedLocations) {
-            // int i = 0;
-            // state.locations.forEach((element) {
-            //   i++;
-            //   myMarker.add(Marker(
-            //     markerId: MarkerId(i.toString()),
+          
+          print(state.toString());
 
-            //     position:
-            //         LatLng(element.longLat.latitude, element.longLat.longitude),
-            //   ));
-            // });
+          if (state is SuccessfulToGetLocations) {
+            state.locations.forEach((element) {
+              myMarker.add(Marker(
+                markerId: MarkerId(element.address.toString()),
+                position:
+                    LatLng(element.longLat.latitude, element.longLat.longitude),
+                icon: BitmapDescriptor.defaultMarker,
+                onTap: (){
+                  print('This should zoom in to the place and then show button to set the house address.');
+                },
+              ));
+            });
+          }
+          else if(state is LoadingLocations)
+          {
+            return Center(child: CircularProgressIndicator(),);
+          }
+          else if(state is SuccessfulToGetRoomates)
+          {
+            print('Update?');
+              state.locations.forEach((element) {
 
-            print(Set.from(myMarker));
+              final Marker newMarker = Marker(
+                markerId: MarkerId(element.id.toString()),
+                position:
+                    LatLng(element.location.latitude, element.location.longitude),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+                onTap: (){
+                  print('This should zoom in to the place and then show button to set the house address.');
+                },
+              );
 
-            return GoogleMap(
-              mapType: MapType.hybrid,
+              if(!myMarker.contains(newMarker))
+              {
+                myMarker.add(newMarker);
+              }
+              else
+              {
+                print('Already contain that marker.');
+              }
+
+            });
+          }
+          else if(state is FailedToGetLocations)
+          {
+            return Center(child: Text('Why no work.'),);
+          }
+
+          print(Set.from(myMarker));
+
+          return GoogleMap(
+              mapType: MapType.normal,
             initialCameraPosition: const CameraPosition(
                 target: const LatLng(39.5, -98.35), zoom: 3),
             markers: Set<Marker>.from(myMarker),
             myLocationEnabled: false,
             myLocationButtonEnabled: true,
-          );
-          }
+            onMapCreated: (mapController) async {
+              controller = mapController;
 
-          return Container(child: Text('Wtf'),);
+              await Future.delayed(Duration(milliseconds: 200));
+
+              //await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: point, zoom: 6)));
+            },
+          );
         });
   }
 }

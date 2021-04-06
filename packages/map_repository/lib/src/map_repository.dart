@@ -18,11 +18,13 @@ class MapRepository {
   final Location _location;
   final FirebaseFirestore _firestore;
   CollectionReference locationCollection;
-  String houseName;
+  final String houseName;
 
-  MapRepository()
+  MapRepository({String houseName})
       : this._firestore = FirebaseFirestore.instance,
-        this._location = Location.instance {
+        this._location = Location.instance,
+        this.houseName = houseName
+        {
     try {
       locationCollection = FirebaseFirestore.instance
           .collection('location')
@@ -96,13 +98,14 @@ class MapRepository {
     }
   }
 
+  // Record a location.
   Future<void> recordUserLocation(String id) async {
     try {
       final userData = await _getCurrentLocation(id);
-
+      print('House name is: $houseName');
       final docRef = _firestore
           .collection('location')
-          .doc('Home')
+          .doc(houseName)
           .collection('locations')
           .doc(userData.id);
 
@@ -124,6 +127,7 @@ class MapRepository {
     }
   }
 
+  // Get all the userlocations
   Stream<List<UserLocation>> userLocations() {
     return locationCollection.snapshots().map((snapshot) {
       return snapshot.docs
@@ -132,4 +136,5 @@ class MapRepository {
           .toList();
     });
   }
+  
 }

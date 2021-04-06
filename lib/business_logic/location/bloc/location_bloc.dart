@@ -10,6 +10,7 @@ part 'location_state.dart';
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
   
   final MapRepository _mapRepository;
+  StreamSubscription _userLocationSubscription;
 
   LocationBloc({
     @required MapRepository mapRepository,
@@ -17,16 +18,47 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   : 
   assert(mapRepository != null),
   _mapRepository = mapRepository,
-  super(LocationInitial());
+  super(LocationInitial())
+  {
+    _userLocationSubscription = _mapRepository.userLocations().listen((event) {add(GetRoomateLocations(event));});
+  }
 
   @override
   Stream<LocationState> mapEventToState(
     LocationEvent event,
   ) async* 
   {
-    if(event is GetRoomateLocations)
+
+    if(event is GetUserLocation)
     {
+      try {
+        await _mapRepository.recordUserLocation(event.id);
+        
+        // Yield successful retreived user location.
+      }
+      on Exception catch(e)
+      {
+        print(e);
+      } 
+    }
+    else if(event is GetRoomateLocations)
+    {
+      yield LoadingLocations();
       
+      try {
+
+        print('Working???');
+        if(event.roomateLocations.isNotEmpty)
+        {
+          yield SuccessfulToGetRoomates(event.roomateLocations);
+        }
+        else
+          yield FailedToGetLocations();
+
+      }
+      on Exception {
+        yield FailedToGetLocations();
+      }
     }
     else if(event is QueryAdresses)
     {
@@ -36,34 +68,22 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       try {
 
         List<HouseLocation> adresses = await _mapRepository.fetchAdresses(event.providedAdress);
-
-        print('Did we make it here?');
-        yield SuccessfullyRetreivedLocations(adresses);
+        
+        yield SuccessfulToGetLocations(adresses);
       }
       on Exception catch(e)
       {
-        print('Or here?');
 
-        yield FailedToRetreiveLocations();
+        yield FailedToGetLocations();
       }
      
     }
-    else if(event is RetreieveUserLocation)
-    {
-      yield LoadingLocations();
-
-      try {
-        await _mapRepository.recordUserLocation(event.id);
-
-        // Yield successful retreived user location.
-      }
-      on Exception
-      {
-
-      }
-
-
-    }
+    
+  @override
+  Future<void> close() {
+    _userLocationSubscription?.cancel();
+    return super.close();
+  }  
 
   }
 }

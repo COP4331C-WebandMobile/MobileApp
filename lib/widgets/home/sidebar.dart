@@ -124,8 +124,24 @@ class SideBar extends StatelessWidget {
                               color: Colors.white,
                             )),
                         onTap: () {
-                          Navigator.push(context, LocationPage.route());
-                        },
+                        
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                             builder: (_) =>
+                                    MultiBlocProvider(
+                                    providers: [
+                                        BlocProvider<LandingCubit>.value(
+                                        value: BlocProvider.of<LandingCubit>(
+                                            context),
+                                        ),
+                                        BlocProvider<RoomatesCubit>.value(
+                                        value: BlocProvider.of<RoomatesCubit>(
+                                            context),
+                                        )
+                                        
+                                        ],
+                                        child: LocationPage())));                        },
                       ),
                       ListTile(
                         title: Text('Settings',
