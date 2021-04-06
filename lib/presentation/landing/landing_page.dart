@@ -56,9 +56,11 @@ class LandingPage extends StatelessWidget {
 class CreateHome extends StatelessWidget {
   final houseName = TextEditingController();
   final password = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
+    final email = context.read<AuthenticationBloc>().state.user.email;
     return AlertDialog(
         content: FractionallySizedBox(
             widthFactor: 0.5,
@@ -85,7 +87,7 @@ class CreateHome extends StatelessWidget {
                       icon: const Icon(Icons.add),
                       onPressed: () => context
                           .read<LandingCubit>()
-                          .addHome(houseName.text, password.text)),
+                          .addHome(houseName.text, password.text,email)),
                   Builder(builder: (BuildContext context) {
                     if (state.status == HomeStatus.Error)
                       return Text(state.error);
@@ -104,6 +106,9 @@ class JoinHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    final email = context.read<AuthenticationBloc>().state.user.email;
+
     return AlertDialog(
         content: FractionallySizedBox(
             widthFactor: 0.5,
@@ -124,7 +129,7 @@ class JoinHome extends StatelessWidget {
                     icon: const Icon(Icons.add),
                     onPressed: () => context
                         .read<LandingCubit>()
-                        .joinHome(houseName.text, password.text)),
+                        .joinHome(houseName.text, password.text,email)),
                 Builder(builder: (BuildContext context) {
                   if (state.status == HomeStatus.Error)
                     return Text(state.error);

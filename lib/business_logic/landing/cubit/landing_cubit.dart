@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:home_repository/home_repository.dart';
+import 'package:roomate_repository/roomate_repository.dart';
 
 part 'landing_state.dart';
 
@@ -30,9 +31,11 @@ class LandingCubit extends Cubit<LandingState> {
     _homeSubscription = _homeRepository.home().listen((home) => validate(home));
   }
 
-  Future<void> addHome(String houseName, String password) async {
+  Future<void> addHome(String houseName, String password,String email) async {
+
     try {
       await _homeRepository.addHome(houseName, password);
+      await RoomateRepository(houseName).addRoomate(email);
     } on HomeExists {
       emit(LandingState.error("A home with that name already exists"));
     } on ServerError {
@@ -40,9 +43,10 @@ class LandingCubit extends Cubit<LandingState> {
     }
   }
 
-  Future<void> joinHome(String houseName, String password) async {
+  Future<void> joinHome(String houseName, String password,String email) async {
     try {
       await _homeRepository.joinHome(houseName, password);
+      await RoomateRepository(houseName).addRoomate(email);
     } on InvalidPassword {
       emit(LandingState.error("Incorrect Password"));
     } on InvalidHomeName {
