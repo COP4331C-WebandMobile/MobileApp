@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:messaging_repository/src/entities/message_entity.dart';
+import 'package:messaging_repository/src/entities/response_entity.dart';
 import 'package:messaging_repository/src/messaging_repository.dart';
 import 'package:messaging_repository/src/models/message.dart';
 
@@ -38,7 +39,18 @@ class FirebaseMessageRepository implements MessagingRepository {
 
     CollectionReference responses = messageCollection.doc(targetId).collection('/responses');
     
-    return await responses.doc().set({'creator': 'Guy', 'body': 'This is a test.'});
+    final reachedMax = await responses.get().then((value) => value.size >= 3);
+
+    // Only allow 3 responses to any question.
+    if(reachedMax)
+    {
+      throw Exception('Too many responses to question');
+    }
+
+    final response = ResponseEntity('targetId', creator, body);
+
+    
+    return await responses.doc().set(response.toDocument());
   } 
 
   @override
@@ -55,7 +67,7 @@ class FirebaseMessageRepository implements MessagingRepository {
 
   @override
   Stream<List<Message>> messages() {
-    return messageCollection.snapshots().map((snapshot){
+    return messageCollection.snapshots().map((snapshot){   
       return snapshot.docs
         .map((doc) => Message.fromEntity(MessageEntity.fromSnapshot(doc)))
         .toList();
