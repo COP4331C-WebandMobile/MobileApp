@@ -34,41 +34,78 @@ class CreateMessageModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final creator = context.read<AuthenticationBloc>().state.user.email;
     final body = TextEditingController();
 
-    return AlertDialog(
-      content: Container(
-        // TODO: Eventually fix any MediaQuery either to be used or finding a better option.
-        height: MediaQuery.of(context).size.height / 2,
-        child: Column( 
-          children: [
-            Text('Create New Message'),
-            const SizedBox(height: 32,),
-            TextField(
-                controller: body,
-                decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Content',
-                helperText: '',
-                hintText: 'I have a test today!',
+    MessageType type = MessageType.invalid;
+    String newText = 'Message';
+    return StatefulBuilder(
+      builder: (context, setState) {
+       return AlertDialog(
+        content: Container(
+          // TODO: Eventually fix any MediaQuery either to be used or finding a better option.
+          height: MediaQuery.of(context).size.height / 2,
+          child: Column( 
+            children: [
+              Text('Create New Message'),
+              const SizedBox(height: 32,),
+              TextField(
+                  controller: body,
+                  decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Content',
+                  helperText: '',
+                  hintText: 'I have a test today!',
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: (){
-                context.read<MessagingBloc>().add(CreateMessage(Message('NewMessage', creator, body.text, MessageType.alert)));
-              }, 
-              child: Text('Post')
-            ),
-          ],),
-      ),
+              Card(
+                margin: EdgeInsets.all(20),
+                child: ExpansionTile(
+                  title: Text(newText),
+                  children: <Widget>[
+                    ListTile(
+                      title: Text('Alert'),
+                      onTap: (){
+                        setState((){
+                          type = MessageType.alert;
+                          newText = 'Alert';
+                        });
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Question'),
+                      onTap: (){
+                        setState((){
+                          type = MessageType.question;
+                          newText = 'Question';
+                        });
+                      },
+                    ),
+                    // ListTile(
+                    //   title: Text('Purchase'),
+                    //   onTap: (){type = MessageType.purchase;},
+                    // ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: (){
+                  print(type);
+                  context.read<MessagingBloc>().add(CreateMessage(Message('NewMessage', creator, body.text, type)));
+                }, 
+                child: Text('Post')
+              ),
+            ],),
+        ),
+      );
+      }
     );
   }
 }
-
 
 class _MyMessagePageState extends State<MyMessagePage> {
 
@@ -233,6 +270,42 @@ class AlertWidget extends StatelessWidget {
 
 }
 
+class CreateResponseDialog extends StatelessWidget {
+  
+  final targetId;
+
+  const CreateResponseDialog(this.targetId);
+
+  @override
+  Widget build(BuildContext context) {
+
+    final String creator = context.read<AuthenticationBloc>().state.user.email;
+
+    return AlertDialog(
+      title: Text('Replying to Question'),
+      content: Container(
+        alignment:  Alignment.center,
+        height: 200,
+        width: 300,
+        child: Column(
+          children: [
+            // TODO: Need to make this textfield more noticable.
+            TextField(
+              onSubmitted: (body) {
+                context.read<MessagingBloc>().add(RespondToQuestion(targetId, creator, body));
+                
+              },
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
+
+}
+
 class QuestionWidget extends StatelessWidget {
 
   final Message message;
@@ -261,10 +334,16 @@ class QuestionWidget extends StatelessWidget {
             alignment: Alignment.bottomRight,
             child: Text('Posted date'),
             ),
+          Text(''),
           // Make button textbox appear and then allow input to submit...
           ElevatedButton(
-            onPressed: (){ context.read<MessagingBloc>().add(RespondToQuestion(message.id, 'Gerg', 'What a stupid question.'));},
-            child: Text('Respond')),
+            onPressed: (){ showDialog(
+              context: context, 
+              builder: (_) => BlocProvider<MessagingBloc>.value(
+                    value: BlocProvider.of<MessagingBloc>(context),
+                    child: CreateResponseDialog(message.id),));},
+
+            child: Text('Create Response')),
         ],
       ),
       );

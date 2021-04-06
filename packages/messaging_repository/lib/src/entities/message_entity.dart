@@ -12,7 +12,7 @@ class MessageEntity extends Equatable {
   final Timestamp date;
   final MessageType type;
   final String cost;
-
+  
   const MessageEntity(this.id, this.creator, this.body, this.date, this.type, this.cost);
   
   @override
@@ -42,7 +42,7 @@ class MessageEntity extends Equatable {
 
   static MessageEntity fromSnapshot(DocumentSnapshot snap) {
     
-    var data = snap.data();
+    final data = snap.data();
     MessageType _type = _getType(data['type']);
 
     return MessageEntity(

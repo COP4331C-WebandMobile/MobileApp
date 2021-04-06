@@ -85,10 +85,15 @@ class MyWrapper extends StatelessWidget {
                           // Need to have access to those locations or query it again.
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
+                            itemCount: 4,
                             itemBuilder: (context, i) {
-                              return Container(
-                                child: Center(child: Text('$i'),),
-                                color: Colors.red,
+                              return Padding(
+                                padding: EdgeInsets.only(left: 8, right: 8),
+                                child: Icon(
+                                  Icons.supervised_user_circle,
+                                  size: 32,
+                                  
+                                ),
                               );
                 
                             },
@@ -148,9 +153,11 @@ class _MyMapState extends StatelessWidget {
                 position:
                     LatLng(element.location.latitude, element.location.longitude),
                 icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-                onTap: (){
-                  print('This should zoom in to the place and then show button to set the house address.');
-                },
+                infoWindow: InfoWindow(
+                  title: element.id,
+                  snippet: 'This is a test.',
+                  onTap: (){ print('This could be used to send message to request location update.');},
+                ),
               );
 
               if(!myMarker.contains(newMarker))
