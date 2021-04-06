@@ -15,36 +15,31 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     MediaQueryData mediaQuery = MediaQuery.of(context);
 
-
     return Scaffold(
-      backgroundColor: CustomColors.gold,
-      appBar: Bar(),
-      body:  Container(
-        decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        color: Colors.white,
-        ),
-        height: mediaQuery.size.height/2,
-        width: mediaQuery.size.width,
-        margin: EdgeInsets.all(32.0),
-        
-        child: Column(
-          children: [
-          Text(
-            "Create An Account",
-             style: TextStyle(fontSize: 30),
-             ),
-          BlocProvider<RegisterCubit>(
-          create: (_) => RegisterCubit(context.read<AuthenticationRepository>()), //call back
-          child: Expanded(
-            child:RegisterForm()
+        backgroundColor: CustomColors.gold,
+        appBar: Bar(),
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            color: Colors.white,
+          ),
+          height: mediaQuery.size.height / 2,
+          width: mediaQuery.size.width,
+          margin: EdgeInsets.all(32.0),
+          child: Column(children: [
+            Text(
+              "Create An Account",
+              style: TextStyle(fontSize: 30),
             ),
-        ),
-
-        ]),
-    ));
+            BlocProvider<RegisterCubit>(
+              create: (_) => RegisterCubit(
+                  context.read<AuthenticationRepository>()), //call back
+              child: Expanded(child: RegisterForm()),
+            ),
+          ]),
+        ));
   }
 }
