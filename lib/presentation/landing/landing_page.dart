@@ -56,15 +56,15 @@ class LandingPage extends StatelessWidget {
 class CreateHome extends StatelessWidget {
   final houseName = TextEditingController();
   final password = TextEditingController();
-  
+  final address = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final email = context.read<AuthenticationBloc>().state.user.email;
-    return AlertDialog(
-        content: FractionallySizedBox(
-            widthFactor: 0.5,
-            heightFactor: 0.5,
+    return Dialog(
+        child: Container(
+            height: 500,
+            width: 300,
             child: BlocBuilder<LandingCubit, LandingState>(
               builder: (context, state) {
                 return Container(
@@ -73,21 +73,58 @@ class CreateHome extends StatelessWidget {
                     Text("Enter Name Of Home"),
                     TextField(
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Content',
+                          helperText: '',
+                          hintText: 'Home',
                         ),
                         controller: houseName)
                   ]),
                   Column(children: [
                     Text("Enter Password"),
                     TextField(
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Content',
+                        helperText: '',
+                        hintText: 'Home',
+                      ),
                       controller: password,
+                    ),
+                    Text("Enter Address"),
+                    TextField(
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Content',
+                        helperText: '',
+                        hintText: 'Address',
+                      ),
+                      controller: address,
                     )
                   ]),
-                  IconButton(
-                      icon: const Icon(Icons.add),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                        icon: const Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 40,
+                          color: Colors.green,
+                        ),
                       onPressed: () => context
                           .read<LandingCubit>()
-                          .addHome(houseName.text, password.text,email)),
+                          .addHome(houseName.text, password.text, email,address.text))),
                   Builder(builder: (BuildContext context) {
                     if (state.status == HomeStatus.Error)
                       return Text(state.error);
@@ -106,30 +143,61 @@ class JoinHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final email = context.read<AuthenticationBloc>().state.user.email;
 
-    return AlertDialog(
-        content: FractionallySizedBox(
-            widthFactor: 0.5,
-            heightFactor: 0.5,
+    return Dialog(
+        child: Container(
+            height: 500,
+            width: 300,
             child: BlocBuilder<LandingCubit, LandingState>(
                 builder: (context, state) {
               return Container(
                   child: Column(children: <Widget>[
-                Row(children: []),
+                Text("House Name",
+                    style: TextStyle(
+                      fontSize: 20,
+                    )),
                 TextField(
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Content',
+                    helperText: '',
+                    hintText: 'Home',
+                  ),
                   controller: houseName,
                 ),
-                Text("Password"),
+                Text("Password",
+                    style: TextStyle(
+                      fontSize: 20,
+                    )),
                 TextField(
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Content',
+                    helperText: '',
+                    hintText: 'Password',
+                  ),
                   controller: password,
                 ),
-                IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => context
-                        .read<LandingCubit>()
-                        .joinHome(houseName.text, password.text,email)),
+                Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                        icon: const Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 40,
+                          color: Colors.green,
+                        ),
+                        onPressed: () => context
+                            .read<LandingCubit>()
+                            .joinHome(houseName.text, password.text, email))),
                 Builder(builder: (BuildContext context) {
                   if (state.status == HomeStatus.Error)
                     return Text(state.error);

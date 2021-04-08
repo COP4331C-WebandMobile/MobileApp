@@ -18,6 +18,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _home = context.read<LandingCubit>().state.home;
+  
+    final _address = context.read<LandingCubit>().state.address;
     final _roomateRepository = RoomateRepository(_home);
     final _reminderRepository = ReminderRepository(_home);
 
@@ -32,7 +34,7 @@ class HomePage extends StatelessWidget {
             child: Column(children: <Widget>[
               Expanded(
                 flex: 2,
-                child: HouseInfo(_home),
+                child: HouseInfo(_home,_address),
               ),
               Expanded(
                   flex: 2,
@@ -80,19 +82,6 @@ class RoomateList extends StatelessWidget {
                           fontSize: 20,
                         ))
                   ])),
-                  Expanded(
-                      child: Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            icon: const Icon(Icons.add_circle_outline_outlined),
-                            onPressed: () => showDialog(
-                                context: context,
-                                builder: (_) =>
-                                    BlocProvider<RoomatesCubit>.value(
-                                        value: BlocProvider.of<RoomatesCubit>(
-                                            context),
-                                        child: AddRoomate())),
-                          )))
                 ])),
             Expanded(
                 flex: 4,
@@ -120,7 +109,8 @@ class RoomateList extends StatelessWidget {
 
 class HouseInfo extends StatelessWidget {
   final home;
-  const HouseInfo(this.home);
+  final address;
+  const HouseInfo(this.home,this.address);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -141,7 +131,7 @@ class HouseInfo extends StatelessWidget {
             ),
           ),
           Text(
-            "Address",
+            address,
             style: TextStyle(
               fontSize: 24,
             ),
@@ -294,30 +284,6 @@ class ReminderList extends StatelessWidget {
             }),
           ]);
         }));
-  }
-}
-
-class AddRoomate extends StatelessWidget {
-  final roomateEmail = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-        content: FractionallySizedBox(
-      widthFactor: 0.3,
-      heightFactor: 0.3,
-      child: Container(
-          child: Column(children: <Widget>[
-        Text("Enter Roomate Email"),
-        TextField(
-          controller: roomateEmail,
-        ),
-        IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () =>
-                context.read<RoomatesCubit>().AddRoomate(roomateEmail.text)),
-      ])),
-    ));
   }
 }
 

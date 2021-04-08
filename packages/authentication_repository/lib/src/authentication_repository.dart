@@ -52,7 +52,7 @@ class AuthenticationRepository {
         'last_name': lastName,
         'phone_number': phoneNumber,
         'house_name': house,
-        'total_chores':0,
+        'total_chores': 0,
       });
     } on Exception {
       throw AddUserFailure();
@@ -153,14 +153,19 @@ class AuthenticationRepository {
     }
   }
 
-  void changeEmail(String email) {
+  Future<void> changeEmail(String email) async {
     var user = _firebaseAuth.currentUser;
-
-    user.updateEmail(email);
+    await user.updateEmail(email);
   }
 
   void changePassword(String newPassword) {
     var user = _firebaseAuth.currentUser;
     user.updatePassword(newPassword);
   }
-}  
+
+  Future<void> deleteAccount() async {
+      var user = _firebaseAuth.currentUser;
+      _fireStore.collection('users').doc(user.email).delete();
+      await user.delete();
+  }
+}

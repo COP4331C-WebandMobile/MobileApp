@@ -33,7 +33,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     {
       try {
         await _mapRepository.recordUserLocation(event.id);
-        
         // Yield successful retreived user location.
       }
       on Exception catch(e)
@@ -46,7 +45,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       yield LoadingLocations();
       
       try {
-
         print('Working???');
         if(event.roomateLocations.isNotEmpty)
         {
@@ -73,6 +71,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
       on Exception catch(e)
       {
+        print(e);
 
         yield FailedToGetLocations();
       }

@@ -19,22 +19,25 @@ class LandingCubit extends Cubit<LandingState> {
     checkHome();
   }
 
-  void validate(String home) {
+  Future<void> validate(String home) async {
+        
     if (home == "") {
       emit(LandingState.homeless());
     } else {
-      emit(LandingState.homeVerified(home));
+      Home homeInfo = await _homeRepository.getInfo(home);
+      emit(LandingState.homeVerified(home,homeInfo.address));
     }
   }
 
   void checkHome() {
+
     _homeSubscription = _homeRepository.home().listen((home) => validate(home));
   }
 
-  Future<void> addHome(String houseName, String password,String email) async {
+  Future<void> addHome(String houseName, String password,String email,String address) async {
 
     try {
-      await _homeRepository.addHome(houseName, password);
+      await _homeRepository.addHome(houseName, password,address);
       await RoomateRepository(houseName).addRoomate(email);
     } on HomeExists {
       emit(LandingState.error("A home with that name already exists"));

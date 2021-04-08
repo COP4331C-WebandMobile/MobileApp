@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
-
-
+import 'entities/entities.dart';
+import 'models/models.dart';
 
 class InvalidHomeName implements Exception {}
-class InvalidPassword implements Exception {}
-class HomeExists implements Exception {}
-class ServerError implements Exception {}
 
+class InvalidPassword implements Exception {}
+
+class HomeExists implements Exception {}
+
+class ServerError implements Exception {}
 
 class HomeRepository {
   final FirebaseFirestore _fireStore;
@@ -21,75 +23,79 @@ class HomeRepository {
 
   Stream<String> home() {
     try {
-      return _fireStore
-          .collection('users')
-          .doc(_email)
-          .snapshots()
-          .map((snapshot) {
-        return snapshot.data()["house_name"];
+      return  _fireStore.collection('users').doc(_email).snapshots().map((snapshot)  {
+       return snapshot.data()["house_name"];
       });
     } on Exception catch (e) {
+  
       print(e);
     }
   }
 
-  Future<void> addHome(String houseName, String password) async {
-    final snapshot = await _fireStore.collection('houses').doc(houseName).get();
-    try{
+  Future<Home>getInfo(String home) async {
 
-    if (snapshot.exists) throw HomeExists();
+    final snapshot = await _fireStore.collection('houses').doc(home).get();
+    if(snapshot.exists){
+    print("dsfdsf");
+    print(snapshot.data()["address"]);
+    return Home.fromEntity(HomeEntity.fromSnapshot(snapshot));
+    } 
+  }
 
-    await _fireStore
-        .collection('users')
-        .doc(_email)
-        .update({"house_name": houseName});
+  Future<void> addHome(String homeName, String password, String address) async {
+    print(_email);
+    print(address);
+    print(homeName);
+    final snapshot = await _fireStore.collection('houses').doc(homeName).get();
+    try {
+      if (snapshot.exists) throw HomeExists();
 
-    await _fireStore.collection('houses').doc(houseName).set({
-      "creator": _email,
-      "password": password,
-    });
+       await _fireStore.collection('houses').doc(homeName).set({
+        "creator": _email,
+        "password": password,
+        "address": address,
+      });
 
-    } on HomeExists{
+      await _fireStore
+          .collection('users')
+          .doc(_email)
+          .update({"house_name": homeName});
+
+     
+    } on HomeExists {
       throw HomeExists();
-    }
-    on Exception {
+    } on Exception {
       throw ServerError();
     }
   }
 
-  Future<void> joinHome(String houseName, String password) async {
+  Future<void> joinHome(String homeName, String password) async {
     try {
-      CollectionReference houseCollection = _fireStore.collection('houses');
+      CollectionReference homeCollection = _fireStore.collection('houses');
 
-      DocumentReference house = houseCollection.doc(houseName);
+      DocumentReference home = homeCollection.doc(homeName);
 
-      await house.get().then((snapShot) {
+      await home.get().then((snapShot) {
         if (snapShot.exists) {
           if (snapShot.data()["password"] == password) {
             _fireStore
                 .collection('users')
                 .doc(_email)
-                .update({"house_name": houseName});
-
-          
+                .update({"house_name": homeName});
           } else
             throw InvalidPassword();
         } else {
           throw InvalidHomeName();
         }
       });
-
     } on InvalidHomeName {
       throw InvalidHomeName();
     } on InvalidPassword {
       throw InvalidPassword();
-    }
-    on Exception {
+    } on Exception {
       throw Exception();
     }
 
     return null;
   }
 }
-
-

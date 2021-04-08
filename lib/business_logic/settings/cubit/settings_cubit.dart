@@ -25,16 +25,11 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeFirstName (String firstName) {
 
     _settingsRepository.changeFirstName(firstName);
-
-
-
   }
 
   void changeLastName(String lastName) {
 
     _settingsRepository.changeLastName(lastName);
-
-
 
   }
 
@@ -42,8 +37,10 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     _settingsRepository.changePhoneNumber(phoneNumber);
 
+  }
 
-
+  void leaveHome(){
+    _settingsRepository.leaveHome();
   }
 
 

@@ -62,5 +62,10 @@ class AuthenticationBloc
      _authenticationRepository.changePassword(password);
   }
 
+  void deleteAccount(){
+     _authenticationRepository.deleteAccount();
+  }
+
+
 
 }

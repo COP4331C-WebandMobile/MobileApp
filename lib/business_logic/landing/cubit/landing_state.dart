@@ -6,19 +6,21 @@ class LandingState extends Equatable {
 
   final status; 
   final String home; 
+  final String address;
   final error; 
   
   @override
-  List<Object> get props => [status,home,error];
+  List<Object> get props => [status,home,error,address];
 
   const LandingState._({
   this.status = HomeStatus.Loading,
   this.home = "",
   this.error ="",
+  this.address ="",
   });
   const LandingState.loading() : this._();
 
-  const LandingState.homeVerified(String home) : this._(status: HomeStatus.HomeVerified, home: home);
+  LandingState.homeVerified(String homeName,String address) : this._(status: HomeStatus.HomeVerified, home: homeName, address: address);
 
   const LandingState.homeless() : this._(status: HomeStatus.Homeless);
 

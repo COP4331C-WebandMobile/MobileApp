@@ -76,7 +76,9 @@ class MapRepository {
   }
 
   Future<UserLocationEntity> _getCurrentLocation(String id) async {
+  
     final permission = await _location.requestPermission();
+      print("test");
 
     var service = await _location.serviceEnabled();
 
