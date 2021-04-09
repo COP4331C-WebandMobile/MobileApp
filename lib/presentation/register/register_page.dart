@@ -26,7 +26,7 @@ class RegisterPage extends StatelessWidget {
             border: Border.all(color: Colors.black),
             color: Colors.white,
           ),
-          height: mediaQuery.size.height / 2,
+          height: mediaQuery.size.height,
           width: mediaQuery.size.width,
           margin: EdgeInsets.all(32.0),
           child: Column(children: [
