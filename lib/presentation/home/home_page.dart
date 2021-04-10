@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _home = context.read<LandingCubit>().state.home;
-  
+
     final _address = context.read<LandingCubit>().state.address;
     final _roomateRepository = RoomateRepository(_home);
     final _reminderRepository = ReminderRepository(_home);
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
             child: Column(children: <Widget>[
               Expanded(
                 flex: 2,
-                child: HouseInfo(_home,_address),
+                child: HouseInfo(_home, _address),
               ),
               Expanded(
                   flex: 2,
@@ -110,7 +110,7 @@ class RoomateList extends StatelessWidget {
 class HouseInfo extends StatelessWidget {
   final home;
   final address;
-  const HouseInfo(this.home,this.address);
+  const HouseInfo(this.home, this.address);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -302,25 +302,29 @@ class _CreateReminderState extends State<CreateReminder> {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-          height: 400,
-          width: 300,
+          height: 450,
+          width: 350,
+          color: Colors.yellow.shade200,
           child: Column(children: <Widget>[
             Text("Enter Reminder Description",
                 style: TextStyle(
                   fontSize: 20,
                 )),
-            TextField(
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Content',
-                helperText: '',
-                hintText: 'Turn Of Lights!',
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: TextField(
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Reminder',
+                  helperText: '',
+                  hintText: 'Turn Of Lights!',
+                ),
+                controller: reminderDescription,
               ),
-              controller: reminderDescription,
             ),
             Text("How Often ?",
                 style: TextStyle(
@@ -355,7 +359,7 @@ class _CreateReminderState extends State<CreateReminder> {
                   icon: const Icon(
                     Icons.add_circle_outline_rounded,
                     size: 40,
-                    color: Colors.green,
+                    color: Colors.black,
                   ),
                   onPressed: () => context
                       .read<ReminderCubit>()
