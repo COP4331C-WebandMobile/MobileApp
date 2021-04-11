@@ -117,7 +117,10 @@ class StatBox extends StatelessWidget {
           Align(
               alignment: Alignment.topLeft,
               child: Row(children: [
-                CircleAvatar(child: Text(rank.toString())),
+                CircleAvatar(
+                    backgroundColor: CustomColors.gold,
+                    foregroundColor: Colors.black,
+                    child: Text(rank.toString())),
                 Text("  " + firstName + " " + lastName + " Has Completed ",
                     style: TextStyle(
                       fontSize: 20,
@@ -267,34 +270,38 @@ class AddModal extends StatelessWidget {
 
     return Dialog(
       child: Container(
-          height: 200,
-          width: 200,
+          color: Colors.yellow.shade200,
+          height: 300,
+          width: 400,
           child: Column(children: <Widget>[
             Text("Enter Description of Chore",
                 style: TextStyle(
                   fontSize: 20,
                 )),
-            TextField(
-              maxLines: null,
-              controller: description,
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Content',
-                helperText: '',
-                hintText: 'Wash clothes!',
-              ),
-            ),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextField(
+                  maxLines: null,
+                  controller: description,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Content',
+                    helperText: '',
+                    hintText: 'Wash clothes!',
+                  ),
+                )),
             Align(
                 alignment: Alignment.bottomRight,
                 child: IconButton(
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                     icon: const Icon(
                       Icons.add_circle_outline_rounded,
                       size: 40,
-                      color: Colors.green,
+                      color: Colors.black,
                     ),
                     onPressed: () => context.read<ChoresBloc>().add(AddChore(
                         Chore(email, false, description.text, "test")))))
@@ -317,7 +324,7 @@ class ChoreBox extends StatelessWidget {
       starColor = Colors.black;
     return Card(
         child: Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(5),
       child: Row(children: [
         Expanded(
           flex: 5,

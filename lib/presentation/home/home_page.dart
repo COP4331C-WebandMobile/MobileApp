@@ -321,7 +321,7 @@ class _CreateReminderState extends State<CreateReminder> {
                   fillColor: Colors.white,
                   labelText: 'Reminder',
                   helperText: '',
-                  hintText: 'Turn Of Lights!',
+                  hintText: 'Turn Off Lights!',
                 ),
                 controller: reminderDescription,
               ),
