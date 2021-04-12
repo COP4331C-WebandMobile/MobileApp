@@ -169,7 +169,11 @@ class RoomateIcon extends StatelessWidget {
                         //Navigate to profile page
                       ))),
           Padding(padding: EdgeInsets.all(5)),
-          Expanded(child: Text(roomate.firstName + " " + roomate.lastName)),
+          Expanded(
+              child: Text(
+            roomate.firstName + " " + roomate.lastName,
+            textAlign: TextAlign.center,
+          )),
         ]));
   }
 }
