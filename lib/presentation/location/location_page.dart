@@ -1,13 +1,17 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_repository/map_repository.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:roomiesMobile/business_logic/authentication/authentication.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
-import 'package:roomiesMobile/business_logic/location/bloc/location_bloc.dart';
+import 'package:roomiesMobile/business_logic/location/OldBloc/location_bloc.dart';
+import 'package:roomiesMobile/presentation/location/map_controller.dart';
 
 class LocationPage extends StatelessWidget {
+  
   static Route route() {
     return MaterialPageRoute(builder: (_) => LocationPage());
   }
@@ -21,10 +25,13 @@ class LocationPage extends StatelessWidget {
 }
 
 class MyWrapper extends StatelessWidget {
+  Completer<GoogleMapController> _controller = Completer();
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
-
+    final MapController temp = MapController(_controller);
+    
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -61,10 +68,15 @@ class MyWrapper extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: 500,
+                          height: 300,
                           width: 300,
-                          child: _MyMapState(),
+                          child: MyMap(temp),                         
                         ),
+                        // SizedBox(
+                        //   height: 500,
+                        //   width: 300,
+                        //   child: _MyMapState(),
+                        // ),
                         ElevatedButton(
                             onPressed: () {
                               context.read<LocationBloc>().add(
@@ -73,33 +85,47 @@ class MyWrapper extends StatelessWidget {
                                       .state
                                       .user
                                       .email));
-                              
                             },
                             child: Text('Check In Location')),
-                            // This will have a side scroll view of the roomate logos to get the location of each last known and animate to it in the map
-                            //
-                        Container(
-                          width: 300,
-                          height: 50,
-                          color: Colors.white,
-                          // Each thing built will be an icon/logo for the roomates. Clicking will zoom on the last known location of them.
-                          // Need to have access to those locations or query it again.
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 4,
-                            itemBuilder: (context, i) {
-                              return Padding(
-                                padding: EdgeInsets.only(left: 8, right: 8),
-                                child: Icon(
-                                  Icons.supervised_user_circle,
-                                  size: 32,
-                                  
+                        SizedBox(
+                          height: 100,
+                          width: 200,
+                          child:
+                        BlocBuilder<LocationBloc, LocationState>(
+                          builder: (context, state) {
+                            
+                            print(state);
+
+                            if(state is SuccessfulToGetRoomates)
+                            {
+                              return Container(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: state.locations.length,
+                                  itemBuilder: (context, i) {
+                                    final currentUser = state.locations[i];
+                                    
+                                    return Padding(
+                                      padding: EdgeInsets.all(32),
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.supervised_user_circle_sharp,
+                                        ),
+                                        onPressed: () { temp.moveCameraTo(currentUser.location.latitude, currentUser.location.longitude, 5);},
+                                      ),
+                                    );
+                                  },
                                 ),
                               );
-                
-                            },
-                          )                      
-                        )
+                            }
+                            else if(state is FailedToGetLocations)
+                            {
+
+                            }
+                            
+                            return Center(child: Text('Nope'),);
+                          },
+                        )),
                       ],
                     )
                   ],
@@ -109,15 +135,33 @@ class MyWrapper extends StatelessWidget {
   }
 }
 
-// class MyMap extends StatefulWidget {
-//   @override
-//   _MyMapState createState() => _MyMapState();
-// }
+class MapTest extends StatelessWidget
+{
+  final MapController test;
 
-class _MyMapState extends StatelessWidget {
-  //final List<Marker> myMarker = <Marker>[];
-  List<Marker> myMarker = [];
-  GoogleMapController controller;
+  MapTest(this.test);
+
+  @override
+  Widget build(BuildContext context) 
+  {
+    return GoogleMap(
+      initialCameraPosition: const CameraPosition(target: LatLng(45, 50)),
+      onMapCreated: (controller) {
+        test.controller.complete(controller);
+      },
+      
+      );
+
+  }
+}
+
+
+class MyMap extends StatelessWidget {
+
+  final MapController test;
+  final List<Marker> myMarker = [];
+
+  MyMap(this.test);
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +169,6 @@ class _MyMapState extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           
-          print(state.toString());
-
           if (state is SuccessfulToGetLocations) {
             state.locations.forEach((element) {
               final Marker newMarker = Marker(
@@ -184,26 +226,26 @@ class _MyMapState extends StatelessWidget {
 
           final address = context.read<LandingCubit>().state.address;
           
-          if(address != '')
-          {
-            context.read<LocationBloc>().add(GetAddress());
+          // if(address != '')
+          // {
+          //   context.read<LocationBloc>().add(GetAddress());
 
-            if(state is SuccessfullyGetAddress)
-            {
-              myMarker.add(Marker(
-                markerId: MarkerId(
-                  'Current_Address',
-                ),
-                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-                position: LatLng(state.latitude, state.longitude),
-                infoWindow: InfoWindow(
-                  title: address,
-                  snippet: "The currently set house address.",
-                  onTap: (){},
-                ),
-              ));
-            }
-          }
+          //   if(state is SuccessfullyGetAddress)
+          //   {
+          //     myMarker.add(Marker(
+          //       markerId: MarkerId(
+          //         'Current_Address',
+          //       ),
+          //       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+          //       position: LatLng(state.latitude, state.longitude),
+          //       infoWindow: InfoWindow(
+          //         title: address,
+          //         snippet: "The currently set house address.",
+          //         onTap: (){},
+          //       ),
+          //     ));
+          //   }
+          // }
 
           return GoogleMap(
               mapType: MapType.normal,
@@ -213,11 +255,7 @@ class _MyMapState extends StatelessWidget {
             myLocationEnabled: false,
             myLocationButtonEnabled: true,
             onMapCreated: (mapController) async {
-              controller = mapController;
-
-              await Future.delayed(Duration(milliseconds: 200));
-
-              //await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: point, zoom: 6)));
+              test.controller.complete(mapController);
             },
           );
         });

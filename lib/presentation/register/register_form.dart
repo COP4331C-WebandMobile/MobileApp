@@ -273,7 +273,7 @@ class _SignUpButton extends StatelessWidget {
                 ),
                 onPressed: state.status.isValidated
                     ? () => context.read<RegisterCubit>().signUpFormSubmitted()
-                    : null,
+                    : () => print('Not validated.'),
               );
       },
     );

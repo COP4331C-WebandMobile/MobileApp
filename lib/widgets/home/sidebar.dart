@@ -5,6 +5,7 @@ import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart'
 import 'package:roomiesMobile/presentation/chores/chore_page.dart';
 import 'package:roomiesMobile/presentation/home/home_page.dart';
 import 'package:roomiesMobile/presentation/location/location_page.dart';
+import 'package:roomiesMobile/presentation/location/new_location_page.dart';
 import 'package:roomiesMobile/presentation/messaging/messages_page.dart';
 import 'package:roomiesMobile/presentation/settings/settings_page.dart';
 import '../../business_logic/authentication/authentication.dart';
@@ -141,7 +142,7 @@ class SideBar extends StatelessWidget {
                                         )
                                         
                                         ],
-                                        child: LocationPage())));                        },
+                                        child: NewLocationPage())));                        },
                       ),
                       ListTile(
                         title: Text('Settings',
