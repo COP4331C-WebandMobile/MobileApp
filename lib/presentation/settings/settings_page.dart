@@ -42,42 +42,51 @@ class SettingsPage extends StatelessWidget {
                     EmailBox(),
                     Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                    BlocProvider<SettingsCubit>.value(
-                                        value: BlocProvider.of<SettingsCubit>(
-                                            context),
-                                        child: LeaveHome()));
-                          },
-                          child: Text("Leave Home"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                    BlocProvider<SettingsCubit>.value(
-                                        value: BlocProvider.of<SettingsCubit>(
-                                            context),
-                                        child: DeleteAccount()));
-                          },
-                          child: Text("Delete Account"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                    BlocProvider<SettingsCubit>.value(
-                                        value: BlocProvider.of<SettingsCubit>(
-                                            context),
-                                        child: ChangePassword()));
-                          },
-                          child: Text("Change Password"),
-                        ),
+                        Container(
+                            margin: EdgeInsets.all(20),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                        BlocProvider<SettingsCubit>.value(
+                                            value:
+                                                BlocProvider.of<SettingsCubit>(
+                                                    context),
+                                            child: LeaveHome()));
+                              },
+                              child: Text("Leave Home"),
+                            )),
+                        Container(
+                            margin: EdgeInsets.all(10),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                        BlocProvider<SettingsCubit>.value(
+                                            value:
+                                                BlocProvider.of<SettingsCubit>(
+                                                    context),
+                                            child: DeleteAccount()));
+                              },
+                              child: Text("Delete Account"),
+                            )),
+                        Container(
+                            margin: EdgeInsets.all(10),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                        BlocProvider<SettingsCubit>.value(
+                                            value:
+                                                BlocProvider.of<SettingsCubit>(
+                                                    context),
+                                            child: ChangePassword()));
+                              },
+                              child: Text("Change Password"),
+                            )),
                       ],
                     )
 
@@ -100,10 +109,24 @@ class HeaderBox extends StatelessWidget {
           color: CustomColors.gold,
         ),
         child: Row(children: [
-          CircleAvatar(),
+          Container(
+              margin: EdgeInsets.all(10),
+              child: CircleAvatar(
+                child: Icon(
+                  Icons.people,
+                  color: Colors.black,
+                ),
+                backgroundColor: Colors.white,
+              )),
 
-          Text(firstName + " "),
-          Text(lastName + " "),
+          Text(
+            firstName + " ",
+            textScaleFactor: 2,
+          ),
+          Text(
+            lastName + " ",
+            textScaleFactor: 2,
+          ),
           // Text(roomate.lastName),
         ]));
   }
@@ -296,11 +319,9 @@ class DeleteAccount extends StatelessWidget {
   }
 }
 
-
 class ChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final password = TextEditingController();
     final confirmPassword = TextEditingController();
     return Dialog(
@@ -309,36 +330,36 @@ class ChangePassword extends StatelessWidget {
       children: [
         Text("New Password"),
         TextField(
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Content',
-                helperText: '',
-                hintText: 'Turn Of Lights!',
-              ),
-              controller: password,
-            ),
-               Text("Confirm Password"),
-              TextField(
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Content',
-                helperText: '',
-                hintText: 'Turn Of Lights!',
-              ),
-              controller: confirmPassword,
-            ),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+            border: OutlineInputBorder(),
+            filled: true,
+            fillColor: Colors.white,
+            labelText: 'Content',
+            helperText: '',
+            hintText: 'Turn Of Lights!',
+          ),
+          controller: password,
+        ),
+        Text("Confirm Password"),
+        TextField(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+            border: OutlineInputBorder(),
+            filled: true,
+            fillColor: Colors.white,
+            labelText: 'Content',
+            helperText: '',
+            hintText: 'Turn Of Lights!',
+          ),
+          controller: confirmPassword,
+        ),
         ElevatedButton(
             child: Text("Delete"),
             onPressed: () {
-              context.read<AuthenticationBloc>().changePassword(confirmPassword.text);
+              context
+                  .read<AuthenticationBloc>()
+                  .changePassword(confirmPassword.text);
             })
       ],
     )));
