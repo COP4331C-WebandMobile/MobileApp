@@ -35,6 +35,46 @@ class MapRepository {
     }
   }
 
+  Future<void> setAddressGeolocation(double longitude, double latitude) async
+  {
+    final GeoPoint geocoding = GeoPoint(latitude, longitude);
+
+    try {
+
+      await _firestore.collection('location').doc(houseName).get().then((snap) 
+      {
+        if(snap.exists)
+        {
+          _firestore.collection('location').doc(houseName).update({"addressGeo": geocoding});
+        }
+        else
+        {
+          _firestore.collection('location').doc(houseName).set({"addressGeo": geocoding});
+        }
+      });
+
+    }
+    on Exception catch(e, stacktrace)
+    {
+      throw Exception();
+    }
+  }
+
+  Future<GeoPoint> getHomeGeoLocation() async
+  {
+    try {
+
+      final snap = await _firestore.collection('location').doc(houseName).get();
+
+      return snap.data()["addressGeo"];
+    }
+    on Exception catch(e, stacktrace)
+    {
+      throw Exception();
+    }
+  }
+
+
   Future<List<HouseLocation>> fetchAdresses(String inputText) async {
     try {
       final Map<String, String> queryParameters = {
@@ -138,5 +178,12 @@ class MapRepository {
           .toList();
     });
   }
+
+  // Stream<GeoPoint> houseLocation()
+  // {
+  //   return _firestore.collection('location').doc(houseName).snapshots().map((snapshot) {
+  //     return snapshot.data()['addressGeo']
+  //   });
+  // }
   
 }

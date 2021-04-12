@@ -21,7 +21,7 @@ class RoomatesCubit extends Cubit<RoomatesState> {
     _roomatesSubscription = _roomateRepository.roomates().listen(
     (roomates) => emit(RoomatesState.loaded(roomates)));
   }
-    Future<void> AddRoomate(email){
+    Future<void> addRoomate(email){
     _roomateRepository.addRoomate(email);
   }
 

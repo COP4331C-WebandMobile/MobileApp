@@ -12,6 +12,8 @@ class HomeExists implements Exception {}
 
 class ServerError implements Exception {}
 
+class HomeNotFoundException implements Exception {}
+
 class HomeRepository {
   final FirebaseFirestore _fireStore;
   final String _email;
@@ -67,6 +69,60 @@ class HomeRepository {
     } on Exception {
       throw ServerError();
     }
+  }
+
+  Future<bool> setHomeAdress(String houseName, String newHomeAdress) async
+  {
+
+    try {
+
+      final DocumentSnapshot snapshot = await _fireStore.collection('houses').doc(houseName).get();
+
+      if(snapshot.exists)
+      {
+        await _fireStore.collection('houses').doc(houseName).update({"address": newHomeAdress});
+
+        return true;
+      }
+      else
+      {
+        throw HomeNotFoundException();
+      }
+
+    }
+    on Exception catch(e, stacktrace)
+    {
+      print(e.toString());
+      print(stacktrace);
+    }
+
+    return false;
+  }
+
+  Future<String> getHomeAddress(String houseName) async
+  {
+
+    try
+    {
+      final DocumentSnapshot snapshot = await _fireStore.collection('houses').doc(houseName).get();
+
+      if(snapshot.exists)
+      {
+        return snapshot.data()['address'];
+      }
+      else
+      {
+        throw HomeNotFoundException();
+      }
+
+    }
+    on Exception catch(e, stacktrace)
+    {
+      print(e);
+      print(stacktrace);
+    }
+
+    return '';
   }
 
   Future<void> joinHome(String homeName, String password) async {

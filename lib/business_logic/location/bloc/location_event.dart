@@ -41,3 +41,22 @@ class GetRoomateLocations extends LocationEvent {
   @override
   List<Object> get props => [roomateLocations];
 }
+
+class SetAddress extends LocationEvent {
+
+  final double longitude;
+  final double latitude;
+
+  const SetAddress(this.longitude, this.latitude);
+
+  @override
+  List<Object> get props => [longitude, latitude];
+}
+
+class GetAddress extends LocationEvent {
+
+  const GetAddress();
+
+  @override
+  List<Object> get props => [];
+}

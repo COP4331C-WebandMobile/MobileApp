@@ -37,7 +37,7 @@ class LandingCubit extends Cubit<LandingState> {
   Future<void> addHome(String houseName, String password,String email,String address) async {
 
     try {
-      await _homeRepository.addHome(houseName, password,address);
+      await _homeRepository.addHome(houseName, password, address);
       await RoomateRepository(houseName).addRoomate(email);
     } on HomeExists {
       emit(LandingState.error("A home with that name already exists"));
@@ -57,6 +57,32 @@ class LandingCubit extends Cubit<LandingState> {
     } on ServerError {
       emit(LandingState.error("Internal Server Error"));
     }
+  }
+
+  
+  // Once the address is set, then it is updated via state using the stream.
+  Future<void> setAddress(String houseName, String newAddress) async
+  {
+
+    try {
+      final bool success = await _homeRepository.setHomeAdress(houseName, newAddress);
+
+      if(success)
+      {
+        print('Successfully set the new address.');
+      }
+      else
+      {
+        print('Failed to set the new address.');
+      }
+
+    }
+    on Exception catch(e, stacktrace)
+    {
+      print(e);
+      print(stacktrace);
+    }
+
   }
 
   @override

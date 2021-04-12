@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_repository/map_repository.dart';
@@ -128,15 +129,18 @@ class _MyMapState extends StatelessWidget {
 
           if (state is SuccessfulToGetLocations) {
             state.locations.forEach((element) {
-              myMarker.add(Marker(
+              final Marker newMarker = Marker(
                 markerId: MarkerId(element.address.toString()),
                 position:
                     LatLng(element.longLat.latitude, element.longLat.longitude),
                 icon: BitmapDescriptor.defaultMarker,
                 onTap: (){
-                  print('This should zoom in to the place and then show button to set the house address.');
+                  // Pop up dialog to ask if they want to set this address as the new house address.
+                  context.read<LocationBloc>().add(SetAddress(element.longLat.longitude, element.longLat.latitude));
                 },
-              ));
+              ); 
+
+              myMarker.add(newMarker);
             });
           }
           else if(state is LoadingLocations)
@@ -173,10 +177,33 @@ class _MyMapState extends StatelessWidget {
           }
           else if(state is FailedToGetLocations)
           {
-            return Center(child: Text('Why no work.'),);
+            return Center(child: Text('Try to be more specific with the address.'),);
           }
 
           print(Set.from(myMarker));
+
+          final address = context.read<LandingCubit>().state.address;
+          
+          if(address != '')
+          {
+            context.read<LocationBloc>().add(GetAddress());
+
+            if(state is SuccessfullyGetAddress)
+            {
+              myMarker.add(Marker(
+                markerId: MarkerId(
+                  'Current_Address',
+                ),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+                position: LatLng(state.latitude, state.longitude),
+                infoWindow: InfoWindow(
+                  title: address,
+                  snippet: "The currently set house address.",
+                  onTap: (){},
+                ),
+              ));
+            }
+          }
 
           return GoogleMap(
               mapType: MapType.normal,

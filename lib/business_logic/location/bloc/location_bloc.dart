@@ -11,6 +11,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   
   final MapRepository _mapRepository;
   StreamSubscription _userLocationSubscription;
+  StreamSubscription _houseLocationSubscription;
 
   LocationBloc({
     @required MapRepository mapRepository,
@@ -77,6 +78,30 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
      
     }
+    else if(event is SetAddress)
+    {
+      try {
+
+        await _mapRepository.setAddressGeolocation(event.longitude, event.latitude);
+
+        yield SuccessfullySetAddress();
+      }
+      on Exception catch(e)
+      {
+        yield FailedSetAddress();
+      }
+
+    }
+    else if(event is GetAddress)
+    {
+      final location = await _mapRepository.getHomeGeoLocation();
+
+      final double longitude = location.longitude;
+      final double latitude = location.latitude;
+
+      yield SuccessfullyGetAddress(longitude, latitude);
+    }
+  }
     
   @override
   Future<void> close() {
@@ -84,5 +109,5 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     return super.close();
   }  
 
-  }
 }
+

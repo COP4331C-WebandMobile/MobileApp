@@ -344,6 +344,10 @@ class QuestionWidget extends StatelessWidget {
                     child: CreateResponseDialog(message.id),));},
 
             child: Text('Create Response')),
+            IconButton(
+              icon: Icon(Icons.remove_circle_outline_outlined), 
+              onPressed: (){ context.read<MessagingBloc>().add(DeleteMessage(message));}
+            ),
         ],
       ),
       );

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/models/models.dart';
+import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart';
 
 part 'login_state.dart';
 
@@ -14,43 +15,34 @@ class LoginCubit extends Cubit<LoginState> {
         super(const LoginState());
 
   void emailChanged(String value) {
-    final email = Email.dirty(value);
-    emit(state.copyWith(
-      email: email,
-      status: Formz.validate([email, state.password]),
-    ));
+    
+    emit(state.copyWith(email: value));
   }
 
   void passwordChanged(String value) {
-    final password = Password.dirty(value);
-
-    emit(state.copyWith(
-      password: password,
-      status: Formz.validate([state.email, password]),
-    ));
+    emit(state.copyWith(password: value));
   }
 
-  Future<void> logInWithCredentials() async {
-    // login has not been validated.
-    if (!state.status.isValidated) {
-      return;
-    }
 
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+  Future<void> logIn(String user, String password) async
+  {
+    
+    emit(state.copyWith(status: Status.inProgress));
 
     try {
-      await _authenticationRepository.loginStandard(
-          email: state.email.value, password: state.password.value);
+      await _authenticationRepository.loginStandard(email: user, password: password);
 
-      // Login success
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: Status.success));
     }
-    // Failed to login.
-    on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    on Exception
+    {
+      emit(state.copyWith(status: Status.failure));
+
+      emit(state.copyWith(status: Status.idle));
     }
+
+
   }
-
   // Google login will be ommitted for now...
 
 }

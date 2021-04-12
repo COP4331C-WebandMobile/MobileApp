@@ -11,9 +11,11 @@ import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status == Status.failure) {
+          print("Ive triggered!");
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -22,7 +24,7 @@ class LoginForm extends StatelessWidget {
                   backgroundColor: CustomColors.gold,
                 ));
         }
-        else if(state.status.isSubmissionSuccess)
+        else if(state.status == Status.success)
         {
           
         }
@@ -59,10 +61,11 @@ class LoginForm extends StatelessWidget {
 }
 
 class _EmailInput extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-        buildWhen: (previous, current) => previous.email != current.email,
+        buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
           return TextField(
             inputFormatters: [
@@ -82,7 +85,6 @@ class _EmailInput extends StatelessWidget {
               labelText: 'Email',
               helperText: '',
               hintText: 'example@gmail.com',
-              errorText: state.email.invalid ? 'Invalid Email' : null,
             ),
           );
         });
@@ -90,14 +92,14 @@ class _EmailInput extends StatelessWidget {
 }
 
 class _PasswordInput extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-        buildWhen: (previous, current) => previous.password != current.password,
+        buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
           return TextField(
-
-            key: const Key('loginForm_emailInput_textField'),
+            key: const Key('loginForm_passwordInput_textField'),
             onChanged: (password) =>
                 context.read<LoginCubit>().passwordChanged(password),
             obscureText: true,
@@ -109,7 +111,6 @@ class _PasswordInput extends StatelessWidget {
               fillColor: Colors.white,
               labelText: 'Password',
               helperText: '',
-              errorText: state.password.invalid ? 'Invalid password' : null,
             ),
           );
         });
@@ -117,12 +118,13 @@ class _PasswordInput extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
         buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
-          return state.status.isSubmissionInProgress
+          return state.status == Status.inProgress
               ? const CircularProgressIndicator()
               : Container(
                   width: MediaQuery.of(context).size.width / 2,
@@ -134,10 +136,7 @@ class _LoginButton extends StatelessWidget {
                       ),
                     ),
                     child: const Text('LOGIN'),
-                    onPressed: state.status.isValidated
-                        ? () =>
-                            context.read<LoginCubit>().logInWithCredentials()
-                        : (() {}),
+                    onPressed: () {context.read<LoginCubit>().logIn(state.email, state.password);},
                   ),
                 );
         });
