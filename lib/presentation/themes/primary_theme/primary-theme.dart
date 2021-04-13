@@ -7,7 +7,7 @@ class PrimaryTheme {
     return ThemeData(
       primaryColor: CustomColors.gold,
       colorScheme: CustomColorTheme.primaryScheme,
-      textTheme: GoogleFonts.oswaldTextTheme(),
+      textTheme: GoogleFonts.bubblegumSansTextTheme(),
       buttonTheme: ButtonThemeData(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
