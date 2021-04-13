@@ -23,7 +23,7 @@ class SideBar extends StatelessWidget {
                   child: DrawerHeader(
                     child: Text('Roomies',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 60,
                           color: Colors.white,
                         )),
                     decoration: BoxDecoration(
@@ -43,25 +43,18 @@ class SideBar extends StatelessWidget {
                             )),
                         onTap: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                             builder: (_) =>
-                                    MultiBlocProvider(
-                                    providers: [
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => MultiBlocProvider(providers: [
                                         BlocProvider<LandingCubit>.value(
-                                        value: BlocProvider.of<LandingCubit>(
-                                            context),
+                                          value: BlocProvider.of<LandingCubit>(
+                                              context),
                                         ),
                                         BlocProvider<RoomatesCubit>.value(
-                                        value: BlocProvider.of<RoomatesCubit>(
-                                            context),
+                                          value: BlocProvider.of<RoomatesCubit>(
+                                              context),
                                         )
-                                        
-                                        ],
-                                        child: HomePage())));
-                        
-                            
-                  
+                                      ], child: HomePage())));
                         },
                       ),
                       ListTile(
@@ -72,22 +65,18 @@ class SideBar extends StatelessWidget {
                             )),
                         onTap: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                               builder: (_) =>
-                                    MultiBlocProvider(
-                                    providers: [
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => MultiBlocProvider(providers: [
                                         BlocProvider<LandingCubit>.value(
-                                        value: BlocProvider.of<LandingCubit>(
-                                            context),
+                                          value: BlocProvider.of<LandingCubit>(
+                                              context),
                                         ),
                                         BlocProvider<RoomatesCubit>.value(
-                                        value: BlocProvider.of<RoomatesCubit>(
-                                            context),
+                                          value: BlocProvider.of<RoomatesCubit>(
+                                              context),
                                         )
-                                        
-                                        ],
-                                        child: TestMessagePage())));
+                                      ], child: TestMessagePage())));
                         },
                       ),
                       ListTile(
@@ -100,22 +89,16 @@ class SideBar extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    MultiBlocProvider(
-                                    providers: [
+                                  builder: (_) => MultiBlocProvider(providers: [
                                         BlocProvider<LandingCubit>.value(
-                                        value: BlocProvider.of<LandingCubit>(
-                                            context),
+                                          value: BlocProvider.of<LandingCubit>(
+                                              context),
                                         ),
                                         BlocProvider<RoomatesCubit>.value(
-                                        value: BlocProvider.of<RoomatesCubit>(
-                                            context),
+                                          value: BlocProvider.of<RoomatesCubit>(
+                                              context),
                                         )
-                                        
-                                        ],
-                                        child: ChoresPage())));
-                        
-      
+                                      ], child: ChoresPage())));
                         },
                       ),
                       ListTile(
@@ -125,24 +108,20 @@ class SideBar extends StatelessWidget {
                               color: Colors.white,
                             )),
                         onTap: () {
-                        
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                             builder: (_) =>
-                                    MultiBlocProvider(
-                                    providers: [
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => MultiBlocProvider(providers: [
                                         BlocProvider<LandingCubit>.value(
-                                        value: BlocProvider.of<LandingCubit>(
-                                            context),
+                                          value: BlocProvider.of<LandingCubit>(
+                                              context),
                                         ),
                                         BlocProvider<RoomatesCubit>.value(
-                                        value: BlocProvider.of<RoomatesCubit>(
-                                            context),
+                                          value: BlocProvider.of<RoomatesCubit>(
+                                              context),
                                         )
-                                        
-                                        ],
-                                        child: NewLocationPage())));                        },
+                                      ], child: NewLocationPage())));
+                        },
                       ),
                       ListTile(
                         title: Text('Settings',
@@ -151,39 +130,31 @@ class SideBar extends StatelessWidget {
                               color: Colors.white,
                             )),
                         onTap: () {
-                           Navigator.push(
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                               builder: (_) =>
-                                    MultiBlocProvider(
-                                    providers: [
+                                  builder: (_) => MultiBlocProvider(providers: [
                                         BlocProvider<LandingCubit>.value(
-                                        value: BlocProvider.of<LandingCubit>(
-                                            context),
+                                          value: BlocProvider.of<LandingCubit>(
+                                              context),
                                         ),
                                         BlocProvider<RoomatesCubit>.value(
-                                        value: BlocProvider.of<RoomatesCubit>(
-                                            context),
+                                          value: BlocProvider.of<RoomatesCubit>(
+                                              context),
                                         )
-                                        
-                                        ],
-                                        child: SettingsPage())));
+                                      ], child: SettingsPage())));
                         },
                       ),
-                   
                     ],
                   )),
               Expanded(
                 flex: 1,
                 child: ElevatedButton(
                   onPressed: () => context
-                  .read<AuthenticationBloc>()
-                 .add(AuthenticationLogoutRequested()),
-                  
-                  child: Text(
-                    "Logout",
-                    style: TextStyle(fontSize: 32)),
-                  ),
+                      .read<AuthenticationBloc>()
+                      .add(AuthenticationLogoutRequested()),
+                  child: Text("Logout", style: TextStyle(fontSize: 32)),
+                ),
               )
             ])));
   }

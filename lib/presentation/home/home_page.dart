@@ -394,9 +394,10 @@ class _CreateReminderState extends State<CreateReminder> {
             Align(
               alignment: Alignment.bottomRight,
               child: IconButton(
+                  padding: EdgeInsets.only(top: 100, right: 50),
                   icon: const Icon(
                     Icons.add_circle_outline_rounded,
-                    size: 40,
+                    size: 60,
                     color: Colors.black,
                   ),
                   onPressed: () => context
