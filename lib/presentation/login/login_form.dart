@@ -65,7 +65,7 @@ class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-        buildWhen: (previous, current) => previous.status != current.status,
+        buildWhen: (previous, current) => previous.email != current.email,
         builder: (context, state) {
           return TextField(
             inputFormatters: [
@@ -96,7 +96,7 @@ class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-        buildWhen: (previous, current) => previous.status != current.status,
+        buildWhen: (previous, current) => previous.password != current.password,
         builder: (context, state) {
           return TextField(
             key: const Key('loginForm_passwordInput_textField'),
@@ -122,7 +122,7 @@ class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-        buildWhen: (previous, current) => previous.status != current.status,
+        //buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
           return state.status == Status.inProgress
               ? const CircularProgressIndicator()

@@ -49,7 +49,6 @@ dependencies:
     path: packages/map_repository
   settings_repository:
     path: packages/settings_repository
-  cloud_firestore_mocks: ^0.8.0
     
     
 dev_dependencies:

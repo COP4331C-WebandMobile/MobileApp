@@ -92,12 +92,12 @@ class RoomateList extends StatelessWidget {
                   if (state.status == RoomateStatus.Loaded) {
                     return Container(
                         padding: EdgeInsets.all(5),
-                        child: ListView.builder(
+                        child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: state.roomates.length,
+                            separatorBuilder: (context, i) { return const SizedBox(width: 16,);},
                             itemBuilder: (BuildContext context, i) {
-                              // TODO: I believe this is null, so maybe its not getting intialized properly.
-                              return RoomateIcon(state.roomates[i]);
+                              return NewRoomateIcon(state.roomates[i]);
                             }));
                   } else
                     return Text("Loading");
@@ -176,6 +176,37 @@ class RoomateIcon extends StatelessWidget {
           )),
         ]));
   }
+}
+
+class NewRoomateIcon extends StatelessWidget {
+
+  final Roomate roomate;
+  NewRoomateIcon(this.roomate);
+  
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: (){print('Thing');},
+      child: CircleAvatar(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      radius: 24,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topCenter,
+            child: Icon(Icons.face),
+          ),
+          Text('G.F'),
+        ],
+      ),
+    ));
+
+  }
+
+
+
 }
 
 class ReminderText extends StatelessWidget {

@@ -20,8 +20,8 @@ class MapRepository {
   CollectionReference locationCollection;
   final String houseName;
 
-  MapRepository({String houseName})
-      : this._firestore = FirebaseFirestore.instance,
+  MapRepository({String houseName, FirebaseFirestore firestore})
+      : this._firestore = firestore ?? FirebaseFirestore.instance,
         this._location = Location.instance,
         this.houseName = houseName
         {

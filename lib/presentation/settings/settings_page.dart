@@ -32,9 +32,12 @@ class SettingsPage extends StatelessWidget {
             child: Container(
                 height: mediaQuery.size.height,
                 width: mediaQuery.size.width,
-                child: BlocBuilder<SettingsCubit, SettingsState>(
+                child: BlocConsumer<SettingsCubit, SettingsState>(
+                  listener: (context, state) {
+                    
+                  },
                     builder: (context, state) {
-                  return Column(children: [
+                  return ListView(children: [
                     HeaderBox(),
                     FirstName(),
                     LastName(),
@@ -96,7 +99,6 @@ class SettingsPage extends StatelessWidget {
                 }))));
   }
 }
-
 class HeaderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,7 @@ class HeaderBox extends StatelessWidget {
     final lastName = context.read<SettingsCubit>().state.user.lastName;
 
     return Container(
-        padding: EdgeInsets.all(50),
+        padding: EdgeInsets.all(25),
         decoration: BoxDecoration(
           color: CustomColors.gold,
         ),
@@ -140,11 +142,17 @@ class FirstName extends StatelessWidget {
     final firstNameController = TextEditingController();
 
     return Card(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: ExpansionTile(
+          leading: const CircleAvatar(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            child: Text('First'),
+          ),
           title: Text(firstName),
           children: <Widget>[
             TextField(
+              
               controller: firstNameController,
             ),
             IconButton(
@@ -168,15 +176,20 @@ class LastName extends StatelessWidget {
     final lastNameController = TextEditingController();
 
     return Card(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: ExpansionTile(
+          leading: const CircleAvatar(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            child: Text('Last'),
+          ),
           title: Text(lastName),
           children: <Widget>[
             TextField(
               controller: lastNameController,
             ),
             IconButton(
-              icon: Icon(Icons.check),
+              icon: const Icon(Icons.check),
               onPressed: () {
                 context
                     .read<SettingsCubit>()
@@ -189,28 +202,82 @@ class LastName extends StatelessWidget {
 }
 
 class PhoneNumber extends StatelessWidget {
+
+  String formatPhoneNumber(String phoneNumber)
+  {
+    if(phoneNumber == '')
+    {  
+      return '';
+    }
+
+    // Can't format an invalid phone number
+    if(phoneNumber.length < 10)
+    {
+      return phoneNumber;
+    }
+
+    String formattedNumber = '';
+    int count = 0;
+
+    for(int i = 0; i < phoneNumber.length; i++)
+    {
+      if(i % 3 == 0 && i != 0 && count < 2)
+      {
+        formattedNumber += '-';
+        count++;
+      }
+
+      formattedNumber += phoneNumber[i];
+    }
+
+    return formattedNumber;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final phoneNumber = context.read<SettingsCubit>().state.user.phoneNumber;
-
+    final rawPhoneNumber = context.read<SettingsCubit>().state.user.phoneNumber;
+    final formattedPhoneNumber = formatPhoneNumber(rawPhoneNumber);
     final phoneNumberController = TextEditingController();
 
     return Card(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: ExpansionTile(
-          title: Text(phoneNumber),
+          childrenPadding: EdgeInsets.all(16),
+          leading: const CircleAvatar(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            child: const Icon(Icons.phone),
+          ),
+          title: Text(formattedPhoneNumber),
           children: <Widget>[
-            TextField(
-              controller: phoneNumberController,
-            ),
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () {
-                context
-                    .read<SettingsCubit>()
-                    .changePhoneNumber(phoneNumberController.text);
-              },
-            )
+ 
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  contentPadding: EdgeInsets.all(10),
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      radius: 10,
+                      child: IconButton (
+                        iconSize: 16,
+                                  icon: Icon(Icons.check),
+                                  onPressed: () {
+                                    context
+                        .read<SettingsCubit>()
+                        .changePhoneNumber(phoneNumberController.text);
+                                  },
+                                )
+                    )
+                  )
+                ),
+                keyboardType: TextInputType.phone,
+                controller: phoneNumberController,
+              ),
+            
           ],
         ));
   }
@@ -223,8 +290,13 @@ class EmailBox extends StatelessWidget {
     final emailController = TextEditingController();
 
     return Card(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: ExpansionTile(
+          leading: const CircleAvatar(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            child: const Icon(Icons.mail),
+          ),
           title: Text(email),
           children: <Widget>[
             TextField(
