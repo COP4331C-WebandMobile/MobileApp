@@ -112,7 +112,7 @@ class StatBox extends StatelessWidget {
     var totalChores = roomate.totalChores;
 
     return Card(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(10),
         child: Column(children: [
           Align(
               alignment: Alignment.topLeft,
