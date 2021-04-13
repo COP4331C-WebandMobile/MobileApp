@@ -95,7 +95,11 @@ class RoomateList extends StatelessWidget {
                         child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: state.roomates.length,
-                            separatorBuilder: (context, i) { return const SizedBox(width: 16,);},
+                            separatorBuilder: (context, i) {
+                              return const SizedBox(
+                                width: 16,
+                              );
+                            },
                             itemBuilder: (BuildContext context, i) {
                               return NewRoomateIcon(state.roomates[i]);
                             }));
@@ -179,34 +183,33 @@ class RoomateIcon extends StatelessWidget {
 }
 
 class NewRoomateIcon extends StatelessWidget {
-
   final Roomate roomate;
   NewRoomateIcon(this.roomate);
-  
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){print('Thing');},
-      child: CircleAvatar(
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-      radius: 24,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topCenter,
-            child: Icon(Icons.face),
+        onTap: () {
+          print('Thing');
+        },
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          radius: 24,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Align(
+                alignment: Alignment.topCenter,
+                child: Icon(Icons.face),
+              ),
+              Text(roomate.firstName.toString().characters.first +
+                  "." +
+                  roomate.lastName.toString().characters.first +
+                  "."),
+            ],
           ),
-          Text('G.F'),
-        ],
-      ),
-    ));
-
+        ));
   }
-
-
-
 }
 
 class ReminderText extends StatelessWidget {
