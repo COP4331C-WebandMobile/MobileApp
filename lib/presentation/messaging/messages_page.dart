@@ -5,6 +5,7 @@ import 'package:messaging_repository/messaging_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
 
@@ -247,7 +248,22 @@ class AlertWidget extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: Text('Posted date'),
+            child: Container(
+                color: Colors.black,
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Text(
+                  'Posted: ' +
+                      message.date.toDate().month.toString() +
+                      "-" +
+                      message.date.toDate().day.toString() +
+                      "-" +
+                      message.date.toDate().year.toString() +
+                      "  " +
+                      message.date.toDate().hour.toString() +
+                      ":" +
+                      message.date.toDate().minute.toString(),
+                  style: TextStyle(color: Colors.white),
+                )),
           ),
         ],
       ),
@@ -318,17 +334,20 @@ class QuestionWidget extends StatelessWidget {
           Text(''),
           // Make button textbox appear and then allow input to submit...
           ElevatedButton(
-            onPressed: (){ showDialog(
-              context: context, 
-              builder: (_) => BlocProvider<MessagingBloc>.value(
-                    value: BlocProvider.of<MessagingBloc>(context),
-                    child: CreateResponseDialog(message.id),));},
-
-            child: Text('Create Response')),
-            IconButton(
-              icon: Icon(Icons.remove_circle_outline_outlined), 
-              onPressed: (){ context.read<MessagingBloc>().add(DeleteMessage(message));}
-            ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider<MessagingBloc>.value(
+                          value: BlocProvider.of<MessagingBloc>(context),
+                          child: CreateResponseDialog(message.id),
+                        ));
+              },
+              child: Text('Create Response')),
+          IconButton(
+              icon: Icon(Icons.remove_circle_outline_outlined),
+              onPressed: () {
+                context.read<MessagingBloc>().add(DeleteMessage(message));
+              }),
         ],
       ),
     );
