@@ -18,6 +18,7 @@ class LandingState extends Equatable {
   this.error ="",
   this.address ="",
   });
+  
   const LandingState.loading() : this._();
 
   LandingState.homeVerified(String homeName,String address) : this._(status: HomeStatus.HomeVerified, home: homeName, address: address);

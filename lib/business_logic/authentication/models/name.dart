@@ -12,9 +12,11 @@ class Name extends FormzInput<String, NameValidationError>{
   @override
   NameValidationError validator(String value)
   {
+    if(value.length < 2)
+      return NameValidationError.invalid;
+
     return !_nameRegExp.hasMatch(value) ? null : NameValidationError.invalid;
   }
-
 }
 
 

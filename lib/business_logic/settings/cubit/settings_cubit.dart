@@ -1,5 +1,10 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
+import 'package:roomiesMobile/business_logic/authentication/authentication.dart';
+import 'package:roomiesMobile/business_logic/authentication/models/name.dart';
+import 'package:roomiesMobile/business_logic/authentication/models/phoneNumber.dart';
+import 'package:roomiesMobile/presentation/settings/settings_page.dart';
 import 'package:settings_repository/settings_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -7,18 +12,19 @@ part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
    StreamSubscription _settingsSubscription;
-   final _settingsRepository;
+   final SettingsRepository _settingsRepository;
 
     SettingsCubit({
     @required SettingsRepository settingsRepository,
   })  :   assert(settingsRepository != null),
          _settingsRepository = settingsRepository,
-         super( SettingsState(User("TEst","TEst","TEst","TEst"),status.loading)){
-            Settings();
+         super( SettingsState(status: status.loading))
+         {
+            settings();
          }
-  void Settings(){
+  void settings(){
     _settingsSubscription = _settingsRepository.user().listen(
-    (settings) => emit(SettingsState(settings,status.loaded)));
+    (settings) => emit(SettingsState(user: settings, status: status.loaded)));
   }
 
 
@@ -43,6 +49,55 @@ class SettingsCubit extends Cubit<SettingsState> {
     _settingsRepository.leaveHome();
   }
 
+  void onLastNameChanged(String value)
+  {
+    final lastName = Name.dirty(value);
+
+    emit(state.copyWith(
+      last: lastName,
+      status: Formz.validate([
+        lastName,
+      ]),
+    ));
+  }
+
+  void onFirstNameChanged(String value)
+  {
+    final firstName = Name.dirty(value);
+
+    emit(state.copyWith(
+      first: firstName,
+      status: Formz.validate([
+        firstName,
+      ]),
+    ));
+  }
+
+  void onPhoneNumberChanged(String value)
+  {
+    final phoneNumber = PhoneNumber.dirty(value);
+
+    emit(state.copyWith(
+      phoneNumber: phoneNumber,
+      status: Formz.validate([
+        phoneNumber,
+      ]),
+    ));
+  }
+
+  void onEmailChanged(String value)
+  {
+    final email = Email.dirty(value);
+
+    emit(state.copyWith(
+      phoneNumber: state.phoneNumber,
+      email: email,
+      status: Formz.validate([
+        email
+      ]),
+    ));
+
+  }
 
 
 

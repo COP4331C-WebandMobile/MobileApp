@@ -58,7 +58,7 @@ class AuthenticationRepository {
       throw AddUserFailure();
     }
   }
-
+  
   User getUser(user) {
     return User(
       id: user.uid,
@@ -67,6 +67,7 @@ class AuthenticationRepository {
       name: user.displayName,
       photo: user.photoURL,
       houseName: "",
+      phoneNumber: user.phoneNumber,
     );
   }
 

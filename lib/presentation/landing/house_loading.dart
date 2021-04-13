@@ -19,13 +19,13 @@ class HouseLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-  return BlocProvider(
+  return BlocProvider<LandingCubit>(
 
     create: (context) => LandingCubit(homeRepository: HomeRepository(context.read<AuthenticationBloc>().state.user.email)),
-    // TODO: This must be null and is being checked against. Need to fix later.
-    child:  BlocListener <LandingCubit,LandingState> ( 
+    child:  BlocListener<LandingCubit,LandingState> ( 
 
       listener: (context,state) {
+        print('${state.address},${state.home},${state.error},${state.status}');
         if(state.status == HomeStatus.Loading) { 
             MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
                          value: BlocProvider.of<LandingCubit>(context),

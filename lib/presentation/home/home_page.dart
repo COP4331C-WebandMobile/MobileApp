@@ -15,10 +15,11 @@ class HomePage extends StatelessWidget {
     return MaterialPageRoute(builder: (_) => HomePage());
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final _home = context.read<LandingCubit>().state.home;
 
+    final _home = context.read<LandingCubit>().state.home;
     final _address = context.read<LandingCubit>().state.address;
     final _roomateRepository = RoomateRepository(_home);
     final _reminderRepository = ReminderRepository(_home);

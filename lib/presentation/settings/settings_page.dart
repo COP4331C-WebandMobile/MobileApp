@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
-import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
-import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
 import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/widgets/appbar.dart';
-import '../../widgets/home/sidebar.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -26,79 +23,75 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
         appBar: Bar(),
-        body: BlocProvider(
+        body: BlocProvider<SettingsCubit>(
             create: (context) =>
                 SettingsCubit(settingsRepository: _settingsRepository),
             child: Container(
                 height: mediaQuery.size.height,
                 width: mediaQuery.size.width,
                 child: BlocConsumer<SettingsCubit, SettingsState>(
-                  listener: (context, state) {
-                    
-                  },
+                    listener: (context, state) {},
                     builder: (context, state) {
-                  return ListView(children: [
-                    HeaderBox(),
-                    FirstName(),
-                    LastName(),
-                    PhoneNumber(),
-                    EmailBox(),
-                    Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.all(20),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) =>
-                                        BlocProvider<SettingsCubit>.value(
-                                            value:
-                                                BlocProvider.of<SettingsCubit>(
-                                                    context),
-                                            child: LeaveHome()));
-                              },
-                              child: Text("Leave Home"),
-                            )),
-                        Container(
-                            margin: EdgeInsets.all(10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) =>
-                                        BlocProvider<SettingsCubit>.value(
-                                            value:
-                                                BlocProvider.of<SettingsCubit>(
-                                                    context),
-                                            child: DeleteAccount()));
-                              },
-                              child: Text("Delete Account"),
-                            )),
-                        Container(
-                            margin: EdgeInsets.all(10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) =>
-                                        BlocProvider<SettingsCubit>.value(
-                                            value:
-                                                BlocProvider.of<SettingsCubit>(
-                                                    context),
-                                            child: ChangePassword()));
-                              },
-                              child: Text("Change Password"),
-                            )),
-                      ],
-                    )
+                      return ListView(children: [
+                        HeaderBox(),
+                        FirstName(),
+                        LastName(),
+                        _PhoneNumber(),
+                        _EmailBox(),
+                        Row(
+                          children: [
+                            Container(
+                                margin: EdgeInsets.all(20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) =>
+                                            BlocProvider<SettingsCubit>.value(
+                                                value: BlocProvider.of<
+                                                    SettingsCubit>(context),
+                                                child: LeaveHome()));
+                                  },
+                                  child: Text("Leave Home"),
+                                )),
+                            Container(
+                                margin: EdgeInsets.all(10),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) =>
+                                            BlocProvider<SettingsCubit>.value(
+                                                value: BlocProvider.of<
+                                                    SettingsCubit>(context),
+                                                child: DeleteAccount()));
+                                  },
+                                  child: Text("Delete Account"),
+                                )),
+                            Container(
+                                margin: EdgeInsets.all(10),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) =>
+                                            BlocProvider<SettingsCubit>.value(
+                                                value: BlocProvider.of<
+                                                    SettingsCubit>(context),
+                                                child: ChangePassword()));
+                                  },
+                                  child: Text("Change Password"),
+                                )),
+                          ],
+                        )
 
-                    //ChoreBox(roomate),
-                    //MoneyBox(roomate),
-                  ]);
-                }))));
+                        //ChoreBox(roomate),
+                        //MoneyBox(roomate),
+                      ]);
+                    }))));
   }
 }
+
 class HeaderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -137,92 +130,117 @@ class HeaderBox extends StatelessWidget {
 class FirstName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final firstName = context.read<SettingsCubit>().state.user.firstName;
 
-    final firstNameController = TextEditingController();
-
-    return Card(
-        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: ExpansionTile(
-          leading: const CircleAvatar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            child: Text('First'),
-          ),
-          title: Text(firstName),
-          children: <Widget>[
-            TextField(
-              
-              controller: firstNameController,
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      buildWhen: (previous, current) => previous.first != current.first,
+      builder: (context, state) {
+      return Card(
+          margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          child: ExpansionTile(
+            childrenPadding: EdgeInsets.all(16),
+            leading: const CircleAvatar(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              child: Text('First'),
             ),
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () {
-                context
-                    .read<SettingsCubit>()
-                    .changeFirstName(firstNameController.text);
-              },
-            )
-          ],
-        ));
+            title: Text(state.user.firstName),
+            children: <Widget>[
+              TextField(
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().onFirstNameChanged(value),
+                decoration: InputDecoration(
+                    hintText: 'John',
+                    errorText: state.first.invalid ? 'Invalid Name' : null,
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    contentPadding: EdgeInsets.all(10),
+                    suffixIcon: state.first.valid
+                        ? Padding(
+                            padding: EdgeInsets.all(8),
+                            child: CircleAvatar(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                radius: 10,
+                                child: IconButton(
+                                  iconSize: 16,
+                                  icon: Icon(Icons.check),
+                                  onPressed: () {
+                                    context.read<SettingsCubit>().changeFirstName(state.first.value);
+                                  },
+                                )))
+                        : null),
+              ),
+            ],
+          ));
+    });
   }
 }
 
 class LastName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final lastName = context.read<SettingsCubit>().state.user.lastName;
 
-    final lastNameController = TextEditingController();
-
-    return Card(
-        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: ExpansionTile(
-          leading: const CircleAvatar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            child: Text('Last'),
-          ),
-          title: Text(lastName),
-          children: <Widget>[
-            TextField(
-              controller: lastNameController,
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      buildWhen: (previous, current) => previous.last != current.last,
+      builder: (context, state) {
+      return Card(
+          margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          child: ExpansionTile(
+            childrenPadding: EdgeInsets.all(16),
+            leading: const CircleAvatar(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              child: Text('Last'),
             ),
-            IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: () {
-                context
-                    .read<SettingsCubit>()
-                    .changeLastName(lastNameController.text);
-              },
-            )
-          ],
-        ));
+            title: Text(state.user.lastName),
+            children: <Widget>[
+              TextField(
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().onLastNameChanged(value),
+                decoration: InputDecoration(
+                    hintText: 'Doe',
+                    errorText: state.last.invalid ? 'Invalid Name' : null,
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    contentPadding: EdgeInsets.all(10),
+                    suffixIcon: state.last.valid
+                        ? Padding(
+                            padding: EdgeInsets.all(8),
+                            child: CircleAvatar(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                radius: 10,
+                                child: IconButton(
+                                  iconSize: 16,
+                                  icon: Icon(Icons.check),
+                                  onPressed: () {
+                                    context.read<SettingsCubit>().changeLastName(state.last.value);
+                                  },
+                                )))
+                        : null),
+              ),
+            ],
+          ));
+    });
   }
 }
 
-class PhoneNumber extends StatelessWidget {
-
-  String formatPhoneNumber(String phoneNumber)
-  {
-    if(phoneNumber == '')
-    {  
+class _PhoneNumber extends StatelessWidget {
+  String formatPhoneNumber(String phoneNumber) {
+    if (phoneNumber == '') {
       return '';
     }
 
     // Can't format an invalid phone number
-    if(phoneNumber.length < 10)
-    {
+    if (phoneNumber.length < 10) {
       return phoneNumber;
     }
 
     String formattedNumber = '';
     int count = 0;
 
-    for(int i = 0; i < phoneNumber.length; i++)
-    {
-      if(i % 3 == 0 && i != 0 && count < 2)
-      {
+    for (int i = 0; i < phoneNumber.length; i++) {
+      if (i % 3 == 0 && i != 0 && count < 2) {
         formattedNumber += '-';
         count++;
       }
@@ -235,83 +253,110 @@ class PhoneNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawPhoneNumber = context.read<SettingsCubit>().state.user.phoneNumber;
-    final formattedPhoneNumber = formatPhoneNumber(rawPhoneNumber);
-    final phoneNumberController = TextEditingController();
-
-    return Card(
-        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: ExpansionTile(
-          childrenPadding: EdgeInsets.all(16),
-          leading: const CircleAvatar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            child: const Icon(Icons.phone),
-          ),
-          title: Text(formattedPhoneNumber),
-          children: <Widget>[
- 
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  contentPadding: EdgeInsets.all(10),
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      radius: 10,
-                      child: IconButton (
-                        iconSize: 16,
-                                  icon: Icon(Icons.check),
-                                  onPressed: () {
-                                    context
-                        .read<SettingsCubit>()
-                        .changePhoneNumber(phoneNumberController.text);
-                                  },
-                                )
-                    )
-                  )
+    return BlocBuilder<SettingsCubit, SettingsState>(
+        buildWhen: (previous, current) =>
+            previous.phoneNumber != current.phoneNumber,
+        builder: (context, state) {
+          return Card(
+              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: ExpansionTile(
+                childrenPadding: EdgeInsets.all(16),
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  child: const Icon(Icons.phone),
                 ),
-                keyboardType: TextInputType.phone,
-                controller: phoneNumberController,
-              ),
-            
-          ],
-        ));
+                title: Text(formatPhoneNumber(state.user.phoneNumber)),
+                children: <Widget>[
+                  TextField(
+                    autofocus: true,
+                    onChanged: (phoneNumber) => context
+                        .read<SettingsCubit>()
+                        .onPhoneNumberChanged(phoneNumber),
+                    decoration: InputDecoration(
+                        hintText: '4078589944',
+                        helperText: 'Only use numbers...',
+                        errorText: state.phoneNumber.invalid
+                            ? 'Invalid only use Numbers'
+                            : null,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        suffixIcon: state.phoneNumber.valid
+                            ? Padding(
+                                padding: EdgeInsets.all(8),
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    radius: 10,
+                                    child: IconButton(
+                                      iconSize: 16,
+                                      icon: Icon(Icons.check),
+                                      onPressed: () {
+                                        context
+                                            .read<SettingsCubit>()
+                                            .changePhoneNumber(
+                                                state.phoneNumber.value);
+                                      },
+                                    )))
+                            : null),
+                    keyboardType: TextInputType.phone,
+                    //controller: phoneNumberController,
+                  ),
+                ],
+              ));
+        });
   }
 }
 
-class EmailBox extends StatelessWidget {
+class _EmailBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final email = context.read<SettingsCubit>().state.user.email;
-    final emailController = TextEditingController();
-
-    return Card(
-        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: ExpansionTile(
-          leading: const CircleAvatar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            child: const Icon(Icons.mail),
-          ),
-          title: Text(email),
-          children: <Widget>[
-            TextField(
-              controller: emailController,
-            ),
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .changeEmail(emailController.text);
-              },
-            )
-          ],
-        ));
+    return BlocBuilder<SettingsCubit, SettingsState>(
+        buildWhen: (previous, current) => previous.email != current.email,
+        builder: (context, state) {
+          return Card(
+              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: ExpansionTile(
+                childrenPadding: EdgeInsets.all(16),
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  child: const Icon(Icons.mail),
+                ),
+                title: Text(state.user.email),
+                children: <Widget>[
+                  TextField(
+                    onChanged: (value) =>
+                        context.read<SettingsCubit>().onEmailChanged(value),
+                    decoration: InputDecoration(
+                        hintText: 'johnDoe@gmail.com',
+                        errorText:
+                            state.email.invalid ? 'Invalid Email Format' : null,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        suffixIcon: state.email.valid
+                            ? Padding(
+                                padding: EdgeInsets.all(8),
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    radius: 10,
+                                    child: IconButton(
+                                      iconSize: 16,
+                                      icon: Icon(Icons.check),
+                                      onPressed: () {
+                                        context
+                                            .read<AuthenticationBloc>()
+                                            .changeEmail(state.email.value);
+                                      },
+                                    )))
+                            : null),
+                  ),
+                ],
+              ));
+        });
   }
 }
 

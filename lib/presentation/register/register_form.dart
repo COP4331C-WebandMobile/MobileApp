@@ -118,7 +118,7 @@ class _PhoneNumberInput extends StatelessWidget {
               labelText: 'Phone Number',
               hintText: '4078586677',
               helperText: '',
-              errorText: state.email.invalid ? 'Invalid Phone Number' : null,
+              errorText: state.phoneNumber.invalid ? 'Invalid Phone Number' : null,
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               border: OutlineInputBorder(
