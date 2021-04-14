@@ -4,6 +4,7 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
+import 'package:roomiesMobile/presentation/chores/chore_page.dart';
 import 'package:roomiesMobile/presentation/roomate_profile/roomate_profile_page.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../widgets/home/sidebar.dart';
@@ -58,57 +59,57 @@ class RoomateList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RoomatesCubit, RoomatesState>(
-      buildWhen: (previous, current) => previous.roomates != current.roomates,
-      builder: (context, state) {
-      return Container(
-          margin: EdgeInsets.all(3),
-          padding: EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: CustomColors.gold,
-            border: Border.all(
-              color: Colors.black,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(children: [
-            Expanded(
-                flex: 3,
-                child: Row(children: [
-                  Expanded(
-                      child: Row(children: [
-                    Icon(Icons.people),
-                    Text(" Roomies",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ))
-                  ])),
-                ])),
-            Expanded(
-                flex: 4,
-                child: Builder(
+        buildWhen: (previous, current) => previous.roomates != current.roomates,
+        builder: (context, state) {
+          return Container(
+              margin: EdgeInsets.all(3),
+              padding: EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: CustomColors.gold,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(children: [
+                Expanded(
+                    flex: 3,
+                    child: Row(children: [
+                      Expanded(
+                          child: Row(children: [
+                        Icon(Icons.people),
+                        Text(" Roomies",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ))
+                      ])),
+                    ])),
+                Expanded(
+                    flex: 4,
+                    child: Builder(
 
-                    // ignore: missing_return
-                    builder: (context) {
-                  if (state.status == RoomateStatus.Loaded) {
-                    return Container(
-                        padding: EdgeInsets.all(5),
-                        child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.roomates.length,
-                            separatorBuilder: (context, i) {
-                              return const SizedBox(
-                                width: 16,
-                              );
-                            },
-                            itemBuilder: (BuildContext context, i) {
-                              return NewRoomateIcon(state.roomates[i]);
-                            }));
-                  } else
-                    return Text("Loading");
-                })),
-          ]));
-    });
+                        // ignore: missing_return
+                        builder: (context) {
+                      if (state.status == RoomateStatus.Loaded) {
+                        return Container(
+                            padding: EdgeInsets.all(5),
+                            child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.roomates.length,
+                                separatorBuilder: (context, i) {
+                                  return const SizedBox(
+                                    width: 16,
+                                  );
+                                },
+                                itemBuilder: (BuildContext context, i) {
+                                  return NewRoomateIcon(state.roomates[i]);
+                                }));
+                      } else
+                        return Text("Loading");
+                    })),
+              ]));
+        });
   }
 }
 
@@ -130,7 +131,9 @@ class HouseInfo extends StatelessWidget {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 54,),
+          const SizedBox(
+            height: 54,
+          ),
           Text(
             home,
             style: TextStyle(
@@ -248,7 +251,42 @@ class ReminderText extends StatelessWidget {
               icon: Icon(Icons.delete, color: Colors.red),
               alignment: Alignment.bottomRight,
               onPressed: () {
-                context.read<ReminderCubit>().deleteReminder(reminder);
+                showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider<ReminderCubit>.value(
+                          value: BlocProvider.of<ReminderCubit>(context),
+                          child: AlertDialog(
+                            title: Text(
+                              'Confirmation',
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SingleChildScrollView(
+                                child: ListBody(
+                              children: <Widget>[
+                                Text(
+                                  'Do you want to delete this?',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )),
+                            actions: <Widget>[
+                              Container(
+                                  decoration: BoxDecoration(
+                                      color: CustomColors.gold,
+                                      border: Border.all(color: Colors.black)),
+                                  child: TextButton(
+                                    child: Text('Confirm'),
+                                    onPressed: () {
+                                      context
+                                          .read<ReminderCubit>()
+                                          .deleteReminder(reminder);
+
+                                      Navigator.of(context).pop();
+                                    },
+                                  )),
+                            ],
+                          ),
+                        ));
               },
             ),
             IconButton(
@@ -420,7 +458,7 @@ class _CreateReminderState extends State<CreateReminder> {
             Align(
               alignment: Alignment.bottomRight,
               child: IconButton(
-                  padding: EdgeInsets.only(top: 100, right: 50),
+                  padding: EdgeInsets.only(right: 50),
                   icon: const Icon(
                     Icons.add_circle_outline_rounded,
                     size: 60,
