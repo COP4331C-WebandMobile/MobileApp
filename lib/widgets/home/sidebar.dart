@@ -8,6 +8,7 @@ import 'package:roomiesMobile/presentation/location/location_page.dart';
 import 'package:roomiesMobile/presentation/location/new_location_page.dart';
 import 'package:roomiesMobile/presentation/messaging/messages_page.dart';
 import 'package:roomiesMobile/presentation/settings/settings_page.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/authentication/bloc/authentication_bloc.dart';
 
@@ -24,7 +25,7 @@ class SideBar extends StatelessWidget {
                     child: Text('Roomies',
                         style: TextStyle(
                           fontSize: 60,
-                          color: Colors.white,
+                          color: CustomColors.gold,
                         )),
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -38,7 +39,7 @@ class SideBar extends StatelessWidget {
                       ListTile(
                         title: Text('Home',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
                             )),
                         onTap: () {
@@ -60,7 +61,7 @@ class SideBar extends StatelessWidget {
                       ListTile(
                         title: Text('Messages',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
                             )),
                         onTap: () {
@@ -82,7 +83,7 @@ class SideBar extends StatelessWidget {
                       ListTile(
                         title: Text('Chores',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
                             )),
                         onTap: () {
@@ -104,7 +105,7 @@ class SideBar extends StatelessWidget {
                       ListTile(
                         title: Text('Locations',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
                             )),
                         onTap: () {
@@ -124,9 +125,10 @@ class SideBar extends StatelessWidget {
                         },
                       ),
                       ListTile(
+                        enableFeedback: true,
                         title: Text('Settings',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
                             )),
                         onTap: () {

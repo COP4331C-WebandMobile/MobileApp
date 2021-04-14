@@ -41,7 +41,7 @@ class SettingsPage extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                                margin: EdgeInsets.all(20),
+                                margin: EdgeInsets.only(left: 30),
                                 child: ElevatedButton(
                                   onPressed: () {
                                     showDialog(
@@ -55,7 +55,7 @@ class SettingsPage extends StatelessWidget {
                                   child: Text("Leave Home"),
                                 )),
                             Container(
-                                margin: EdgeInsets.all(10),
+                                margin: EdgeInsets.only(left: 10, right: 10),
                                 child: ElevatedButton(
                                   onPressed: () {
                                     showDialog(
@@ -69,19 +69,19 @@ class SettingsPage extends StatelessWidget {
                                   child: Text("Delete Account"),
                                 )),
                             Container(
-                                margin: EdgeInsets.all(10),
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) =>
-                                            BlocProvider<SettingsCubit>.value(
-                                                value: BlocProvider.of<
-                                                    SettingsCubit>(context),
-                                                child: ChangePassword()));
-                                  },
-                                  child: Text("Change Password"),
-                                )),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                        BlocProvider<SettingsCubit>.value(
+                                            value:
+                                                BlocProvider.of<SettingsCubit>(
+                                                    context),
+                                            child: ChangePassword()));
+                              },
+                              child: Text("Change Password"),
+                            )),
                           ],
                         )
 
@@ -130,98 +130,100 @@ class HeaderBox extends StatelessWidget {
 class FirstName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<SettingsCubit, SettingsState>(
-      buildWhen: (previous, current) => previous.first != current.first,
-      builder: (context, state) {
-      return Card(
-          margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-          child: ExpansionTile(
-            childrenPadding: EdgeInsets.all(16),
-            leading: const CircleAvatar(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              child: Text('First'),
-            ),
-            title: Text(state.user.firstName),
-            children: <Widget>[
-              TextField(
-                onChanged: (value) =>
-                    context.read<SettingsCubit>().onFirstNameChanged(value),
-                decoration: InputDecoration(
-                    hintText: 'John',
-                    errorText: state.first.invalid ? 'Invalid Name' : null,
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    contentPadding: EdgeInsets.all(10),
-                    suffixIcon: state.first.valid
-                        ? Padding(
-                            padding: EdgeInsets.all(8),
-                            child: CircleAvatar(
-                                backgroundColor: Colors.black,
-                                foregroundColor: Colors.white,
-                                radius: 10,
-                                child: IconButton(
-                                  iconSize: 16,
-                                  icon: Icon(Icons.check),
-                                  onPressed: () {
-                                    context.read<SettingsCubit>().changeFirstName(state.first.value);
-                                  },
-                                )))
-                        : null),
-              ),
-            ],
-          ));
-    });
+        buildWhen: (previous, current) => previous.first != current.first,
+        builder: (context, state) {
+          return Card(
+              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: ExpansionTile(
+                childrenPadding: EdgeInsets.all(16),
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  child: Text('First'),
+                ),
+                title: Text(state.user.firstName),
+                children: <Widget>[
+                  TextField(
+                    onChanged: (value) =>
+                        context.read<SettingsCubit>().onFirstNameChanged(value),
+                    decoration: InputDecoration(
+                        hintText: 'John',
+                        errorText: state.first.invalid ? 'Invalid Name' : null,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        suffixIcon: state.first.valid
+                            ? Padding(
+                                padding: EdgeInsets.all(8),
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    radius: 10,
+                                    child: IconButton(
+                                      iconSize: 16,
+                                      icon: Icon(Icons.check),
+                                      onPressed: () {
+                                        context
+                                            .read<SettingsCubit>()
+                                            .changeFirstName(state.first.value);
+                                      },
+                                    )))
+                            : null),
+                  ),
+                ],
+              ));
+        });
   }
 }
 
 class LastName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<SettingsCubit, SettingsState>(
-      buildWhen: (previous, current) => previous.last != current.last,
-      builder: (context, state) {
-      return Card(
-          margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-          child: ExpansionTile(
-            childrenPadding: EdgeInsets.all(16),
-            leading: const CircleAvatar(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              child: Text('Last'),
-            ),
-            title: Text(state.user.lastName),
-            children: <Widget>[
-              TextField(
-                onChanged: (value) =>
-                    context.read<SettingsCubit>().onLastNameChanged(value),
-                decoration: InputDecoration(
-                    hintText: 'Doe',
-                    errorText: state.last.invalid ? 'Invalid Name' : null,
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    contentPadding: EdgeInsets.all(10),
-                    suffixIcon: state.last.valid
-                        ? Padding(
-                            padding: EdgeInsets.all(8),
-                            child: CircleAvatar(
-                                backgroundColor: Colors.black,
-                                foregroundColor: Colors.white,
-                                radius: 10,
-                                child: IconButton(
-                                  iconSize: 16,
-                                  icon: Icon(Icons.check),
-                                  onPressed: () {
-                                    context.read<SettingsCubit>().changeLastName(state.last.value);
-                                  },
-                                )))
-                        : null),
-              ),
-            ],
-          ));
-    });
+        buildWhen: (previous, current) => previous.last != current.last,
+        builder: (context, state) {
+          return Card(
+              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: ExpansionTile(
+                childrenPadding: EdgeInsets.all(16),
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  child: Text('Last'),
+                ),
+                title: Text(state.user.lastName),
+                children: <Widget>[
+                  TextField(
+                    onChanged: (value) =>
+                        context.read<SettingsCubit>().onLastNameChanged(value),
+                    decoration: InputDecoration(
+                        hintText: 'Doe',
+                        errorText: state.last.invalid ? 'Invalid Name' : null,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        suffixIcon: state.last.valid
+                            ? Padding(
+                                padding: EdgeInsets.all(8),
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    radius: 10,
+                                    child: IconButton(
+                                      iconSize: 16,
+                                      icon: Icon(Icons.check),
+                                      onPressed: () {
+                                        context
+                                            .read<SettingsCubit>()
+                                            .changeLastName(state.last.value);
+                                      },
+                                    )))
+                            : null),
+                  ),
+                ],
+              ));
+        });
   }
 }
 
