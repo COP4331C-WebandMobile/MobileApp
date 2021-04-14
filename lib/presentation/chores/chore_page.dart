@@ -181,7 +181,12 @@ class StatDescription extends StatelessWidget {
         child: Row(
           children: [
             Text(stat.description + "   ", style: TextStyle(fontSize: 20)),
-            CircleAvatar(child: Text(stat.completed.toString())),
+            CircleAvatar(
+                backgroundColor: Colors.black,
+                child: Text(
+                  stat.completed.toString(),
+                  style: TextStyle(color: CustomColors.gold),
+                )),
           ],
         ));
   }
@@ -207,7 +212,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(title: Text('Chores'), centerTitle: true, actions: [
-      
       Container(
           decoration: BoxDecoration(
             color: Colors.black,
@@ -226,8 +230,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                           child: AddModal(),
                         ));
               }))
-                    
-
     ]);
   }
 }
@@ -364,6 +366,25 @@ class ChoreBox extends StatelessWidget {
                 color: Colors.green,
               ),
               onPressed: () {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(const SnackBar(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    duration: Duration(seconds: 1, milliseconds: 500),
+                    backgroundColor: Colors.black,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.elliptical(5, 5))),
+                    content: Text(
+                      'Completed!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: CustomColors.gold,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ));
                 context.read<ChoresBloc>().add(CompleteChore(chore,
                     context.read<AuthenticationBloc>().state.user.email));
               },

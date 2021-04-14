@@ -17,7 +17,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final _home = context.read<LandingCubit>().state.home;
     final _address = context.read<LandingCubit>().state.address;
     final _roomateRepository = RoomateRepository(_home);
@@ -188,13 +187,11 @@ class NewRoomateIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () =>
-           Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => ProfilePage(roomate)),
-                        //Navigate to profile page
-                      ),
-        
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => ProfilePage(roomate)),
+              //Navigate to profile page
+            ),
         child: CircleAvatar(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -253,6 +250,25 @@ class ReminderText extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.check, color: Colors.green),
               onPressed: () {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(const SnackBar(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    duration: Duration(seconds: 1, milliseconds: 500),
+                    backgroundColor: Colors.black,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.elliptical(5, 5))),
+                    content: Text(
+                      'Completed!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: CustomColors.gold,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ));
                 context.read<ReminderCubit>().completeReminder(
                     context.read<AuthenticationBloc>().state.user.email,
                     reminder);
@@ -298,8 +314,10 @@ class ReminderList extends StatelessWidget {
                         child: Align(
                             alignment: Alignment.topRight,
                             child: IconButton(
-                              icon:
-                                  const Icon(Icons.add_circle_outline_outlined),
+                              icon: const Icon(
+                                Icons.add_circle_outline_outlined,
+                                size: 40,
+                              ),
                               onPressed: () => showDialog(
                                   context: context,
                                   builder: (_) =>
