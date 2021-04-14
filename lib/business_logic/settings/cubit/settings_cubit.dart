@@ -4,7 +4,6 @@ import 'package:formz/formz.dart';
 import 'package:roomiesMobile/business_logic/authentication/authentication.dart';
 import 'package:roomiesMobile/business_logic/authentication/models/name.dart';
 import 'package:roomiesMobile/business_logic/authentication/models/phoneNumber.dart';
-import 'package:roomiesMobile/presentation/settings/settings_page.dart';
 import 'package:settings_repository/settings_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -18,13 +17,18 @@ class SettingsCubit extends Cubit<SettingsState> {
     @required SettingsRepository settingsRepository,
   })  :   assert(settingsRepository != null),
          _settingsRepository = settingsRepository,
-         super( SettingsState(status: status.loading))
+         super( SettingsState(
+           
+         ))
          {
             settings();
+            state.user.toString();
          }
+
   void settings(){
+    
     _settingsSubscription = _settingsRepository.user().listen(
-    (settings) => emit(SettingsState(user: settings, status: status.loaded)));
+    (settings) => emit(SettingsState(user: settings)));
   }
 
 
@@ -99,7 +103,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   }
 
-
-
-   
+    @override
+  Future<void> close() {
+      _settingsSubscription.cancel();
+      return super.close();
+    }
 }

@@ -38,7 +38,7 @@ class HomeRepository {
 
     final snapshot = await _fireStore.collection('houses').doc(home).get();
     if(snapshot.exists){
-    print(snapshot.data()["address"]);
+    //print(snapshot.data()["address"]);
     return Home.fromEntity(HomeEntity.fromSnapshot(snapshot));
     } 
   }

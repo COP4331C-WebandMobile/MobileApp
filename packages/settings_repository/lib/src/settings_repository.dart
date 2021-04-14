@@ -33,6 +33,7 @@ class SettingsRepository {
         .collection('users')
         .doc(_email)
         .update({"first_name": firstName});
+
     await _fireStore
         .collection('roomates')
         .doc(_home)
@@ -54,6 +55,7 @@ class SettingsRepository {
         .collection('users')
         .doc(_email)
         .update({"last_name": lastName});
+
     await _fireStore
         .collection('roomates')
         .doc(_home)
@@ -67,6 +69,7 @@ class SettingsRepository {
         .collection('users')
         .doc(_email)
         .update({"phone_number": phoneNumber});
+        
     await _fireStore
         .collection('roomates')
         .doc(_home)

@@ -20,16 +20,18 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: CustomColors.gold,
         appBar: Bar(),
-        resizeToAvoidBottomInset: false,
-        body: Container(
+        //resizeToAvoidBottomInset: false,
+        body: ListView( children: [
+        
+        Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
             color: Colors.white,
           ),
-          height: mediaQuery.size.height,
+          height: 650,
           width: mediaQuery.size.width,
-          margin: EdgeInsets.all(32.0),
-          child: ListView(scrollDirection: Axis.vertical, children: [
+          margin: EdgeInsets.all(32),
+          child: Column(children: [
             Text(
               "Create An Account",
               style: TextStyle(fontSize: 30),
@@ -40,6 +42,6 @@ class RegisterPage extends StatelessWidget {
               child: Expanded(child: RegisterForm()),
             ),
           ]),
-        ));
+        )]));
   }
 }

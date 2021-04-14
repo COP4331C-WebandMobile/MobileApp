@@ -25,7 +25,7 @@ class HouseLoading extends StatelessWidget {
     child:  BlocListener<LandingCubit,LandingState> ( 
 
       listener: (context,state) {
-        print('${state.address},${state.home},${state.error},${state.status}');
+        //print('${state.address},${state.home},${state.error},${state.status}');
         if(state.status == HomeStatus.Loading) { 
             MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
                          value: BlocProvider.of<LandingCubit>(context),
