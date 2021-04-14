@@ -15,7 +15,6 @@ class HomePage extends StatelessWidget {
     return MaterialPageRoute(builder: (_) => HomePage());
   }
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -189,9 +188,13 @@ class NewRoomateIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-          print('Thing');
-        },
+        onTap: () =>
+           Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ProfilePage(roomate)),
+                        //Navigate to profile page
+                      ),
+        
         child: CircleAvatar(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,

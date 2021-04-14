@@ -14,15 +14,8 @@ Widget build(BuildContext context) {
         child: AppBar(
         backgroundColor: Colors.white,
         title: const Text('Roomies'),
-        actions: <Widget>[
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context
-                .read<AuthenticationBloc>()
-                .add(AuthenticationLogoutRequested()),
-          ),
-          ],
+       
+      
         ));
 }
 

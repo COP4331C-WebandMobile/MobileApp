@@ -7,6 +7,7 @@ import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/statistics/cubit/statistics_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 
 class ChoresPage extends StatefulWidget {
@@ -77,6 +78,7 @@ class _ChoresState extends State<ChoresPage> {
               selectedItemColor: Colors.amber[800],
               onTap: _onItemTapped,
             ),
+            drawer: SideBar(),
           );
         }));
   }
@@ -205,13 +207,13 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(title: Text('Chores'), centerTitle: true, actions: [
+      
       Container(
           decoration: BoxDecoration(
             color: Colors.black,
             shape: BoxShape.circle,
           ),
           child: IconButton(
-              key: const Key('messagePage_add_iconButton'),
               icon: const Icon(Icons.add),
               color: Colors.white,
               splashColor: Colors.white,
@@ -224,6 +226,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                           child: AddModal(),
                         ));
               }))
+                    
+
     ]);
   }
 }

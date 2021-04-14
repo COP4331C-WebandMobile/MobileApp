@@ -16,26 +16,25 @@ class LandingCubit extends Cubit<LandingState> {
   })  : assert(homeRepository != null),
         _homeRepository = homeRepository,
         super(LandingState.loading()) {
+    emit(LandingState.loading());
     checkHome();
   }
 
   Future<void> validate(String home) async {
-        
     if (home == "") {
       emit(LandingState.homeless());
     } else {
       Home homeInfo = await _homeRepository.getInfo(home);
-      emit(LandingState.homeVerified(home,homeInfo.address));
+      emit(LandingState.homeVerified(home, homeInfo.address));
     }
   }
 
   void checkHome() {
-
     _homeSubscription = _homeRepository.home().listen((home) => validate(home));
   }
 
-  Future<void> addHome(String houseName, String password,String email,String address) async {
-
+  Future<void> addHome(
+      String houseName, String password, String email, String address) async {
     try {
       await _homeRepository.addHome(houseName, password, address);
       await RoomateRepository(houseName).addRoomate(email);
@@ -46,7 +45,7 @@ class LandingCubit extends Cubit<LandingState> {
     }
   }
 
-  Future<void> joinHome(String houseName, String password,String email) async {
+  Future<void> joinHome(String houseName, String password, String email) async {
     try {
       await _homeRepository.joinHome(houseName, password);
       await RoomateRepository(houseName).addRoomate(email);
@@ -59,30 +58,21 @@ class LandingCubit extends Cubit<LandingState> {
     }
   }
 
-  
   // Once the address is set, then it is updated via state using the stream.
-  Future<void> setAddress(String houseName, String newAddress) async
-  {
-
+  Future<void> setAddress(String houseName, String newAddress) async {
     try {
-      final bool success = await _homeRepository.setHomeAdress(houseName, newAddress);
+      final bool success =
+          await _homeRepository.setHomeAdress(houseName, newAddress);
 
-      if(success)
-      {
+      if (success) {
         print('Successfully set the new address.');
-      }
-      else
-      {
+      } else {
         print('Failed to set the new address.');
       }
-
-    }
-    on Exception catch(e, stacktrace)
-    {
+    } on Exception catch (e, stacktrace) {
       print(e);
       print(stacktrace);
     }
-
   }
 
   @override

@@ -9,6 +9,7 @@ import 'package:roomiesMobile/business_logic/authentication/authentication.dart'
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/location/OldBloc/location_bloc.dart';
 import 'package:roomiesMobile/presentation/location/map_controller.dart';
+import 'package:roomiesMobile/widgets/home/sidebar.dart';
 
 class LocationPage extends StatelessWidget {
   
@@ -37,6 +38,7 @@ class MyWrapper extends StatelessWidget {
         appBar: AppBar(
           title: Text('Location'),
         ),
+        drawer: SideBar(),
         body: Container(
             padding: EdgeInsets.all(32),
             child: Column(
@@ -131,7 +133,8 @@ class MyWrapper extends StatelessWidget {
                   ],
                 )
               ],
-            )));
+            ))
+            );
   }
 }
 

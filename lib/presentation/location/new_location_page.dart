@@ -9,6 +9,7 @@ import 'package:roomate_repository/roomate_repository.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/location/user_location/user_location_bloc.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
+import 'package:roomiesMobile/widgets/home/sidebar.dart';
 
 class NewLocationPage extends StatelessWidget {
   @override
@@ -51,7 +52,7 @@ class _LocationPageWrapper extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Location'),
-      ),
+      ),  drawer: SideBar(),
       body: Container(
         padding: EdgeInsets.all(32),
         child: Center(

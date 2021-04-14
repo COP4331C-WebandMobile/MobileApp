@@ -402,16 +402,23 @@ class MoneyBox extends StatelessWidget {
   }
 }
 
+
+
+
+
 class LeaveHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
         child: Container(
+            height: 450,
+           width: 350,
+            color: Colors.yellow.shade200,
             child: Column(
       children: [
         Text("Are You Sure you Want to leave this home"),
         ElevatedButton(
-            child: Text("Delete"),
+            child: Text("Leave"),
             onPressed: () {
               context.read<SettingsCubit>().leaveHome();
             })
@@ -425,9 +432,12 @@ class DeleteAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
         child: Container(
+           height: 450,
+           width: 350,
+            color: Colors.yellow.shade200,
             child: Column(
       children: [
-        Text("Are you sure you want to delete you account"),
+        Text("Are you sure you want to delete your account"),
         ElevatedButton(
             child: Text("Delete"),
             onPressed: () {
@@ -445,6 +455,9 @@ class ChangePassword extends StatelessWidget {
     final confirmPassword = TextEditingController();
     return Dialog(
         child: Container(
+           height: 450,
+           width: 350,
+            color: Colors.yellow.shade200,
             child: Column(
       children: [
         Text("New Password"),
@@ -474,7 +487,7 @@ class ChangePassword extends StatelessWidget {
           controller: confirmPassword,
         ),
         ElevatedButton(
-            child: Text("Delete"),
+            child: Text("Confirm"),
             onPressed: () {
               context
                   .read<AuthenticationBloc>()
@@ -484,3 +497,6 @@ class ChangePassword extends StatelessWidget {
     )));
   }
 }
+
+
+ 
