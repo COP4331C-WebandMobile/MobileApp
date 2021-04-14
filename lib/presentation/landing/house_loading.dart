@@ -22,7 +22,7 @@ class HouseLoading extends StatelessWidget {
     create: (context) => LandingCubit(homeRepository: HomeRepository(context.read<AuthenticationBloc>().state.user.email)),
     child:  BlocListener<LandingCubit,LandingState> ( 
       listener: (context,state) {
-        print('${state.address},${state.home},${state.error},${state.status}');
+        //print('${state.address},${state.home},${state.error},${state.status}');
         if(state.status == HomeStatus.Loading) { 
           print("Test");
            MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(

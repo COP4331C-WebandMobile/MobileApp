@@ -26,7 +26,8 @@ class User {
     return UserEntity(firstName,lastName,email,phoneNumber);
   }
 
-
+  @override
+  String toString() => '{ id: $email, Phone: $phoneNumber, First: $firstName, Last: $lastName }';
 
   // unauthenticated user...
 }

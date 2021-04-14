@@ -14,8 +14,13 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(children: <Widget>[
+      body: 
+      MediaQuery.removePadding(
+        removeTop: true,
+        context: context, child:
+      ListView(
+        children: <Widget>[
+        
         Container(
           color: CustomColors.gold,
           height: mediaQuery.size.height / 4,
@@ -37,6 +42,6 @@ class LoginPage extends StatelessWidget {
           ),
         ),
       ]),
-    );
+    ));
   }
 }

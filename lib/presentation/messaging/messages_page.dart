@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
@@ -35,42 +38,69 @@ class CreateMessageModal extends StatelessWidget {
   Widget build(BuildContext context) {
     final creator = context.read<AuthenticationBloc>().state.user.email;
     final body = TextEditingController();
+    MessageType type = MessageType.alert;
+    String newText = 'Alert';
 
-    MessageType type = MessageType.invalid;
-    String newText = 'Message';
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
+        actions: [
+          FloatingActionButton.extended(
+            onPressed: () {
+              final Message newMessage = Message('Temp', creator, body.text, type);
+
+              context.read<MessagingBloc>().add(CreateMessage(newMessage));
+            },
+            label: Text('Post'),
+          ),
+          FloatingActionButton.extended(
+            onPressed: () { Navigator.pop(context);},
+            label: Text('Cancel'),
+          ),
+        ],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: Colors.white,
+        title: Center(
+            child: Text(
+          'Create New Message',
+          style: TextStyle(color: Colors.black),
+        )),
+        titlePadding: EdgeInsets.all(8),
         contentPadding: EdgeInsets.all(0),
         content: Container(
-          // TODO: Eventually fix any MediaQuery either to be used or finding a better option.
-          color: Colors.yellow.shade200,
-          height: MediaQuery.of(context).size.height / 1.7,
-          child: Column(
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.yellow.shade200,
+            //borderRadius: BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
+          ),
+          //color: Colors.yellow.shade200,
+          height: MediaQuery.of(context).size.height / 3,
+          child: SingleChildScrollView(
+              
+              child: Column(
             children: [
-              Text('Create New Message'),
-              const SizedBox(
-                height: 32,
-              ),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: TextField(
+                    keyboardType: TextInputType.text,
+                    onSubmitted: (value) {},
+                    maxLines: 3,
+                    maxLength: 150,
                     textAlign: TextAlign.start,
                     textAlignVertical: TextAlignVertical.top,
-                    autofocus: true,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
                     controller: body,
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                      isDense: true,
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Content',
+                      labelText: 'Message',
                       helperText: '',
                       hintText: 'I have a test today!',
                     ),
                   )),
               Card(
-                margin: EdgeInsets.all(40),
+                margin: EdgeInsets.symmetric(horizontal: 60),
                 child: ExpansionTile(
                   title: Text(newText),
                   children: <Widget>[
@@ -92,22 +122,27 @@ class CreateMessageModal extends StatelessWidget {
                         });
                       },
                     ),
-                    // ListTile(
-                    //   title: Text('Purchase'),
-                    //   onTap: (){type = MessageType.purchase;},
-                    // ),
+                    ListTile(
+                      title: Text('Purchase'),
+                      onTap: () {
+                        setState(() {
+                          type = MessageType.purchase;
+                          newText = 'Purchase';
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    print(type);
-                    context.read<MessagingBloc>().add(CreateMessage(
-                        Message('NewMessage', creator, body.text, type)));
-                  },
-                  child: Text('Post')),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       print(type);
+              //       context.read<MessagingBloc>().add(CreateMessage(
+              //           Message('NewMessage', creator, body.text, type)));
+              //     },
+              //     child: Text('Post')),
             ],
-          ),
+          )),
         ),
       );
     });
@@ -123,16 +158,14 @@ class _MyMessagePageState extends State<MyMessagePage> {
         centerTitle: true,
         actions: [
           Container(
-            decoration: BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              key: const Key('messagePage_add_iconButton'),
-              icon: const Icon(Icons.add),
-              color: Colors.white,
-              splashColor: Colors.white,
-              splashRadius: 20,
+            alignment: Alignment.bottomRight,
+            padding: EdgeInsets.all(4),
+            child: FloatingActionButton(
+              key: const Key('messagePage_add_FAB'),
+              child: const Icon(
+                Icons.add,
+                size: 32,
+              ),
               onPressed: () {
                 showDialog(
                     context: context,

@@ -34,7 +34,7 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
     {
       yield LoadingLocations(); 
 
-      yield mapSuccessfulOnRerievedToState(event);
+      yield mapGetRoomateLocationsToState(event);
     }
     else if(event is CheckInUserLocation)
     {
@@ -42,7 +42,7 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
     }
   }
 
-  UserLocationState mapSuccessfulOnRerievedToState(GetRoomateLocations event)
+  UserLocationState mapGetRoomateLocationsToState(GetRoomateLocations event)
   {
     if(event.roomateLocations.isEmpty)
     {
@@ -53,7 +53,7 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
       return SuccessfulOnRetrievedLocations(event.roomateLocations);
     }
   }
-
+  
   Future<UserLocationState> mapCheckInUserToState(CheckInUserLocation event) async
   {
     

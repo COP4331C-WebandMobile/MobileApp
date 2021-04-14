@@ -82,8 +82,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     {
       try {
 
-        await _mapRepository.setAddressGeolocation(event.longitude, event.latitude);
-
         yield SuccessfullySetAddress();
       }
       on Exception catch(e)

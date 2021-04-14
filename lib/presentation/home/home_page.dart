@@ -37,14 +37,14 @@ class HomePage extends StatelessWidget {
               ),
               Expanded(
                   flex: 2,
-                  child: BlocProvider(
+                  child: BlocProvider<RoomatesCubit>(
                     create: (context) =>
                         RoomatesCubit(roomateRepository: _roomateRepository),
                     child: RoomateList(),
                   )),
               Expanded(
                   flex: 7,
-                  child: BlocProvider(
+                  child: BlocProvider<ReminderCubit>(
                     create: (context) =>
                         ReminderCubit(reminderRepository: _reminderRepository),
                     child: ReminderList(),
@@ -57,7 +57,9 @@ class HomePage extends StatelessWidget {
 class RoomateList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RoomatesCubit, RoomatesState>(builder: (context, state) {
+    return BlocBuilder<RoomatesCubit, RoomatesState>(
+      buildWhen: (previous, current) => previous.roomates != current.roomates,
+      builder: (context, state) {
       return Container(
           margin: EdgeInsets.all(3),
           padding: EdgeInsets.all(3),
@@ -126,7 +128,9 @@ class HouseInfo extends StatelessWidget {
             color: Colors.black,
           )),
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 54,),
           Text(
             home,
             style: TextStyle(

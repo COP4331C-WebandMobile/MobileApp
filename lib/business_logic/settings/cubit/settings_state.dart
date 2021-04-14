@@ -1,22 +1,19 @@
 part of 'settings_cubit.dart';
 
-enum status {loaded, loading}
 
 class SettingsState extends Equatable {
 
   final User user;
-  final status;
 
   final Name first;
   final Name last;
   final Email email;
   final PhoneNumber phoneNumber;
-  final FormzStatus newStatus;
+  final FormzStatus status;
 
   const SettingsState({
     this.user, 
-    this.status, 
-    this.newStatus = FormzStatus.pure,
+    this.status = FormzStatus.pure,
     this.first = const Name.pure(),
     this.last = const Name.pure(),
     this.phoneNumber = const PhoneNumber.pure(),
@@ -24,8 +21,7 @@ class SettingsState extends Equatable {
   });
  
   @override
-  List<Object> get props => [user, status, newStatus, phoneNumber, email, first, last];
-  
+  List<Object> get props => [user, status, phoneNumber, email, first, last];
 
   SettingsState copyWith({
     User user,
@@ -42,10 +38,13 @@ class SettingsState extends Equatable {
       last: last ?? this.last,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       email: email ?? this.email,
-      status:  newStatus ?? this.newStatus,
+      status:  status ?? this.status,
     );
   }
-  
+  FormzStatus intialize()
+  {
+    return Formz.validate([first, last, phoneNumber, email]);
+  }  
 
 }
 

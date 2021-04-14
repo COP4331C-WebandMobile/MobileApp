@@ -23,8 +23,7 @@ class MapRepository {
   MapRepository({String houseName, FirebaseFirestore firestore})
       : this._firestore = firestore ?? FirebaseFirestore.instance,
         this._location = Location.instance,
-        this.houseName = houseName
-        {
+        this.houseName = houseName {
     try {
       locationCollection = FirebaseFirestore.instance
           .collection('location')
@@ -35,45 +34,36 @@ class MapRepository {
     }
   }
 
-  Future<void> setAddressGeolocation(double longitude, double latitude) async
-  {
-    final GeoPoint geocoding = GeoPoint(latitude, longitude);
-
+  Future<void> setAddressGeolocation(HouseLocation newLocation) async {
     try {
-
-      await _firestore.collection('location').doc(houseName).get().then((snap) 
-      {
-        if(snap.exists)
-        {
-          _firestore.collection('location').doc(houseName).update({"addressGeo": geocoding});
-        }
-        else
-        {
-          _firestore.collection('location').doc(houseName).set({"addressGeo": geocoding});
+      await _firestore.collection('location').doc(houseName).get().then((snap) {
+        if (snap.exists) {
+          _firestore
+              .collection('location')
+              .doc(houseName)
+              .update(newLocation.toEntity().toDocument());
+        } else {
+          _firestore
+              .collection('location')
+              .doc(houseName)
+              .set(newLocation.toEntity().toDocument());
         }
       });
-
-    }
-    on Exception catch(e, stacktrace)
-    {
+    } on Exception catch (e, stacktrace) {
       throw Exception();
     }
   }
 
-  Future<GeoPoint> getHomeGeoLocation() async
-  {
+  //TODO: THIS METHOD WILL BE DELETED SINCE USING A STREAM INSTEAD.
+  Future<GeoPoint> getHomeGeoLocation() async {
     try {
-
       final snap = await _firestore.collection('location').doc(houseName).get();
 
       return snap.data()["addressGeo"];
-    }
-    on Exception catch(e, stacktrace)
-    {
+    } on Exception catch (e, stacktrace) {
       throw Exception();
     }
   }
-
 
   Future<List<HouseLocation>> fetchAdresses(String inputText) async {
     try {
@@ -116,9 +106,8 @@ class MapRepository {
   }
 
   Future<UserLocationEntity> _getCurrentLocation(String id) async {
-  
     final permission = await _location.requestPermission();
-      print("test");
+    print("test");
 
     var service = await _location.serviceEnabled();
 
@@ -179,11 +168,11 @@ class MapRepository {
     });
   }
 
-  // Stream<GeoPoint> houseLocation()
-  // {
-  //   return _firestore.collection('location').doc(houseName).snapshots().map((snapshot) {
-  //     return snapshot.data()['addressGeo']
-  //   });
-  // }
-  
+  Stream<HouseLocation> houseLocation() {
+    return locationCollection.snapshots().map((snapshot) {
+      final doc = snapshot.docs.first;
+
+      return HouseLocation.fromEntity(HouseLocationEntity.fromSnapshot(doc));
+    });
+  }
 }

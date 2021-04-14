@@ -31,7 +31,7 @@ class CustomColorTheme {
         primary: Colors.black,
         primaryVariant: Colors.yellowAccent,
         secondary: Colors.black,
-        secondaryVariant: Colors.black26,
+        secondaryVariant: Colors.black,
         surface: Colors.blue);
   }
 }

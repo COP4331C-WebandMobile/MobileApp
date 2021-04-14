@@ -7,8 +7,12 @@ import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/widgets/appbar.dart';
 import 'package:settings_repository/settings_repository.dart';
 
+typedef VoidCallBack = Function(void);
+
 class SettingsPage extends StatelessWidget {
+
   SettingsPage();
+
 
   static Route route(roomate) {
     return MaterialPageRoute(builder: (_) => SettingsPage());
@@ -17,8 +21,9 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
-    var email = context.read<AuthenticationBloc>().state.user.email;
-    var home = context.read<LandingCubit>().state.home;
+
+    final email = context.read<AuthenticationBloc>().state.user.email;
+    final home = context.read<LandingCubit>().state.home;
     SettingsRepository _settingsRepository = SettingsRepository(home, email);
 
     return Scaffold(
@@ -26,13 +31,15 @@ class SettingsPage extends StatelessWidget {
         body: BlocProvider<SettingsCubit>(
             create: (context) =>
                 SettingsCubit(settingsRepository: _settingsRepository),
-            child: Container(
+            child: BlocBuilder<SettingsCubit, SettingsState>(
+              buildWhen: (previous, current) => previous != current,
+              builder: (context, state) {
+              return
+            Container(
                 height: mediaQuery.size.height,
                 width: mediaQuery.size.width,
-                child: BlocConsumer<SettingsCubit, SettingsState>(
-                    listener: (context, state) {},
-                    builder: (context, state) {
-                      return ListView(children: [
+                child:
+                      ListView(children: [
                         HeaderBox(),
                         FirstName(),
                         LastName(),
@@ -83,18 +90,16 @@ class SettingsPage extends StatelessWidget {
                               child: Text("Change Password"),
                             )),
                           ],
-                        )
-
-                        //ChoreBox(roomate),
-                        //MoneyBox(roomate),
-                      ]);
-                    }))));
+                        ) ,                    //ChoreBox(roomate),                      //MoneyBox(roomate),
+                      ]),
+                    );})));
   }
 }
-
 class HeaderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    
     final firstName = context.read<SettingsCubit>().state.user.firstName;
     final lastName = context.read<SettingsCubit>().state.user.lastName;
 
@@ -133,6 +138,7 @@ class FirstName extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (previous, current) => previous.first != current.first,
         builder: (context, state) {
+          print(state.first.valid);
           return Card(
               margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: ExpansionTile(
@@ -148,34 +154,58 @@ class FirstName extends StatelessWidget {
                     onChanged: (value) =>
                         context.read<SettingsCubit>().onFirstNameChanged(value),
                     decoration: InputDecoration(
-                        hintText: 'John',
+                        hintText: 'Jane',
                         errorText: state.first.invalid ? 'Invalid Name' : null,
                         border: OutlineInputBorder(),
                         filled: true,
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: state.first.valid
-                            ? Padding(
-                                padding: EdgeInsets.all(8),
-                                child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: IconButton(
-                                      iconSize: 16,
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        context
-                                            .read<SettingsCubit>()
-                                            .changeFirstName(state.first.value);
-                                      },
-                                    )))
-                            : null),
+                        suffixIcon: SubmitButton(
+                          visible: (state.first.valid),
+                          onPressed: () {
+                            context.read<SettingsCubit>().changeFirstName(state.first.value);
+                          },
+                        ),
+                        
+                              ),
                   ),
                 ],
               ));
         });
   }
 }
+
+
+class SubmitButton extends StatelessWidget {
+
+  final visible;
+  final onPressed;
+
+  SubmitButton({this.visible, this.onPressed = VoidCallBack});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity( 
+                            opacity: visible ? 1.0 : 0.0,
+                            duration: Duration(milliseconds: 500),
+                            child:
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    radius: 10,
+                                    child: visible ?
+                                    IconButton(
+                                      iconSize: 16,
+                                      icon: Icon(Icons.check),
+                                      onPressed: onPressed
+                                    ): null)));
+  }
+
+
+
+}
+
 
 class LastName extends StatelessWidget {
   @override
@@ -203,24 +233,13 @@ class LastName extends StatelessWidget {
                         border: OutlineInputBorder(),
                         filled: true,
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: state.last.valid
-                            ? Padding(
-                                padding: EdgeInsets.all(8),
-                                child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: IconButton(
-                                      iconSize: 16,
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        context
-                                            .read<SettingsCubit>()
-                                            .changeLastName(state.last.value);
-                                      },
-                                    )))
-                            : null),
-                  ),
+                        suffixIcon: SubmitButton(
+                          visible: (state.last.valid),
+                          onPressed: () {
+                            context.read<SettingsCubit>().changeLastName(state.last.value);
+                          },
+                        ),
+                  )),
                 ],
               ));
         });
@@ -284,26 +303,15 @@ class _PhoneNumber extends StatelessWidget {
                         border: OutlineInputBorder(),
                         filled: true,
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: state.phoneNumber.valid
-                            ? Padding(
-                                padding: EdgeInsets.all(8),
-                                child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: IconButton(
-                                      iconSize: 16,
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        context
-                                            .read<SettingsCubit>()
-                                            .changePhoneNumber(
-                                                state.phoneNumber.value);
-                                      },
-                                    )))
-                            : null),
+                        suffixIcon: SubmitButton(
+                          visible: state.phoneNumber.valid,
+                          onPressed: () {
+                            context.read<SettingsCubit>().changePhoneNumber(state.phoneNumber.value);
+                          },
+                        )
+                        ),
                     keyboardType: TextInputType.phone,
-                    //controller: phoneNumberController,
+
                   ),
                 ],
               ));
@@ -338,25 +346,12 @@ class _EmailBox extends StatelessWidget {
                         border: OutlineInputBorder(),
                         filled: true,
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: state.email.valid
-                            ? Padding(
-                                padding: EdgeInsets.all(8),
-                                child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: IconButton(
-                                      iconSize: 16,
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        context
-                                            .read<AuthenticationBloc>()
-                                            .changeEmail(state.email.value);
-                                      },
-                                    )))
-                            : null),
+                        suffixIcon: SubmitButton(
+                          visible: state.email.valid,
+                          onPressed: () {context.read<AuthenticationBloc>().changeEmail(state.email.value);},
+                        ),
                   ),
-                ],
+                  )],
               ));
         });
   }
