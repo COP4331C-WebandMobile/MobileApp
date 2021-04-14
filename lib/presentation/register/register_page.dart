@@ -29,7 +29,7 @@ class RegisterPage extends StatelessWidget {
           height: mediaQuery.size.height,
           width: mediaQuery.size.width,
           margin: EdgeInsets.all(32.0),
-          child: Column(children: [
+          child: ListView(scrollDirection: Axis.vertical, children: [
             Text(
               "Create An Account",
               style: TextStyle(fontSize: 30),
