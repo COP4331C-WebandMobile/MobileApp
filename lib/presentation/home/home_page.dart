@@ -4,7 +4,6 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
-import 'package:roomiesMobile/presentation/chores/chore_page.dart';
 import 'package:roomiesMobile/presentation/roomate_profile/roomate_profile_page.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../widgets/home/sidebar.dart';

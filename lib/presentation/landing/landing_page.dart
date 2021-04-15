@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/landing/cubit/landing_cubit.dart';
 

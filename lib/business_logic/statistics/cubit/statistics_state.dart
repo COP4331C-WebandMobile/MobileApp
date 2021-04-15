@@ -12,7 +12,7 @@ class Stat{
 class StatsState extends Equatable {
 
   final status; 
-  List<Stat> stats;
+  final List<Stat> stats;
 
   @override
   List<Object> get props => [status];

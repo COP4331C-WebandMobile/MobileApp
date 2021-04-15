@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 part 'statistics_state.dart';
 
 class StatsCubit extends Cubit<StatsState> {

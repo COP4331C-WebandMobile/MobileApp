@@ -7,9 +7,7 @@ import 'package:map_repository/map_repository.dart';
 import 'package:roomate_repository/roomate_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/authentication.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
-import 'package:roomiesMobile/business_logic/location/address_location/address_location_bloc.dart';
-import 'package:roomiesMobile/business_logic/location/google_map/google_map_cubit.dart';
-import 'package:roomiesMobile/business_logic/location/user_location/user_location_bloc.dart';
+import 'package:roomiesMobile/business_logic/location/location.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 
 class NewLocationPage extends StatelessWidget {

@@ -40,7 +40,7 @@ class ChoresBloc extends Bloc<ChoresEvent, ChoresState> {
   }
 
   Stream<ChoresState> _mapUnMarkChoreToState(UnMarkChore event) async* {
-    _choresRepository.UnMarkChore(event.chore);
+    _choresRepository.unmarkChore(event.chore);
   }
 
   Stream<ChoresState> _mapAddChoreToState(AddChore event) async* {

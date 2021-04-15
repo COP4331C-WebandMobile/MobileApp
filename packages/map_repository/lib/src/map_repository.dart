@@ -54,17 +54,6 @@ class MapRepository {
     }
   }
 
-  //TODO: THIS METHOD WILL BE DELETED SINCE USING A STREAM INSTEAD.
-  Future<GeoPoint> getHomeGeoLocation() async {
-    try {
-      final snap = await _firestore.collection('location').doc(houseName).get();
-
-      return snap.data()["addressGeo"];
-    } on Exception catch (e, stacktrace) {
-      throw Exception();
-    }
-  }
-
   Future<List<HouseLocation>> fetchAdresses(String inputText) async {
     try {
       final Map<String, String> queryParameters = {

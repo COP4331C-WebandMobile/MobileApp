@@ -54,7 +54,7 @@ class ChoresRepository {
     });
   }
 
-  Future<void> UnMarkChore(Chore chore) async {
+  Future<void> unmarkChore(Chore chore) async {
     return await _fireStore
         .collection('chore')
         .doc(_home)
@@ -142,8 +142,8 @@ class ChoresRepository {
 
 
   Future<Map<String,int>> getChores(String email) async {
-
-  
+    // TODO: Not sure
+    
 
   }
 

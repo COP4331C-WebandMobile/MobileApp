@@ -8,7 +8,6 @@ import 'package:messaging_repository/messaging_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
-import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
@@ -250,8 +249,6 @@ class MessageWidget extends StatelessWidget {
     }
   }
 }
-
-// TODO: I plan to better generalize the widgets so its neater.
 class AlertWidget extends StatelessWidget {
   final Message message;
 
@@ -270,7 +267,6 @@ class AlertWidget extends StatelessWidget {
                 width: 8,
               ),
               Expanded(child: Text(message.body)),
-              // TODO: Need to figure out why the icons dont align. Wtf?
               IconButton(
                   icon: Icon(Icons.remove_circle_outline_outlined),
                   onPressed: () {
@@ -338,7 +334,6 @@ class CreateResponseDialog extends StatelessWidget {
         width: 300,
         child: Column(
           children: [
-            // TODO: Need to make this textfield more noticable.
             TextField(
               onSubmitted: (body) {
                 context

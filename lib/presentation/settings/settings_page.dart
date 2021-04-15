@@ -398,27 +398,6 @@ class MoneyBox extends StatelessWidget {
   }
 }
 
-class LeaveHome extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return Dialog(
-    //     child: Container(
-    //         height: 450,
-    //        width: 350,
-    //         color: Colors.yellow.shade200,
-    //         child: Column(
-    //   children: [
-    //     Text("Are You Sure you Want to leave this home"),
-    //     ElevatedButton(
-    //         child: Text("Leave"),
-    //         onPressed: () {
-    //           context.read<SettingsCubit>().leaveHome();
-    //         })
-    //   ],
-    // )));
-  }
-}
-
 class DeleteAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

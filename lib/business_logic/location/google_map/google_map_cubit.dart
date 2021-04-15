@@ -9,7 +9,6 @@ part 'google_map_state.dart';
 class GoogleMapCubit extends Cubit<GoogleMapState> {
 
   final Completer<GoogleMapController> _controller;
-  BitmapDescriptor _roomateIcon;
 
   GoogleMapCubit({
     Completer<GoogleMapController> controller,
@@ -18,15 +17,9 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
   : 
   assert(controller != null),
   this._controller = controller,
-  super(GoogleMapState())
-  {
-    //_init();
-  }
+  super(GoogleMapState());
+ 
 
-  void _init() async
-  {
-    //_roomateIcon = await getRoomateIcon();
-  }
 
   void addRoomateMarker(String id, double longitude, double latitude, DateTime lastKnownTime)
   {
