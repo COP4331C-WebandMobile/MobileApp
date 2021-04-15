@@ -27,6 +27,7 @@ class SettingsRepository {
       print(e);
     }
   }
+
   Future<void> changeFirstName(String firstName) async {
     await _fireStore
         .collection('users')
@@ -58,12 +59,20 @@ class SettingsRepository {
         .doc(_email)
         .delete();
 
-    await _fireStore.collection('roomates').doc(_home).collection('roomates').doc(_email).collection('chores').get().then((snapshot) {
+    await _fireStore
+        .collection('roomates')
+        .doc(_home)
+        .collection('roomates')
+        .doc(_email)
+        .collection('chores')
+        .get()
+        .then((snapshot) {
       for (DocumentSnapshot ds in snapshot.docs) {
         ds.reference.delete();
       }
     });
   }
+
   Future<void> changeLastName(String lastName) async {
     await _fireStore
         .collection('users')
@@ -77,6 +86,7 @@ class SettingsRepository {
         .doc(_email)
         .update({"last_name": lastName});
   }
+
   Future<void> changePhoneNumber(String phoneNumber) async {
     await _fireStore
         .collection('users')
