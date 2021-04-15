@@ -345,7 +345,44 @@ class ChoreBox extends StatelessWidget {
                 color: Colors.red,
               ),
               onPressed: () {
-                context.read<ChoresBloc>().add(DeleteChore(chore));
+                showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider<ChoresBloc>.value(
+                          value: BlocProvider.of<ChoresBloc>(context),
+                          child: AlertDialog(
+                            title: Text(
+                              'Confirmation',
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SingleChildScrollView(
+                                child: ListBody(
+                              children: <Widget>[
+                                Text(
+                                  'Do you want to delete this?',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )),
+                            actions: <Widget>[
+                              Container(
+                                  decoration: BoxDecoration(
+                                      color: CustomColors.gold,
+                                      border: Border.all(color: Colors.black)),
+                                  child: TextButton(
+                                    child: Text('Confirm'),
+                                    onPressed: () {
+                                      context
+                                          .read<ChoresBloc>()
+                                          .add(DeleteChore(chore));
+
+                                      Navigator.of(context).pop();
+                                    },
+                                  )),
+                            ],
+                          ),
+                        ));
+
+                // context.read<ChoresBloc>().add(DeleteChore(chore));
               },
             ),
             IconButton(
