@@ -169,10 +169,6 @@ class MapRepository {
   }
 
   Stream<HouseLocation> houseLocation() {
-    return locationCollection.snapshots().map((snapshot) {
-      final doc = snapshot.docs.first;
-
-      return HouseLocation.fromEntity(HouseLocationEntity.fromSnapshot(doc));
-    });
+    return _firestore.collection('location').doc(houseName).snapshots().map((snapshot) => HouseLocation.fromEntity(HouseLocationEntity.fromSnapshot(snapshot)));
   }
 }

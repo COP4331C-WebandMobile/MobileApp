@@ -16,12 +16,12 @@ class GetHomeLocation extends AddressLocationEvent {
 }
 
 class QueryAddresses extends AddressLocationEvent {
-  final List<HouseLocation> addressList;
+  final String targetAddress;
 
-  const QueryAddresses(this.addressList);
+  const QueryAddresses(this.targetAddress);
 
   @override
-  List<Object> get props => [addressList];
+  List<Object> get props => [targetAddress];
 }
 
 class SetHomeAddress extends AddressLocationEvent {

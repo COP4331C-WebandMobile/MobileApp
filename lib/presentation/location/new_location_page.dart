@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import 'package:roomiesMobile/business_logic/location/address_location/address_l
 import 'package:roomiesMobile/business_logic/location/google_map/google_map_cubit.dart';
 import 'package:roomiesMobile/business_logic/location/user_location/user_location_bloc.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
-import 'package:roomiesMobile/widgets/home/sidebar.dart';
 
 class NewLocationPage extends StatelessWidget {
   @override
@@ -40,7 +38,6 @@ class NewLocationPage extends StatelessWidget {
 }
 
 class _LocationPageWrapper extends StatelessWidget {
-  
   final Completer<GoogleMapController> _controller;
 
   const _LocationPageWrapper(this._controller);
@@ -55,11 +52,37 @@ class _LocationPageWrapper extends StatelessWidget {
       ),
       body: BlocBuilder<GoogleMapCubit, GoogleMapState>(
         buildWhen: (previous, current) => previous.markers != current.markers,
-        builder: (context, state) {
+        builder: (context, googleState) {
 
-          Set<Marker> myMarkers = state.markers.toSet();
+          return BlocConsumer<AddressLocationBloc, AddressLocationState>(
+            listener: (context, addressState) {
+              if(addressState is SuccessfullyRetreievedAddresses)
+              {
+                addressState.houseLocations.forEach((element) {
+                  context.read<GoogleMapCubit>().addAddressMarker(
+                    element.address,
+                    element.longLat.latitude,
+                    element.longLat.longitude, onTap: () {
+                      print('This is a test.');
+                      context.read<AddressLocationBloc>().add(SetHomeAddress(element));
+                    });
+                });
+              }
 
-          return Container(
+              if(addressState is HomeAddressUpdated)
+              {
+                print(addressState.houseLocation.longLat);
+
+                context.read<GoogleMapCubit>().setHomeMarker(addressState.houseLocation.longLat.longitude,addressState.houseLocation.longLat.latitude,addressState.houseLocation.address);
+              }
+
+            },
+            builder: (context, addressState) 
+            {
+
+              Set<Marker> myMarkers = googleState.markers.toSet();
+
+              return Container(
             padding: EdgeInsets.all(32),
             child: Center(
               child: Column(
@@ -75,7 +98,11 @@ class _LocationPageWrapper extends StatelessWidget {
                         border: OutlineInputBorder(),
                       ),
                       controller: addressController,
-                      onSubmitted: (value) {},
+                      onSubmitted: (value) {
+                        context
+                            .read<AddressLocationBloc>()
+                            .add(QueryAddresses(value));
+                      },
                     ),
                   ),
                   Expanded(
@@ -112,6 +139,8 @@ class _LocationPageWrapper extends StatelessWidget {
               ),
             ),
           );
+            },
+          );
         },
       ),
     );
@@ -123,7 +152,7 @@ class RoomateList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserLocationBloc, UserLocationState>(
       builder: (context, state) {
-        print(state);
+        
 
         if (state is SuccessfulOnRetrievedLocations) {
           return ListView.separated(
@@ -137,11 +166,11 @@ class RoomateList extends StatelessWidget {
             },
             itemBuilder: (context, i) {
               context.read<GoogleMapCubit>().addRoomateMarker(
-                state.locations[i].id,
-                state.locations[i].location.longitude, 
-                state.locations[i].location.latitude, 
-                state.locations[i].recordedTime.toDate(),
-                );
+                    state.locations[i].id,
+                    state.locations[i].location.longitude,
+                    state.locations[i].location.latitude,
+                    state.locations[i].recordedTime.toDate(),
+                  );
 
               return RoomateButton(state.locations[i]);
             },
@@ -174,7 +203,9 @@ class RoomateButton extends StatelessWidget {
               child: IconButton(
             icon: Icon(Icons.supervised_user_circle_sharp),
             onPressed: () async {
-              await context.read<GoogleMapCubit>().moveCameraTo(userLocation.location.latitude, userLocation.location.longitude);
+              await context.read<GoogleMapCubit>().moveCameraTo(
+                  userLocation.location.latitude,
+                  userLocation.location.longitude);
             },
           )),
           Expanded(child: Text('${roomate.firstName} ${roomate.lastName}')),

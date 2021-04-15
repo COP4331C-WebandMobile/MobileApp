@@ -26,15 +26,80 @@ class AddressLocationBloc
     AddressLocationEvent event,
   ) async* {
     if (event is GetHomeLocation) {
-      // yield loadingState
-      // Then on success pass the HouseLocation to the state.
+
+      yield LoadingLocationData();
+
+      yield mapGetHomeLocationToState(event);
 
     } else if (event is SetHomeAddress) {
-      // Access the information from the event and pass it to the map repo set function.
-      // yield loading
-      // then yield failure or success.
+
+      yield LoadingLocationData();
+
+      yield await mapSetHomeAddress(event);
+
     } else if (event is QueryAddresses) {
-      // Same flow as set home address.
+
+      yield LoadingLocationData();
+
+      yield await mapQueryAddressesToState(event);
     }
   }
+
+  AddressLocationState mapGetHomeLocationToState (GetHomeLocation event) 
+  { 
+    if(event.houseLocation != null)
+    {
+      return HomeAddressUpdated(event.houseLocation);
+    }
+    else
+    {
+      return FailureToRetreiveHome();
+    }
+    
+
+  }
+
+  Future<AddressLocationState> mapSetHomeAddress (SetHomeAddress event) async 
+  {
+    try
+    {
+      await _mapRepository.setAddressGeolocation(event.newHouseLocation);
+
+      return SuccessfullySetHome();
+    }
+    on Exception
+    {
+      return FailureToSetHome();
+    }
+
+  }
+
+  Future<AddressLocationState> mapQueryAddressesToState(QueryAddresses event) async
+  {
+
+    try{
+      final List<HouseLocation> locations = await _mapRepository.fetchAdresses(event.targetAddress);
+      
+      if(locations.isEmpty)
+      {
+        return FailureToRetreiveAddresses();
+      }
+      else
+      {
+        return SuccessfullyRetreievedAddresses(locations);
+      }
+
+    }
+    on Exception
+    {
+      return FailureToRetreiveAddresses();
+    }
+
+  }
+
+  @override
+  Future<void> close() {
+    _addressLocation?.cancel();
+    return super.close();
+  }  
 }

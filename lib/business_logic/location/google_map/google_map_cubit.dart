@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 part 'google_map_state.dart';
@@ -21,13 +20,12 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
   this._controller = controller,
   super(GoogleMapState())
   {
-    _init();
+    //_init();
   }
 
   void _init() async
   {
-    _roomateIcon = await getRoomateIcon();
-    print(_roomateIcon);
+    //_roomateIcon = await getRoomateIcon();
   }
 
   void addRoomateMarker(String id, double longitude, double latitude, DateTime lastKnownTime)
@@ -35,7 +33,7 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
     List<Marker> newMarkers = [];
     
     Marker newMarker = Marker(
-      icon: _roomateIcon,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
       markerId: MarkerId(id),
       position: LatLng(latitude, longitude),
       infoWindow: InfoWindow(
@@ -57,23 +55,55 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
     emit(state.copyWith(markers: newMarkers));
   }
   
-  void addAddressMarker(double longitude, double latitude, String address)
+  void addAddressMarker(String address, double latitude, double longitude, {Function onTap})
   {
-    List<Marker> newMarkers = const [];
+    List<Marker> newMarkers = [];
     
     Marker newMarker = Marker(
-      
-      markerId: MarkerId('current_home'),
+      icon: BitmapDescriptor.defaultMarker,
+      markerId: MarkerId(address),
       position: LatLng(latitude, longitude),
+      onTap: onTap,
     );
     
     final Iterable<Marker> removedDuplicate = state.markers.where((element) => element.markerId != newMarker.markerId);
+    
+    newMarkers.addAll(removedDuplicate);
+
+    newMarkers.add(newMarker);
+
+    emit(state.copyWith(markers: newMarkers,));
+  }
+
+  void setHomeMarker(double longitude, double latitude, String address)
+  {
+    List<Marker> newMarkers = [];
+    
+    Marker newMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueMagenta),
+      markerId: MarkerId('current_home'),
+      position: LatLng(latitude, longitude),
+      infoWindow: InfoWindow(
+        title: 'Current Home',
+        snippet: '$address'
+      ),
+      onTap: () async {
+        await moveCameraTo(latitude, longitude, zoomAmount: 12);
+      }
+    );
+    
+    final Iterable<Marker> removedDuplicate = state.markers.where((element) => ((element.markerId != newMarker.markerId) && (element.markerId != MarkerId(address))));
 
     newMarkers.addAll(removedDuplicate);
 
     newMarkers.add(newMarker);
 
-    emit(state.copyWith(markers: newMarkers));
+    if(state.currentHome != null)
+    {
+      newMarkers.remove(state.currentHome);
+    }
+    
+    emit(state.copyWith(markers: newMarkers, currentHome: newMarker));
   }
   
   Future<void> moveCameraTo(double latitude, double longitude, {double zoomAmount = 1.0}) async
@@ -87,12 +117,12 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
     myController.animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
   }
 
-  Future<BitmapDescriptor> getRoomateIcon() async
-  {
-    return await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(devicePixelRatio: 2.5), 
-      'assets/Roomate_Marker.png',
-    );
-  }
+  // Future<BitmapDescriptor> getRoomateIcon() async
+  // {
+  //   return await BitmapDescriptor.fromAssetImage(
+  //     ImageConfiguration(devicePixelRatio: 2.5), 
+  //     'assets/Roomate_Marker.png',
+  //   );
+  // }
 
 }

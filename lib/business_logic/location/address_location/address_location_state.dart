@@ -9,7 +9,7 @@ abstract class AddressLocationState extends Equatable {
 
 class AddressLocationInitial extends AddressLocationState {}
 
-class SuccessfullyRetreievedAddresses extends AddressLocationEvent {
+class SuccessfullyRetreievedAddresses extends AddressLocationState {
   final List<HouseLocation> houseLocations;
 
   const SuccessfullyRetreievedAddresses(this.houseLocations);
@@ -18,12 +18,20 @@ class SuccessfullyRetreievedAddresses extends AddressLocationEvent {
   List<Object> get props => [houseLocations];
 }
 
-class FailureToRetreiveAddresses extends AddressLocationEvent {}
+class FailureToRetreiveAddresses extends AddressLocationState {}
 
-class HomeAddressUpdated extends AddressLocationEvent {
+class HomeAddressUpdated extends AddressLocationState {
   final HouseLocation houseLocation;
   const HomeAddressUpdated(this.houseLocation);
 
   @override
   List<Object> get props => [houseLocation];
 }
+
+class SuccessfullySetHome extends AddressLocationState {}
+
+class FailureToSetHome extends AddressLocationState {}
+
+class FailureToRetreiveHome extends AddressLocationState { }
+
+class LoadingLocationData extends AddressLocationState {}

@@ -13,7 +13,6 @@ class HouseLocationEntity extends Equatable {
   List<Object> get props => [id, address, longLat];
   
 
-// TODO: Need to figure out how to generate the id.
 static HouseLocationEntity fromJson(Map<String, Object> json)
 { 
   
