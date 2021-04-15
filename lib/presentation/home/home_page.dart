@@ -264,7 +264,7 @@ class ReminderText extends StatelessWidget {
                                 child: ListBody(
                               children: <Widget>[
                                 Text(
-                                  'Do you want to delete this?',
+                                  'Do you want to delete this reminder?',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               ],
@@ -402,74 +402,116 @@ class _CreateReminderState extends State<CreateReminder> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-          height: 450,
-          width: 350,
-          color: Colors.yellow.shade200,
-          child: Column(children: <Widget>[
-            Text("Enter Reminder Description",
-                style: TextStyle(
-                  fontSize: 20,
-                )),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Reminder',
-                  helperText: '',
-                  hintText: 'Turn Off Lights!',
+    final body = TextEditingController();
+    return AlertDialog(
+        actions: [
+          FloatingActionButton.extended(
+            onPressed: () {
+              context
+                  .read<ReminderCubit>()
+                  .createReminder(body.text, dropdownValue);
+            },
+            label: Text('Post'),
+          ),
+          FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            label: Text('Cancel'),
+          ),
+        ],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: Colors.white,
+        title: Center(
+            child: Text(
+          'Enter Reminder Description',
+          style: TextStyle(color: Colors.black),
+        )),
+        titlePadding: EdgeInsets.all(8),
+        contentPadding: EdgeInsets.all(0),
+        content: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.yellow.shade200,
+            ),
+            height: MediaQuery.of(context).size.height / 3,
+            child: SingleChildScrollView(
+                child: Column(children: [
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    onSubmitted: (value) {},
+                    maxLines: 3,
+                    maxLength: 150,
+                    textAlign: TextAlign.start,
+                    textAlignVertical: TextAlignVertical.top,
+                    //maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    controller: body,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Reminder',
+                      helperText: '',
+                      hintText: 'I have a test today!',
+                    ),
+                  )),
+              Text("How Often ?",
+                  style: TextStyle(
+                    fontSize: 20,
+                  )),
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
                 ),
-                controller: reminderDescription,
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                items: <String>['Daily', 'Weekly', 'Monthly']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-            ),
-            Text("How Often ?",
-                style: TextStyle(
-                  fontSize: 20,
-                )),
-            DropdownButton<String>(
-              value: dropdownValue,
-              icon: const Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String newValue) {
-                setState(() {
-                  dropdownValue = newValue;
-                });
-              },
-              items: <String>['Daily', 'Weekly', 'Monthly']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: IconButton(
-                  padding: EdgeInsets.only(right: 50),
-                  icon: const Icon(
-                    Icons.add_circle_outline_rounded,
-                    size: 60,
-                    color: Colors.black,
-                  ),
-                  onPressed: () => context
-                      .read<ReminderCubit>()
-                      .createReminder(reminderDescription.text, dropdownValue)),
-            )
-          ])),
-    );
+            ]))));
+    // return Dialog(
+    //   child: Container(
+    //       height: 450,
+    //       width: 350,
+    //       color: Colors.yellow.shade200,
+    //       child: Column(children: <Widget>[
+    //         Text("Enter Reminder Description",
+    //             style: TextStyle(
+    //               fontSize: 20,
+    //             )),
+    //         Container(
+    //           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+    //           child: TextField(
+    //             decoration: InputDecoration(
+    //               contentPadding:
+    //                   EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+    //               border: OutlineInputBorder(),
+    //               filled: true,
+    //               fillColor: Colors.white,
+    //               labelText: 'Reminder',
+    //               helperText: '',
+    //               hintText: 'Turn Off Lights!',
+    //             ),
+    //             controller: reminderDescription,
+    //           ),
+    //         ),
   }
 }
 
