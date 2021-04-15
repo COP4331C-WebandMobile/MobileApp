@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
@@ -89,11 +90,16 @@ class SettingsPage extends StatelessWidget {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                onConfirm: () {
-                                                  context
+                                                onConfirm: () async {
+                                                try{
+                                                 await context
                                                       .read<
                                                           AuthenticationBloc>()
-                                                      .deleteAccount();
+                                                      .deleteAccount(home);
+                                                } on RecentAuthenticationFailure {
+                                                  
+                                                }
+                                                
                                                 },
                                               )));
                                 },
@@ -113,7 +119,7 @@ class SettingsPage extends StatelessWidget {
                             child: Text("Change Password"),
                           )),
                         ],
-                      ), //ChoreBox(roomate),                      //MoneyBox(roomate),
+                      ), 
                     ]),
                   );
                 })));
@@ -397,7 +403,7 @@ class MoneyBox extends StatelessWidget {
         ]));
   }
 }
-
+/*
 class DeleteAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -417,7 +423,7 @@ class DeleteAccount extends StatelessWidget {
               ],
             )));
   }
-}
+}*/
 
 class NewChangePassword extends StatelessWidget {
   @override

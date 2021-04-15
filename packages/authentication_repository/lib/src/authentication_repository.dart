@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpFailure implements Exception {}
 
+class RecentAuthenticationFailure implements Exception {}
+
 class AddUserFailure implements Exception {}
 
 class FetchUserFailure implements Exception {}
@@ -58,7 +60,7 @@ class AuthenticationRepository {
       throw AddUserFailure();
     }
   }
-  
+
   User getUser(user) {
     return User(
       id: user.uid,
@@ -156,17 +158,50 @@ class AuthenticationRepository {
 
   Future<void> changeEmail(String email) async {
     var user = _firebaseAuth.currentUser;
-    await user.updateEmail(email);
+    try {
+      await user.updateEmail(email);
+    } on Exception {
+      throw RecentAuthenticationFailure();
+    }
   }
 
-  void changePassword(String newPassword) {
+  Future<void> changePassword(String newPassword) async {
     var user = _firebaseAuth.currentUser;
-    user.updatePassword(newPassword);
+    try {
+      await user.updatePassword(newPassword);
+    } on Exception {
+      throw RecentAuthenticationFailure();
+    }
   }
 
-  Future<void> deleteAccount() async {
-      var user = _firebaseAuth.currentUser;
-      _fireStore.collection('users').doc(user.email).delete();
+  Future<void> deleteAccount(String home) async {
+    var user = _firebaseAuth.currentUser;
+    try {
       await user.delete();
+
+      _fireStore.collection('users').doc(user.email).delete();
+
+    await _fireStore
+        .collection('location')
+        .doc(home)
+        .collection('locations')
+        .doc(user.email)
+        .delete();
+
+    await _fireStore
+        .collection('roomates')
+        .doc(home)
+        .collection('roomates')
+        .doc(user.email)
+        .delete();
+
+    await _fireStore.collection('roomates').doc(home).collection('roomates').doc(user.email).collection('chores').get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
+    } on Exception {
+      throw RecentAuthenticationFailure();
+    }
   }
 }

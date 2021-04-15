@@ -43,11 +43,27 @@ class SettingsRepository {
   }
 
   Future<void> leaveHome() async {
+    await _fireStore.collection('users').doc(_email).update({"house_name": ""});
+
     await _fireStore
-        .collection('users')
+        .collection('location')
+        .doc(_home)
+        .collection('locations')
         .doc(_email)
-        .update({"house_name":""});
-  
+        .delete();
+
+    await _fireStore
+        .collection('roomates')
+        .doc(_home)
+        .collection('roomates')
+        .doc(_email)
+        .delete();
+
+    await _fireStore.collection('roomates').doc(_home).collection('roomates').doc(_email).collection('chores').get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
   }
 
   Future<void> changeLastName(String lastName) async {
@@ -69,7 +85,7 @@ class SettingsRepository {
         .collection('users')
         .doc(_email)
         .update({"phone_number": phoneNumber});
-        
+
     await _fireStore
         .collection('roomates')
         .doc(_home)

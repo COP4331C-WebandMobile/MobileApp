@@ -32,7 +32,7 @@ class AuthenticationBloc
       yield _mapAuthenticationUserChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       unawaited(_authenticationRepository.logOut());
-    } 
+    }
   }
 
   @override
@@ -44,28 +44,37 @@ class AuthenticationBloc
   AuthenticationState _mapAuthenticationUserChangedToState(
     AuthenticatedUserChanged event,
   ) {
-    if(event.user != User.empty && event.user.isVerified)
-    {
+    if (event.user != User.empty && event.user.isVerified) {
       return AuthenticationState.authenticated(event.user);
-    }
-    else
-    {
+    } else {
       return const AuthenticationState.unathenticated();
     }
   }
 
-  void changeEmail(String email){
-     _authenticationRepository.changeEmail(email);
+  bool changeEmail(String email) {
+    try {
+      _authenticationRepository.changeEmail(email);
+    } on RecentAuthenticationFailure {
+      return false;
+    }
+    return true;
   }
 
-   void changePassword(String password){
-     _authenticationRepository.changePassword(password);
+  bool changePassword(String password) {
+    try {
+      _authenticationRepository.changePassword(password);
+    } on RecentAuthenticationFailure {
+      return false;
+    }
+    return true;
   }
 
-  void deleteAccount(){
-     _authenticationRepository.deleteAccount();
+  Future<bool> deleteAccount(String home) async {
+    try {
+      await _authenticationRepository.deleteAccount(home);
+    } on RecentAuthenticationFailure {
+      throw RecentAuthenticationFailure();
+    }
+    return true;
   }
-
-
-
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+//import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:roomiesMobile/business_logic/authentication/authentication.dart';
@@ -10,50 +11,40 @@ import 'package:meta/meta.dart';
 part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
-   StreamSubscription _settingsSubscription;
-   final SettingsRepository _settingsRepository;
+  StreamSubscription _settingsSubscription;
+  final SettingsRepository _settingsRepository;
 
-    SettingsCubit({
+  SettingsCubit({
     @required SettingsRepository settingsRepository,
-  })  :   assert(settingsRepository != null),
-         _settingsRepository = settingsRepository,
-         super( SettingsState(
-           
-         ))
-         {
-            settings();
-         }
-
-  void settings(){
-    
-    _settingsSubscription = _settingsRepository.user().listen(
-    (settings) => emit(SettingsState(user: settings)));
+  })  : assert(settingsRepository != null),
+        _settingsRepository = settingsRepository,
+        super(SettingsState()) {
+    settings();
   }
 
+  void settings() {
+    _settingsSubscription = _settingsRepository
+        .user()
+        .listen((settings) => emit(SettingsState(user: settings)));
+  }
 
-  void changeFirstName (String firstName) {
-
-    _settingsRepository.changeFirstName(firstName);
+ void changeFirstName(String firstName) {
+      _settingsRepository.changeFirstName(firstName);
   }
 
   void changeLastName(String lastName) {
-
     _settingsRepository.changeLastName(lastName);
-
   }
 
-  void changePhoneNumber(String phoneNumber){
-
+  void changePhoneNumber(String phoneNumber) {
     _settingsRepository.changePhoneNumber(phoneNumber);
-
   }
 
-  void leaveHome(){
+  void leaveHome() {
     _settingsRepository.leaveHome();
   }
 
-  void onLastNameChanged(String value)
-  {
+  void onLastNameChanged(String value) {
     final lastName = Name.dirty(value);
 
     emit(state.copyWith(
@@ -64,8 +55,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     ));
   }
 
-  void onFirstNameChanged(String value)
-  {
+  void onFirstNameChanged(String value) {
     final firstName = Name.dirty(value);
 
     emit(state.copyWith(
@@ -76,8 +66,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     ));
   }
 
-  void onPhoneNumberChanged(String value)
-  {
+  void onPhoneNumberChanged(String value) {
     final phoneNumber = PhoneNumber.dirty(value);
 
     emit(state.copyWith(
@@ -88,22 +77,17 @@ class SettingsCubit extends Cubit<SettingsState> {
     ));
   }
 
-  void onEmailChanged(String value)
-  {
+  void onEmailChanged(String value) {
     final email = Email.dirty(value);
 
     emit(state.copyWith(
       phoneNumber: state.phoneNumber,
       email: email,
-      status: Formz.validate([
-        email
-      ]),
+      status: Formz.validate([email]),
     ));
-
   }
 
-  void onNewPasswordChanged(String value)
-  {
+  void onNewPasswordChanged(String value) {
     final newPassword = Password.dirty(value);
 
     emit(state.copyWith(
@@ -112,22 +96,18 @@ class SettingsCubit extends Cubit<SettingsState> {
     ));
   }
 
-  void onNewConfirmedPasswordChanged(String value)
-  {
+  void onNewConfirmedPasswordChanged(String value) {
     final newConfirmedPassword = ConfirmedPassword.dirty(
-      password: state.newPassword.value,
-      value: value
-    );
-
+        password: state.newPassword.value, value: value);
     emit(state.copyWith(
       newConfirmedPassword: newConfirmedPassword,
       status: Formz.validate([newConfirmedPassword]),
     ));
   }
 
-    @override
+  @override
   Future<void> close() {
-      _settingsSubscription.cancel();
-      return super.close();
-    }
+    _settingsSubscription.cancel();
+    return super.close();
+  }
 }
