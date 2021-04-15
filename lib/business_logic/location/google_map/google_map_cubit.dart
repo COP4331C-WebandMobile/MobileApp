@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:roomiesMobile/utils/utility_functions.dart';
 
 part 'google_map_state.dart';
 
@@ -31,7 +32,7 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
       position: LatLng(latitude, longitude),
       infoWindow: InfoWindow(
         title: id,
-        snippet: 'Last checked in: ${lastKnownTime.month}/${lastKnownTime.day}/${lastKnownTime.year} at ${lastKnownTime.hour}:${lastKnownTime.minute}',
+        snippet: 'Last checked in: ${UtilityFunctions.formatDate(lastKnownTime)} at ${UtilityFunctions.formatTime(lastKnownTime)}',
       ),
       onTap: () async { 
 

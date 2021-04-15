@@ -1,5 +1,6 @@
 class UtilityFunctions {
-  static String formattedNumber(String phoneNumber) {
+
+  static String formatNumber(String phoneNumber) {
     if (phoneNumber == '') {
       return '';
     }
@@ -22,4 +23,28 @@ class UtilityFunctions {
 
     return formattedNumber;
   }
+
+  static String formatDate(DateTime dateTime)
+  {
+    return '${dateTime.month}/${dateTime.day}/${dateTime.year}';
+  }
+
+  static String formatTime(DateTime dateTime)
+  {
+    int hour = dateTime.hour;
+    final int minutes = dateTime.minute;
+    final String prefix = hour >= 12 ? "P.M" : "A.M";
+    
+    if(hour == 0)
+    {
+      hour = 12;
+    }
+    else if(hour > 12)
+    {
+      hour -= 12;
+    }
+
+    return '$hour:$minutes $prefix';
+  }
+
 }

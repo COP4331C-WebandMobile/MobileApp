@@ -68,7 +68,7 @@ class PhoneBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(roomate.phoneNumber);
-    String phone = UtilityFunctions.formattedNumber(roomate.phoneNumber);
+    String phone = UtilityFunctions.formatNumber(roomate.phoneNumber);
     return Container(
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(30),

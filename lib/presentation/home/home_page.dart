@@ -6,6 +6,7 @@ import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart'
 import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dart';
 import 'package:roomiesMobile/presentation/roomate_profile/roomate_profile_page.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
 import '../../widgets/home/sidebar.dart';
 import 'package:reminder_repository/reminder_repository.dart';
 import 'package:roomate_repository/roomate_repository.dart';
@@ -50,7 +51,7 @@ class HomePage extends StatelessWidget {
                     child: ReminderList(),
                   )),
             ])),
-        drawer: SideBar());
+        drawer: NewSideBar());
   }
 }
 

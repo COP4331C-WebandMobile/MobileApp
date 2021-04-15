@@ -283,7 +283,7 @@ class _PhoneNumber extends StatelessWidget {
                   child: const Icon(Icons.phone),
                 ),
                 title: Text(
-                    UtilityFunctions.formattedNumber(state.user.phoneNumber)),
+                    UtilityFunctions.formatNumber(state.user.phoneNumber)),
                 children: <Widget>[
                   TextField(
                     autofocus: true,

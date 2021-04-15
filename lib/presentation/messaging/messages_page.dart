@@ -9,6 +9,7 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
 import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
+import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
 
@@ -45,6 +46,7 @@ class CreateMessageModal extends StatelessWidget {
       return AlertDialog(
         actions: [
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               final Message newMessage =
                   Message('Temp', creator, body.text, type);
@@ -54,6 +56,7 @@ class CreateMessageModal extends StatelessWidget {
             label: Text('Post'),
           ),
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -207,7 +210,7 @@ class _MyMessagePageState extends State<MyMessagePage> {
         }),
       ),
       // Temporarily using SideBar until We decide what will be there.
-      drawer: SideBar(),
+      drawer: NewSideBar(),
     );
   }
 }

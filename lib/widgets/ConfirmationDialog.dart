@@ -35,6 +35,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
       ),
       actions: <Widget>[
         FloatingActionButton.extended(
+          heroTag: null,
           onPressed: () => widget.onConfirm(),
           label: widget.confirmWidget,
           backgroundColor: CustomColors.gold,
@@ -44,6 +45,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
           ),
         ),
         FloatingActionButton.extended(
+          heroTag: null,
           onPressed: () {
             Navigator.pop(context);
           },

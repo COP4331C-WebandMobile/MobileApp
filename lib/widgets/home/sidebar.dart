@@ -36,6 +36,12 @@ class SideBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ListTile(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 4,
+                          ),
+                        ),
                         title: Text('Home',
                             style: TextStyle(
                               fontSize: 30,
