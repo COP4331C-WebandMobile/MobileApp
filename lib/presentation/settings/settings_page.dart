@@ -4,15 +4,15 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/utils/helper_functions.dart';
+import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
 import 'package:roomiesMobile/widgets/appbar.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 typedef VoidCallBack = Function(void);
 
 class SettingsPage extends StatelessWidget {
-
   SettingsPage();
-
 
   static Route route(roomate) {
     return MaterialPageRoute(builder: (_) => SettingsPage());
@@ -32,74 +32,97 @@ class SettingsPage extends StatelessWidget {
             create: (context) =>
                 SettingsCubit(settingsRepository: _settingsRepository),
             child: BlocBuilder<SettingsCubit, SettingsState>(
-              buildWhen: (previous, current) => previous != current,
-              builder: (context, state) {
-              return
-            Container(
-                height: mediaQuery.size.height,
-                width: mediaQuery.size.width,
-                child:
-                      ListView(children: [
-                        HeaderBox(),
-                        FirstName(),
-                        LastName(),
-                        _PhoneNumber(),
-                        _EmailBox(),
-                        Row(
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(left: 30),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) =>
-                                            BlocProvider<SettingsCubit>.value(
-                                                value: BlocProvider.of<
-                                                    SettingsCubit>(context),
-                                                child: LeaveHome()));
-                                  },
-                                  child: Text("Leave Home"),
-                                )),
-                            Container(
-                                margin: EdgeInsets.only(left: 10, right: 10),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) =>
-                                            BlocProvider<SettingsCubit>.value(
-                                                value: BlocProvider.of<
-                                                    SettingsCubit>(context),
-                                                child: DeleteAccount()));
-                                  },
-                                  child: Text("Delete Account"),
-                                )),
-                            Container(
-                                child: ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) =>
-                                        BlocProvider<SettingsCubit>.value(
-                                            value:
-                                                BlocProvider.of<SettingsCubit>(
-                                                    context),
-                                            child: ChangePassword()));
-                              },
-                              child: Text("Change Password"),
-                            )),
-                          ],
-                        ) ,                    //ChoreBox(roomate),                      //MoneyBox(roomate),
-                      ]),
-                    );})));
+                buildWhen: (previous, current) => previous != current,
+                builder: (context, state) {
+                  return Container(
+                    height: mediaQuery.size.height,
+                    width: mediaQuery.size.width,
+                    child: ListView(children: [
+                      HeaderBox(),
+                      FirstName(),
+                      LastName(),
+                      _PhoneNumber(),
+                      _EmailBox(),
+                      Row(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(left: 30),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                          BlocProvider<SettingsCubit>.value(
+                                              value: BlocProvider.of<
+                                                  SettingsCubit>(context),
+                                              child: ConfirmationDialog(
+                                                title: Text('Confirmation'),
+                                                snippet: Text(
+                                                  'Are you sure you want to leave the \'$home\' home?',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                onConfirm: () {
+                                                  context
+                                                      .read<SettingsCubit>()
+                                                      .leaveHome();
+                                                },
+                                              )));
+                                },
+                                child: Text("Leave Home"),
+                              )),
+                          Container(
+                              margin: EdgeInsets.only(left: 10, right: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                          BlocProvider<SettingsCubit>.value(
+                                              value: BlocProvider.of<
+                                                  SettingsCubit>(context),
+                                              child: ConfirmationDialog(
+                                                snippet: const Text(
+                                                  'Are you sure you want to delete your account?',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                onConfirm: () {
+                                                  context
+                                                      .read<
+                                                          AuthenticationBloc>()
+                                                      .deleteAccount();
+                                                },
+                                              )));
+                                },
+                                child: Text("Delete Account"),
+                              )),
+                          Container(
+                              child: ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                      BlocProvider<SettingsCubit>.value(
+                                          value: BlocProvider.of<SettingsCubit>(
+                                              context),
+                                          child: NewChangePassword()));
+                            },
+                            child: Text("Change Password"),
+                          )),
+                        ],
+                      ), //ChoreBox(roomate),                      //MoneyBox(roomate),
+                    ]),
+                  );
+                })));
   }
 }
+
 class HeaderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    
     final firstName = context.read<SettingsCubit>().state.user.firstName;
     final lastName = context.read<SettingsCubit>().state.user.lastName;
 
@@ -154,19 +177,20 @@ class FirstName extends StatelessWidget {
                     onChanged: (value) =>
                         context.read<SettingsCubit>().onFirstNameChanged(value),
                     decoration: InputDecoration(
-                        hintText: 'Jane',
-                        errorText: state.first.invalid ? 'Invalid Name' : null,
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        contentPadding: EdgeInsets.all(10),
-                        suffixIcon: SubmitButton(
-                          visible: (state.first.valid),
-                          onPressed: () {
-                            context.read<SettingsCubit>().changeFirstName(state.first.value);
-                          },
-                        ),
-                        
-                              ),
+                      hintText: 'Jane',
+                      errorText: state.first.invalid ? 'Invalid Name' : null,
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      contentPadding: EdgeInsets.all(10),
+                      suffixIcon: SubmitButton(
+                        visible: (state.first.valid),
+                        onPressed: () {
+                          context
+                              .read<SettingsCubit>()
+                              .changeFirstName(state.first.value);
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ));
@@ -174,9 +198,7 @@ class FirstName extends StatelessWidget {
   }
 }
 
-
 class SubmitButton extends StatelessWidget {
-
   final visible;
   final onPressed;
 
@@ -184,28 +206,23 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity( 
-                            opacity: visible ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 500),
-                            child:
-                              Padding(
-                                padding: EdgeInsets.all(8),
-                                child: CircleAvatar(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: visible ?
-                                    IconButton(
-                                      iconSize: 16,
-                                      icon: Icon(Icons.check),
-                                      onPressed: onPressed
-                                    ): null)));
+    return AnimatedOpacity(
+        opacity: visible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 500),
+        child: Padding(
+            padding: EdgeInsets.all(8),
+            child: CircleAvatar(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                radius: 10,
+                child: visible
+                    ? IconButton(
+                        iconSize: 16,
+                        icon: Icon(Icons.check),
+                        onPressed: onPressed)
+                    : null)));
   }
-
-
-
 }
-
 
 class LastName extends StatelessWidget {
   @override
@@ -225,9 +242,10 @@ class LastName extends StatelessWidget {
                 title: Text(state.user.lastName),
                 children: <Widget>[
                   TextField(
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().onLastNameChanged(value),
-                    decoration: InputDecoration(
+                      onChanged: (value) => context
+                          .read<SettingsCubit>()
+                          .onLastNameChanged(value),
+                      decoration: InputDecoration(
                         hintText: 'Doe',
                         errorText: state.last.invalid ? 'Invalid Name' : null,
                         border: OutlineInputBorder(),
@@ -236,10 +254,12 @@ class LastName extends StatelessWidget {
                         suffixIcon: SubmitButton(
                           visible: (state.last.valid),
                           onPressed: () {
-                            context.read<SettingsCubit>().changeLastName(state.last.value);
+                            context
+                                .read<SettingsCubit>()
+                                .changeLastName(state.last.value);
                           },
                         ),
-                  )),
+                      )),
                 ],
               ));
         });
@@ -247,33 +267,10 @@ class LastName extends StatelessWidget {
 }
 
 class _PhoneNumber extends StatelessWidget {
-  String formatPhoneNumber(String phoneNumber) {
-    if (phoneNumber == '') {
-      return '';
-    }
-
-    // Can't format an invalid phone number
-    if (phoneNumber.length < 10) {
-      return phoneNumber;
-    }
-
-    String formattedNumber = '';
-    int count = 0;
-
-    for (int i = 0; i < phoneNumber.length; i++) {
-      if (i % 3 == 0 && i != 0 && count < 2) {
-        formattedNumber += '-';
-        count++;
-      }
-
-      formattedNumber += phoneNumber[i];
-    }
-
-    return formattedNumber;
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (previous, current) =>
             previous.phoneNumber != current.phoneNumber,
@@ -287,7 +284,7 @@ class _PhoneNumber extends StatelessWidget {
                   foregroundColor: Colors.white,
                   child: const Icon(Icons.phone),
                 ),
-                title: Text(formatPhoneNumber(state.user.phoneNumber)),
+                title: Text(UtilityFunctions.formatPhoneNumber(state.user.phoneNumber)),
                 children: <Widget>[
                   TextField(
                     autofocus: true,
@@ -306,12 +303,12 @@ class _PhoneNumber extends StatelessWidget {
                         suffixIcon: SubmitButton(
                           visible: state.phoneNumber.valid,
                           onPressed: () {
-                            context.read<SettingsCubit>().changePhoneNumber(state.phoneNumber.value);
+                            context
+                                .read<SettingsCubit>()
+                                .changePhoneNumber(state.phoneNumber.value);
                           },
-                        )
-                        ),
+                        )),
                     keyboardType: TextInputType.phone,
-
                   ),
                 ],
               ));
@@ -340,18 +337,23 @@ class _EmailBox extends StatelessWidget {
                     onChanged: (value) =>
                         context.read<SettingsCubit>().onEmailChanged(value),
                     decoration: InputDecoration(
-                        hintText: 'johnDoe@gmail.com',
-                        errorText:
-                            state.email.invalid ? 'Invalid Email Format' : null,
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        contentPadding: EdgeInsets.all(10),
-                        suffixIcon: SubmitButton(
-                          visible: state.email.valid,
-                          onPressed: () {context.read<AuthenticationBloc>().changeEmail(state.email.value);},
-                        ),
-                  ),
-                  )],
+                      hintText: 'johnDoe@gmail.com',
+                      errorText:
+                          state.email.invalid ? 'Invalid Email Format' : null,
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      contentPadding: EdgeInsets.all(10),
+                      suffixIcon: SubmitButton(
+                        visible: state.email.valid,
+                        onPressed: () {
+                          context
+                              .read<AuthenticationBloc>()
+                              .changeEmail(state.email.value);
+                        },
+                      ),
+                    ),
+                  )
+                ],
               ));
         });
   }
@@ -397,28 +399,24 @@ class MoneyBox extends StatelessWidget {
   }
 }
 
-
-
-
-
 class LeaveHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-        child: Container(
-            height: 450,
-           width: 350,
-            color: Colors.yellow.shade200,
-            child: Column(
-      children: [
-        Text("Are You Sure you Want to leave this home"),
-        ElevatedButton(
-            child: Text("Leave"),
-            onPressed: () {
-              context.read<SettingsCubit>().leaveHome();
-            })
-      ],
-    )));
+    // return Dialog(
+    //     child: Container(
+    //         height: 450,
+    //        width: 350,
+    //         color: Colors.yellow.shade200,
+    //         child: Column(
+    //   children: [
+    //     Text("Are You Sure you Want to leave this home"),
+    //     ElevatedButton(
+    //         child: Text("Leave"),
+    //         onPressed: () {
+    //           context.read<SettingsCubit>().leaveHome();
+    //         })
+    //   ],
+    // )));
   }
 }
 
@@ -427,21 +425,48 @@ class DeleteAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
         child: Container(
-           height: 450,
-           width: 350,
+            height: 450,
+            width: 350,
             color: Colors.yellow.shade200,
             child: Column(
-      children: [
-        Text("Are you sure you want to delete your account"),
-        ElevatedButton(
-            child: Text("Delete"),
-            onPressed: () {
-              context.read<AuthenticationBloc>().deleteAccount();
-            })
-      ],
-    )));
+              children: [
+                Text("Are you sure you want to delete your account"),
+                ElevatedButton(
+                    child: Text("Delete"),
+                    onPressed: () {
+                      context.read<AuthenticationBloc>().deleteAccount();
+                    })
+              ],
+            )));
   }
 }
+
+class NewChangePassword extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ConfirmationDialog(
+      confirmWidget: const Text('Submit'),
+      title: const Text('Password Reset'),
+      snippet: Column(
+        children: [
+          TextField(
+            obscureText: true,
+            onChanged: (value) =>
+                context.read<SettingsCubit>().onEmailChanged(value),
+            decoration: InputDecoration(
+              hintText: 'secret',
+              border: OutlineInputBorder(),
+              filled: true,
+              contentPadding: EdgeInsets.all(10),
+            ),
+          ),
+        ],
+      ),
+      onConfirm: () {},
+    );
+  }
+}
+
 
 class ChangePassword extends StatelessWidget {
   @override
@@ -450,48 +475,47 @@ class ChangePassword extends StatelessWidget {
     final confirmPassword = TextEditingController();
     return Dialog(
         child: Container(
-           height: 450,
-           width: 350,
+            height: 450,
+            width: 350,
             color: Colors.yellow.shade200,
             child: Column(
-      children: [
-        Text("New Password"),
-        TextField(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-            border: OutlineInputBorder(),
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Content',
-            helperText: '',
-            hintText: 'Turn Of Lights!',
-          ),
-          controller: password,
-        ),
-        Text("Confirm Password"),
-        TextField(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-            border: OutlineInputBorder(),
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Content',
-            helperText: '',
-            hintText: 'Turn Of Lights!',
-          ),
-          controller: confirmPassword,
-        ),
-        ElevatedButton(
-            child: Text("Confirm"),
-            onPressed: () {
-              context
-                  .read<AuthenticationBloc>()
-                  .changePassword(confirmPassword.text);
-            })
-      ],
-    )));
+              children: [
+                Text("New Password"),
+                TextField(
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Content',
+                    helperText: '',
+                    hintText: 'Turn Of Lights!',
+                  ),
+                  controller: password,
+                ),
+                Text("Confirm Password"),
+                TextField(
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Content',
+                    helperText: '',
+                    hintText: 'Turn Of Lights!',
+                  ),
+                  controller: confirmPassword,
+                ),
+                ElevatedButton(
+                    child: Text("Confirm"),
+                    onPressed: () {
+                      context
+                          .read<AuthenticationBloc>()
+                          .changePassword(confirmPassword.text);
+                    })
+              ],
+            )));
   }
 }
-
-
- 

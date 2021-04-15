@@ -9,6 +9,7 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
 
@@ -277,38 +278,15 @@ class AlertWidget extends StatelessWidget {
                         context: context,
                         builder: (_) => BlocProvider<MessagingBloc>.value(
                               value: BlocProvider.of<MessagingBloc>(context),
-                              child: AlertDialog(
-                                title: Text(
-                                  'Confirmation',
-                                  textAlign: TextAlign.center,
+                              child: ConfirmationDialog(
+                                snippet: const Text(
+                                  'Are you sure you want to delete this message?',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                content: SingleChildScrollView(
-                                    child: ListBody(
-                                  children: <Widget>[
-                                    Text(
-                                      'Do you want to delete this?',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                                actions: <Widget>[
-                                  Container(
-                                      decoration: BoxDecoration(
-                                          color: CustomColors.gold,
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      child: TextButton(
-                                        child: Text('Confirm'),
-                                        onPressed: () {
-                                          context
-                                              .read<MessagingBloc>()
-                                              .add(DeleteMessage(message));
-
-                                          Navigator.of(context).pop();
-                                        },
-                                      )),
-                                ],
+                                onConfirm: () {
+                                  context.read<MessagingBloc>().add(DeleteMessage(message));
+                                  Navigator.pop(context);
+                                },
                               ),
                             ));
                   }),
