@@ -27,7 +27,6 @@ class SettingsRepository {
       print(e);
     }
   }
-
   Future<void> changeFirstName(String firstName) async {
     await _fireStore
         .collection('users')
@@ -65,7 +64,6 @@ class SettingsRepository {
       }
     });
   }
-
   Future<void> changeLastName(String lastName) async {
     await _fireStore
         .collection('users')
@@ -79,7 +77,6 @@ class SettingsRepository {
         .doc(_email)
         .update({"last_name": lastName});
   }
-
   Future<void> changePhoneNumber(String phoneNumber) async {
     await _fireStore
         .collection('users')

@@ -125,7 +125,6 @@ class SettingsPage extends StatelessWidget {
                 })));
   }
 }
-
 class HeaderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
