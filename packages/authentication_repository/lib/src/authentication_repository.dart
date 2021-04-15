@@ -8,8 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpFailure implements Exception {}
 
-class RecentAuthenticationFailure implements Exception {}
-
 class AddUserFailure implements Exception {}
 
 class FetchUserFailure implements Exception {}
@@ -23,7 +21,7 @@ class LogInWithGoogleFailure implements Exception {}
 class LogOutFailure implements Exception {}
 
 class PasswordResetFailure implements Exception {}
-
+class RecentAuthenticationFailure implements Exception {}
 class AuthenticationRepository {
   final auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
@@ -56,11 +54,12 @@ class AuthenticationRepository {
         'house_name': house,
         'total_chores': 0,
       });
-    } on Exception {
+    } on Exception catch(e)
+    {
       throw AddUserFailure();
     }
   }
-
+  
   User getUser(user) {
     return User(
       id: user.uid,
@@ -108,8 +107,12 @@ class AuthenticationRepository {
       newUser.user.sendEmailVerification();
 
       await addUser(email, firstName, lastName, phoneNumber, "");
-    } on Exception {
-      throw SignUpFailure();
+    } on Exception catch (e)
+    {
+      if(e is auth.FirebaseAuthException)
+      {
+        print(e.code);
+      }
     }
   }
 
@@ -158,50 +161,18 @@ class AuthenticationRepository {
 
   Future<void> changeEmail(String email) async {
     var user = _firebaseAuth.currentUser;
-    try {
-      await user.updateEmail(email);
-    } on Exception {
-      throw RecentAuthenticationFailure();
-    }
+    await user.updateEmail(email);
   }
 
-  Future<void> changePassword(String newPassword) async {
+  void changePassword(String newPassword) async 
+  {
     var user = _firebaseAuth.currentUser;
-    try {
-      await user.updatePassword(newPassword);
-    } on Exception {
-      throw RecentAuthenticationFailure();
-    }
+    user.updatePassword(newPassword);
   }
 
-  Future<void> deleteAccount(String home) async {
-    var user = _firebaseAuth.currentUser;
-    try {
-      await user.delete();
-
+  Future<void> deleteAccount() async {
+      var user = _firebaseAuth.currentUser;
       _fireStore.collection('users').doc(user.email).delete();
-
-    await _fireStore
-        .collection('location')
-        .doc(home)
-        .collection('locations')
-        .doc(user.email)
-        .delete();
-
-    await _fireStore
-        .collection('roomates')
-        .doc(home)
-        .collection('roomates')
-        .doc(user.email)
-        .delete();
-
-    await _fireStore.collection('roomates').doc(home).collection('roomates').doc(user.email).collection('chores').get().then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.docs) {
-        ds.reference.delete();
-      }
-    });
-    } on Exception {
-      throw RecentAuthenticationFailure();
-    }
+      await user.delete();
   }
 }
