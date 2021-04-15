@@ -1,11 +1,13 @@
 class UtilityFunctions {
 
   static String formatNumber(String phoneNumber) {
-    if (phoneNumber == '') {
-      return '';
-    }
     // Can't format an invalid phone number
-    if (phoneNumber.length < 10) {
+    if (phoneNumber.length != 10) {
+      return phoneNumber;
+    }
+
+    if(double.tryParse(phoneNumber) == null)
+    {
       return phoneNumber;
     }
 
