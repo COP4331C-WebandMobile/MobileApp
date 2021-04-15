@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
-import 'package:roomiesMobile/widgets/appbar.dart';
-import 'package:reminder_repository/reminder_repository.dart';
 import 'package:roomate_repository/roomate_repository.dart';
+import 'package:roomiesMobile/utils/utility_functions.dart';
 
 class ProfilePage extends StatelessWidget {
   final Roomate roomate;
@@ -18,7 +16,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: const Text('Roomies'),
+          title: Text('Roomies'),
         ),
         body: Container(
             child: Column(children: [
@@ -66,8 +64,11 @@ class HeaderBox extends StatelessWidget {
 class PhoneBox extends StatelessWidget {
   final Roomate roomate;
   PhoneBox(this.roomate);
+
   @override
   Widget build(BuildContext context) {
+    print(roomate.phoneNumber);
+    String phone = UtilityFunctions.formattedNumber(roomate.phoneNumber);
     return Container(
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(30),
@@ -79,7 +80,7 @@ class PhoneBox extends StatelessWidget {
             )),
         child: Row(children: [
           Icon(Icons.phone),
-          Text("   " + roomate.phoneNumber),
+          Text("   " + phone),
         ]));
   }
 }

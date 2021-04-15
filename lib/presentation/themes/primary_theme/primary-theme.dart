@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
@@ -7,6 +8,9 @@ class PrimaryTheme {
     return ThemeData(
       primaryColor: CustomColors.gold,
       colorScheme: CustomColorTheme.primaryScheme,
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+      ),
       textTheme: GoogleFonts.bubblegumSansTextTheme(),
       buttonTheme: ButtonThemeData(
         shape:

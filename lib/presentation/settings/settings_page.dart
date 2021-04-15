@@ -283,7 +283,7 @@ class _PhoneNumber extends StatelessWidget {
                   child: const Icon(Icons.phone),
                 ),
                 title: Text(
-                    UtilityFunctions.formatPhoneNumber(state.user.phoneNumber)),
+                    UtilityFunctions.formattedNumber(state.user.phoneNumber)),
                 children: <Widget>[
                   TextField(
                     autofocus: true,
@@ -520,7 +520,11 @@ class _NewPassword extends StatelessWidget {
   }
 }
 
+<<<<<<< HEAD
 class _NewPasswordConfirm extends StatelessWidget {
+=======
+class ChangePassword extends StatelessWidget {
+>>>>>>> a76ad5e67275f7402aa401fef97578486937bc12
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
