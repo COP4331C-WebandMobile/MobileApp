@@ -46,14 +46,17 @@ class CreateMessageModal extends StatelessWidget {
         actions: [
           FloatingActionButton.extended(
             onPressed: () {
-              final Message newMessage = Message('Temp', creator, body.text, type);
+              final Message newMessage =
+                  Message('Temp', creator, body.text, type);
 
               context.read<MessagingBloc>().add(CreateMessage(newMessage));
             },
             label: Text('Post'),
           ),
           FloatingActionButton.extended(
-            onPressed: () { Navigator.pop(context);},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             label: Text('Cancel'),
           ),
         ],
@@ -75,7 +78,6 @@ class CreateMessageModal extends StatelessWidget {
           //color: Colors.yellow.shade200,
           height: MediaQuery.of(context).size.height / 3,
           child: SingleChildScrollView(
-              
               child: Column(
             children: [
               Container(
@@ -271,7 +273,44 @@ class AlertWidget extends StatelessWidget {
               IconButton(
                   icon: Icon(Icons.remove_circle_outline_outlined),
                   onPressed: () {
-                    context.read<MessagingBloc>().add(DeleteMessage(message));
+                    showDialog(
+                        context: context,
+                        builder: (_) => BlocProvider<MessagingBloc>.value(
+                              value: BlocProvider.of<MessagingBloc>(context),
+                              child: AlertDialog(
+                                title: Text(
+                                  'Confirmation',
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: SingleChildScrollView(
+                                    child: ListBody(
+                                  children: <Widget>[
+                                    Text(
+                                      'Do you want to delete this?',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
+                                actions: <Widget>[
+                                  Container(
+                                      decoration: BoxDecoration(
+                                          color: CustomColors.gold,
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      child: TextButton(
+                                        child: Text('Confirm'),
+                                        onPressed: () {
+                                          context
+                                              .read<MessagingBloc>()
+                                              .add(DeleteMessage(message));
+
+                                          Navigator.of(context).pop();
+                                        },
+                                      )),
+                                ],
+                              ),
+                            ));
                   }),
             ],
           ),
