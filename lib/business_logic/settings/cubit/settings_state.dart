@@ -9,6 +9,8 @@ class SettingsState extends Equatable {
   final Name last;
   final Email email;
   final PhoneNumber phoneNumber;
+  final Password newPassword;
+  final ConfirmedPassword newConfirmedPassword;
   final FormzStatus status;
 
   const SettingsState({
@@ -18,10 +20,12 @@ class SettingsState extends Equatable {
     this.last = const Name.pure(),
     this.phoneNumber = const PhoneNumber.pure(),
     this.email = const Email.pure(),
+    this.newPassword = const Password.pure(),
+    this.newConfirmedPassword = const ConfirmedPassword.pure(),
   });
  
   @override
-  List<Object> get props => [user, status, phoneNumber, email, first, last];
+  List<Object> get props => [user, status, phoneNumber, email, first, last, newPassword, newConfirmedPassword];
 
   SettingsState copyWith({
     User user,
@@ -29,6 +33,8 @@ class SettingsState extends Equatable {
     Name last,
     PhoneNumber phoneNumber,
     Email email,
+    Password newPassword,
+    ConfirmedPassword newConfirmedPassword,
     FormzStatus status,
   })
   {
@@ -38,14 +44,11 @@ class SettingsState extends Equatable {
       last: last ?? this.last,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       email: email ?? this.email,
+      newPassword: newPassword ?? this.newPassword,
+      newConfirmedPassword: newConfirmedPassword ?? this.newConfirmedPassword,
       status:  status ?? this.status,
     );
   }
-  FormzStatus intialize()
-  {
-    return Formz.validate([first, last, phoneNumber, email]);
-  }  
-
 }
 
 

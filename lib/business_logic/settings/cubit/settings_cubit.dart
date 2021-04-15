@@ -22,7 +22,6 @@ class SettingsCubit extends Cubit<SettingsState> {
          ))
          {
             settings();
-            state.user.toString();
          }
 
   void settings(){
@@ -101,6 +100,29 @@ class SettingsCubit extends Cubit<SettingsState> {
       ]),
     ));
 
+  }
+
+  void onNewPasswordChanged(String value)
+  {
+    final newPassword = Password.dirty(value);
+
+    emit(state.copyWith(
+      newPassword: newPassword,
+      status: Formz.validate([newPassword]),
+    ));
+  }
+
+  void onNewConfirmedPasswordChanged(String value)
+  {
+    final newConfirmedPassword = ConfirmedPassword.dirty(
+      password: state.newPassword.value,
+      value: value
+    );
+
+    emit(state.copyWith(
+      newConfirmedPassword: newConfirmedPassword,
+      status: Formz.validate([newConfirmedPassword]),
+    ));
   }
 
     @override

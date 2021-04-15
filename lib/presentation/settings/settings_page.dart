@@ -4,7 +4,7 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
-import 'package:roomiesMobile/utils/helper_functions.dart';
+import 'package:roomiesMobile/utils/utility_functions.dart';
 import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
 import 'package:roomiesMobile/widgets/appbar.dart';
 import 'package:settings_repository/settings_repository.dart';
@@ -267,10 +267,8 @@ class LastName extends StatelessWidget {
 }
 
 class _PhoneNumber extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (previous, current) =>
             previous.phoneNumber != current.phoneNumber,
@@ -284,7 +282,8 @@ class _PhoneNumber extends StatelessWidget {
                   foregroundColor: Colors.white,
                   child: const Icon(Icons.phone),
                 ),
-                title: Text(UtilityFunctions.formatPhoneNumber(state.user.phoneNumber)),
+                title: Text(
+                    UtilityFunctions.formatPhoneNumber(state.user.phoneNumber)),
                 children: <Widget>[
                   TextField(
                     autofocus: true,
@@ -444,78 +443,104 @@ class DeleteAccount extends StatelessWidget {
 class NewChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      confirmWidget: const Text('Submit'),
-      title: const Text('Password Reset'),
-      snippet: Column(
-        children: [
-          TextField(
-            obscureText: true,
-            onChanged: (value) =>
-                context.read<SettingsCubit>().onEmailChanged(value),
-            decoration: InputDecoration(
-              hintText: 'secret',
-              border: OutlineInputBorder(),
-              filled: true,
-              contentPadding: EdgeInsets.all(10),
+    return BlocBuilder<SettingsCubit, SettingsState>(builder: (context, state) {
+
+      bool canSubmit = (state.newConfirmedPassword.valid && state.newPassword.valid && !state.newPassword.pure && !state.newConfirmedPassword.pure);
+
+      return ConfirmationDialog(
+        confirmWidget: canSubmit ? const Text('Submit', style: const TextStyle(color: Colors.black),) : const Text('Invalid', style: const TextStyle(color: Colors.black),),
+        title: const Text('Password Reset'),
+        snippet: Column(
+          children: [
+            _NewPassword(),
+            const SizedBox(
+              height: 32,
             ),
+            _NewPasswordConfirm(),
+          ],
+        ),
+        onConfirm: canSubmit ?
+        () {
+          context.read<AuthenticationBloc>().changePassword(state.newPassword.value);
+          // Going to have to alert user when fails on firebase end.
+          Navigator.pop(context);
+        }
+        :
+        // Invalid Submission
+        () {
+          Navigator.pop(context);
+           ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(const SnackBar(
+                    elevation: 20,
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    duration: Duration(seconds: 1, milliseconds: 500),
+                    backgroundColor: Colors.black,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.elliptical(5, 5))),
+                    content: Text(
+                      'Invalid Submission',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: CustomColors.gold,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ));
+        },
+      );
+    });
+  }
+}
+
+class _NewPassword extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      buildWhen: (previous, current) =>
+          previous.newPassword != current.newPassword,
+      builder: (context, state) {
+        return TextField(
+          obscureText: true,
+          onChanged: (value) =>
+              context.read<SettingsCubit>().onNewPasswordChanged(value),
+          decoration: InputDecoration(
+            labelText: 'New Password',
+            hintText: 'secret',
+            errorText: state.newPassword.invalid ? 'Invalid password' : null,
+            border: OutlineInputBorder(),
+            filled: true,
+            contentPadding: EdgeInsets.all(10),
           ),
-        ],
-      ),
-      onConfirm: () {},
+        );
+      },
     );
   }
 }
 
-
-class ChangePassword extends StatelessWidget {
+class _NewPasswordConfirm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final password = TextEditingController();
-    final confirmPassword = TextEditingController();
-    return Dialog(
-        child: Container(
-            height: 450,
-            width: 350,
-            color: Colors.yellow.shade200,
-            child: Column(
-              children: [
-                Text("New Password"),
-                TextField(
-                  decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Content',
-                    helperText: '',
-                    hintText: 'Turn Of Lights!',
-                  ),
-                  controller: password,
-                ),
-                Text("Confirm Password"),
-                TextField(
-                  decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Content',
-                    helperText: '',
-                    hintText: 'Turn Of Lights!',
-                  ),
-                  controller: confirmPassword,
-                ),
-                ElevatedButton(
-                    child: Text("Confirm"),
-                    onPressed: () {
-                      context
-                          .read<AuthenticationBloc>()
-                          .changePassword(confirmPassword.text);
-                    })
-              ],
-            )));
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      buildWhen: (previous, current) =>
+          previous.newConfirmedPassword != current.newConfirmedPassword,
+      builder: (context, state) {
+        return TextField(
+          obscureText: true,
+          onChanged: (value) =>
+              context.read<SettingsCubit>().onNewConfirmedPasswordChanged(value),
+          decoration: InputDecoration(
+            labelText: 'New Password Confirm',
+            hintText: 'secret',
+            errorText: state.newConfirmedPassword.invalid ? 'Invalid password' : null,
+            border: OutlineInputBorder(),
+            filled: true,
+            contentPadding: EdgeInsets.all(10),
+          ),
+        );
+      },
+    );
   }
 }
