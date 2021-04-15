@@ -1,11 +1,8 @@
-
 class UtilityFunctions {
-  
-static String formatPhoneNumber(String phoneNumber) {
+  static String formattedNumber(String phoneNumber) {
     if (phoneNumber == '') {
       return '';
     }
-
     // Can't format an invalid phone number
     if (phoneNumber.length < 10) {
       return phoneNumber;
@@ -25,6 +22,4 @@ static String formatPhoneNumber(String phoneNumber) {
 
     return formattedNumber;
   }
-
-
 }

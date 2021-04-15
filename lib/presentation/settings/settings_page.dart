@@ -4,7 +4,7 @@ import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
-import 'package:roomiesMobile/utils/helper_functions.dart';
+import 'package:roomiesMobile/utils/utility_functions.dart';
 import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
 import 'package:roomiesMobile/widgets/appbar.dart';
 import 'package:settings_repository/settings_repository.dart';
@@ -267,10 +267,8 @@ class LastName extends StatelessWidget {
 }
 
 class _PhoneNumber extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (previous, current) =>
             previous.phoneNumber != current.phoneNumber,
@@ -284,7 +282,8 @@ class _PhoneNumber extends StatelessWidget {
                   foregroundColor: Colors.white,
                   child: const Icon(Icons.phone),
                 ),
-                title: Text(UtilityFunctions.formatPhoneNumber(state.user.phoneNumber)),
+                title: Text(
+                    UtilityFunctions.formattedNumber(state.user.phoneNumber)),
                 children: <Widget>[
                   TextField(
                     autofocus: true,
@@ -466,7 +465,6 @@ class NewChangePassword extends StatelessWidget {
     );
   }
 }
-
 
 class ChangePassword extends StatelessWidget {
   @override
