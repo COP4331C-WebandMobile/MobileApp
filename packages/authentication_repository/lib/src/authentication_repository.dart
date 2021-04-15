@@ -168,7 +168,7 @@ class AuthenticationRepository {
     user.updatePassword(newPassword);
   }
 
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount(String home) async {
       var user = _firebaseAuth.currentUser;
       _fireStore.collection('users').doc(user.email).delete();
       await user.delete();
