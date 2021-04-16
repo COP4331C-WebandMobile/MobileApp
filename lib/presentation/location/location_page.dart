@@ -9,6 +9,7 @@ import 'package:roomiesMobile/business_logic/authentication/authentication.dart'
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/location/location.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 
 class NewLocationPage extends StatelessWidget {
   @override
@@ -51,92 +52,113 @@ class _LocationPageWrapper extends StatelessWidget {
       body: BlocBuilder<GoogleMapCubit, GoogleMapState>(
         buildWhen: (previous, current) => previous.markers != current.markers,
         builder: (context, googleState) {
-
           return BlocConsumer<AddressLocationBloc, AddressLocationState>(
             listener: (context, addressState) {
-              if(addressState is SuccessfullyRetreievedAddresses)
-              {
+              if (addressState is SuccessfullyRetreievedAddresses) {
                 addressState.houseLocations.forEach((element) {
                   context.read<GoogleMapCubit>().addAddressMarker(
-                    element.address,
-                    element.longLat.latitude,
-                    element.longLat.longitude, onTap: () {
-                      print('This is a test.');
-                      context.read<AddressLocationBloc>().add(SetHomeAddress(element));
-                    });
+                      element.address,
+                      element.longLat.latitude,
+                      element.longLat.longitude, onTap: () {
+                    print('This is a test.');
+                    context
+                        .read<AddressLocationBloc>()
+                        .add(SetHomeAddress(element));
+                  });
                 });
               }
 
-              if(addressState is HomeAddressUpdated)
-              {
+              if (addressState is HomeAddressUpdated) {
                 print(addressState.houseLocation.longLat);
 
-                context.read<GoogleMapCubit>().setHomeMarker(addressState.houseLocation.longLat.longitude,addressState.houseLocation.longLat.latitude,addressState.houseLocation.address);
+                context.read<GoogleMapCubit>().setHomeMarker(
+                    addressState.houseLocation.longLat.longitude,
+                    addressState.houseLocation.longLat.latitude,
+                    addressState.houseLocation.address);
               }
-
             },
-            builder: (context, addressState) 
-            {
-
+            builder: (context, addressState) {
               Set<Marker> myMarkers = googleState.markers.toSet();
 
               return Container(
-            padding: EdgeInsets.all(32),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
+                padding: EdgeInsets.all(32),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      
+                      //   Expanded(
+                      //     child: RoomateList(),
+                      //   ),
+                      Flexible(
+                        flex: 5,
+                        child:
+                      Column(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: addressController,
+                              onSubmitted: (value) {
+                                context
+                                    .read<AddressLocationBloc>()
+                                    .add(QueryAddresses(value));
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 8,
+                            child: GoogleMap(
+                              mapType: MapType.normal,
+                              markers: myMarkers,
+                              initialCameraPosition: const CameraPosition(
+                                  target: const LatLng(39.5, -98.35), zoom: 3),
+                              myLocationEnabled: false,
+                              myLocationButtonEnabled: true,
+                              onMapCreated: (mapController) async {
+                                _controller.complete(mapController);
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Expanded(
+                            flex: 0,
+                            child: FloatingActionButton.extended(
+                              tooltip:
+                                  'Record your current location for other roomates to view.',
+                              heroTag: null,
+                              label: const Text('Check In'),
+                              onPressed: () {
+                                final String id = context
+                                    .read<AuthenticationBloc>()
+                                    .state
+                                    .user
+                                    .email;
+
+                                context
+                                    .read<UserLocationBloc>()
+                                    .add(CheckInUserLocation(id));
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      controller: addressController,
-                      onSubmitted: (value) {
-                        context
-                            .read<AddressLocationBloc>()
-                            .add(QueryAddresses(value));
-                      },
-                    ),
+                      ),
+                      const SizedBox(width: 16,),
+                      Flexible(child:
+                      RoomateList()),],
                   ),
-                  Expanded(
-                    flex: 8,
-                    child: GoogleMap(
-                      mapType: MapType.normal,
-                      markers: myMarkers,
-                      initialCameraPosition: const CameraPosition(
-                          target: const LatLng(39.5, -98.35), zoom: 3),
-                      myLocationEnabled: false,
-                      myLocationButtonEnabled: true,
-                      onMapCreated: (mapController) async {
-                        _controller.complete(mapController);
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 0,
-                    child: ElevatedButton(
-                      child: Text('Press me'),
-                      onPressed: () {
-                        final String id =
-                            context.read<AuthenticationBloc>().state.user.email;
-                        context
-                            .read<UserLocationBloc>()
-                            .add(CheckInUserLocation(id));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RoomateList(),
-                  ),
-                ],
-              ),
-            ),
-          );
+                )
+              ;
             },
           );
         },
@@ -150,16 +172,14 @@ class RoomateList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserLocationBloc, UserLocationState>(
       builder: (context, state) {
-        
-
         if (state is SuccessfulOnRetrievedLocations) {
           return ListView.separated(
             shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             itemCount: state.locations.length,
             separatorBuilder: (context, i) {
               return const SizedBox(
-                width: 16,
+                height: 16,
               );
             },
             itemBuilder: (context, i) {
@@ -195,20 +215,56 @@ class RoomateButton extends StatelessWidget {
         .firstWhere((element) => element.email == userLocation.id);
 
     return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-              child: IconButton(
-            icon: Icon(Icons.supervised_user_circle_sharp),
-            onPressed: () async {
-              await context.read<GoogleMapCubit>().moveCameraTo(
-                  userLocation.location.latitude,
-                  userLocation.location.longitude);
-            },
-          )),
-          Expanded(child: Text('${roomate.firstName} ${roomate.lastName}')),
-        ],
+        child: Center(
+      child: CircleAvatar(
+        radius: 28,
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+                child: IconButton(
+              splashColor: Colors.yellow.shade300,
+              icon: Icon(
+                Icons.person,
+                size: 32,
+              ),
+              onPressed: () async {
+                await context.read<GoogleMapCubit>().moveCameraTo(
+                    userLocation.location.latitude,
+                    userLocation.location.longitude);
+
+                ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  duration: Duration(seconds: 1, milliseconds: 250),
+                  backgroundColor: Colors.black,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.elliptical(5, 5))),
+                  content: Text(
+                    'Moving to ${roomate.firstName} ${roomate.lastName}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: CustomColors.gold,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ));
+              },
+            )),
+            Expanded(
+                flex: 0,
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 3),
+                    child: Text(
+                      '${roomate.firstName[0]}.${roomate.lastName[0]}',
+                      style: TextStyle(fontSize: 12),
+                    ))),
+          ],
+        ),
       ),
-    );
+    ));
   }
 }

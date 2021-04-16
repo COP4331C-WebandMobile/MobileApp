@@ -103,10 +103,12 @@ class GoogleMapCubit extends Cubit<GoogleMapState> {
   Future<void> moveCameraTo(double latitude, double longitude, {double zoomAmount = 1.0}) async
   {
     final GoogleMapController myController = await _controller.future;
+    
+    final zoom = await myController.getZoomLevel();
 
     final LatLng newPosition = LatLng(latitude, longitude);
 
-    final CameraPosition newCameraPosition = CameraPosition(target: newPosition, zoom: zoomAmount);
+    final CameraPosition newCameraPosition = CameraPosition(target: newPosition, zoom: zoom);
 
     myController.animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
   }
