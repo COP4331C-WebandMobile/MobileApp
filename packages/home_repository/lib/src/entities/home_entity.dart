@@ -10,7 +10,7 @@ class HomeEntity {
   const HomeEntity(this.creator,this.homeName,this.address);
 
   static HomeEntity fromSnapshot(DocumentSnapshot snap) {
-    print(snap.data()["house_name"]);
+    print('Home Entity: ${snap.data()["house_name"]}');
     return HomeEntity(
       snap.data()["creator"],
       snap.data()['house_name'],

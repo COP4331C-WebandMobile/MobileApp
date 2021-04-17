@@ -21,7 +21,9 @@ class LandingCubit extends Cubit<LandingState> {
   }
 
   Future<void> validate(String home) async {
-    if (home == "") {
+    
+    if (home == "") 
+    {
       emit(LandingState.homeless());
     } else {
       Home homeInfo = await _homeRepository.getInfo(home);

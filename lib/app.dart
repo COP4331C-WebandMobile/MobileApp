@@ -64,7 +64,6 @@ class _AppViewState extends State<AppView> {
                 break;
 
               default:
-                                  print('Test');
               _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                   (route) => false);

@@ -10,53 +10,56 @@ import 'package:home_repository/home_repository.dart';
 import '../../business_logic/landing/cubit/landing_cubit.dart';
 
 class HouseLoading extends StatelessWidget {
- 
   static Route route() {
     return MaterialPageRoute(builder: (_) => HouseLoading());
   }
+
   @override
   Widget build(BuildContext context) {
-
-  return BlocProvider<LandingCubit>(
-
-    create: (context) => LandingCubit(homeRepository: HomeRepository(context.read<AuthenticationBloc>().state.user.email)),
-    child:  BlocListener<LandingCubit,LandingState> ( 
-      listener: (context,state) {
-        //print('${state.address},${state.home},${state.error},${state.status}');
-        if(state.status == HomeStatus.Loading) { 
-          print("Test");
-           MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
-                         value: BlocProvider.of<LandingCubit>(context),
-                         child: SplashPage())
-              );
-        }
-        if(state.status == HomeStatus.HomeVerified) {
-          print("test");
-          final _roomateRepository = RoomateRepository(state.home);
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => MultiBlocProvider(
-                providers:[
-                         BlocProvider<LandingCubit>.value(
-                         value: BlocProvider.of<LandingCubit>(context)),
-                         BlocProvider<RoomatesCubit>(
-                         create: (context) => RoomatesCubit(roomateRepository: _roomateRepository)
-                         )  
-                 ],
-                 child: HomePage()
-
-              )));
-        }     
-       if(state.status==HomeStatus.Homeless) {
-             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => BlocProvider<LandingCubit>.value(
-                          value: BlocProvider.of<LandingCubit>(context),
-                          child: LandingPage())),
-              );
-        }  
-    }));
-
-  
+    return 
+    BlocProvider<LandingCubit>(
+      create: (context) => LandingCubit(
+          homeRepository: HomeRepository(
+              context.read<AuthenticationBloc>().state.user.email)),
+      child: HouseLoadingWrapper(),
+    );
   }
 }
 
+class HouseLoadingWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LandingCubit, LandingState>(
+      listener: (context, state) {
+        print(state);
+        // if (state.status == HomeStatus.Loading) {
+        //   MaterialPageRoute(
+        //       builder: (_) => BlocProvider<LandingCubit>.value(
+        //           value: BlocProvider.of<LandingCubit>(context),
+        //           child: Center(child: CircularProgressIndicator(),)));
+        // }
+        if (state.status == HomeStatus.HomeVerified) {
+          final _roomateRepository = RoomateRepository(state.home);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+              builder: (_) => MultiBlocProvider(providers: [
+                    BlocProvider<LandingCubit>.value(
+                        value: BlocProvider.of<LandingCubit>(context)),
+                    BlocProvider<RoomatesCubit>(
+                        create: (context) => RoomatesCubit(
+                            roomateRepository: _roomateRepository))
+                  ], child: HomePage())), (route) => true);
+        }
+        else if (state.status == HomeStatus.Homeless) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BlocProvider<LandingCubit>.value(
+                    value: BlocProvider.of<LandingCubit>(context),
+                    child: LandingPage())),
+          );
+        }
+      },
+      child: Container(alignment: Alignment.center,color: Colors.white, child: CircularProgressIndicator(),),
+    );
+  }
+}

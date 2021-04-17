@@ -23,7 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
   cupertino_icons: ^1.0.0
   bloc: ^7.0.0
   flutter_bloc: ^7.0.0
@@ -50,11 +49,19 @@ dependencies:
   settings_repository:
     path: packages/settings_repository
     
-    
 dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^8.0.0
+  flutter_launcher_icons: ^0.9.0
+
+flutter_icons:
+  image_path: "assets/icons/icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
