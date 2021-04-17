@@ -71,9 +71,13 @@ class CreateHome extends StatelessWidget {
     final email = context.read<AuthenticationBloc>().state.user.email;
     return Dialog(
         child: Container(
-            height: 500,
+            decoration: BoxDecoration(
+                color: Colors.yellow.shade200,
+                border: Border.all(
+                    color: Colors.white, width: 5, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.elliptical(30, 30))),
+            height: 400,
             width: 300,
-            color: Colors.yellow.shade200,
             child: BlocBuilder<LandingCubit, LandingState>(
               builder: (context, state) {
                 return Container(
@@ -127,18 +131,14 @@ class CreateHome extends StatelessWidget {
                           controller: address,
                         )
                       ]),
-                      Align(
-                          alignment: Alignment.bottomRight,
-                          child: IconButton(
-                              icon: const Icon(
-                                Icons.add_circle_outline_rounded,
-                                size: 40,
-                                color: Colors.black,
-                              ),
-                              onPressed: () => context
-                                  .read<LandingCubit>()
-                                  .addHome(houseName.text, password.text, email,
-                                      address.text))),
+                      FloatingActionButton.extended(
+                          heroTag: null,
+                          onPressed: () => context.read<LandingCubit>().addHome(
+                              houseName.text,
+                              password.text,
+                              email,
+                              address.text),
+                          label: Text('Add home')),
                       Builder(builder: (BuildContext context) {
                         if (state.status == HomeStatus.Error)
                           return Text(state.error);
@@ -161,9 +161,13 @@ class JoinHome extends StatelessWidget {
 
     return Dialog(
         child: Container(
-            height: 500,
+            height: 400,
             width: 300,
-            color: Colors.yellow.shade200,
+            decoration: BoxDecoration(
+                color: Colors.yellow.shade200,
+                border: Border.all(
+                    color: Colors.white, width: 5, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.elliptical(30, 30))),
             child: BlocBuilder<LandingCubit, LandingState>(
                 builder: (context, state) {
               return Container(
@@ -206,18 +210,12 @@ class JoinHome extends StatelessWidget {
                       ),
                       controller: password,
                     ),
-                    Align(
-                        alignment: Alignment.bottomRight,
-                        child: IconButton(
-                            icon: const Icon(
-                              Icons.add_circle_outline_rounded,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            onPressed: () => context
-                                .read<LandingCubit>()
-                                .joinHome(
-                                    houseName.text, password.text, email))),
+                    FloatingActionButton.extended(
+                        heroTag: null,
+                        onPressed: () => context
+                            .read<LandingCubit>()
+                            .joinHome(houseName.text, password.text, email),
+                        label: Text('Join home')),
                     Builder(builder: (BuildContext context) {
                       if (state.status == HomeStatus.Error)
                         return Text(state.error);

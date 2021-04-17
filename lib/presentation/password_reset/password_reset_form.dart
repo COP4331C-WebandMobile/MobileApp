@@ -37,8 +37,15 @@ class PasswordResetForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                  padding: EdgeInsets.only(bottom: 25, left: 50, right: 50),
-                  color: Colors.black,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.black,
+                        width: 5,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    color: Colors.black,
+                  ),
+                  padding: EdgeInsets.only(bottom: 15, left: 30, right: 30),
                   child: const Text(
                     'Password Reset',
                     textScaleFactor: 2,
