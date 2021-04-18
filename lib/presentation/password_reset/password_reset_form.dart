@@ -39,7 +39,7 @@ class PasswordResetForm extends StatelessWidget {
               Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Colors.black,
+                        color: Colors.white,
                         width: 5,
                         style: BorderStyle.solid),
                     borderRadius: BorderRadius.all(Radius.circular(30)),
