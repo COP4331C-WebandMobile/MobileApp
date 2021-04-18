@@ -40,8 +40,8 @@ class SettingsPage extends StatelessWidget {
                     width: mediaQuery.size.width,
                     child: ListView(children: [
                       HeaderBox(),
-                      FirstName(),
-                      LastName(),
+                      _FirstName(),
+                      _LastName(),
                       _PhoneNumber(),
                       _EmailBox(),
                       Row(
@@ -65,9 +65,17 @@ class SettingsPage extends StatelessWidget {
                                                           FontWeight.bold),
                                                 ),
                                                 onConfirm: () {
+                                                  try{
                                                   context
                                                       .read<SettingsCubit>()
                                                       .leaveHome();
+
+                                                      Navigator.pop(context);
+                                                  }
+                                                  on Exception
+                                                  {
+                                                    
+                                                  }
                                                 },
                                               )));
                                 },
@@ -114,7 +122,7 @@ class SettingsPage extends StatelessWidget {
                                       BlocProvider<SettingsCubit>.value(
                                           value: BlocProvider.of<SettingsCubit>(
                                               context),
-                                          child: NewChangePassword()));
+                                          child: ChangePassword()));
                             },
                             child: Text("Change Password"),
                           )),
@@ -125,6 +133,7 @@ class SettingsPage extends StatelessWidget {
                 })));
   }
 }
+// TODO: For some reason this page ends up accessing null on entering page.
 class HeaderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -160,7 +169,7 @@ class HeaderBox extends StatelessWidget {
   }
 }
 
-class FirstName extends StatelessWidget {
+class _FirstName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
@@ -187,7 +196,7 @@ class FirstName extends StatelessWidget {
                       border: OutlineInputBorder(),
                       filled: true,
                       contentPadding: EdgeInsets.all(10),
-                      suffixIcon: SubmitButton(
+                      suffixIcon: _SubmitButton(
                         visible: (state.first.valid),
                         onPressed: () {
                           context
@@ -203,11 +212,11 @@ class FirstName extends StatelessWidget {
   }
 }
 
-class SubmitButton extends StatelessWidget {
+class _SubmitButton extends StatelessWidget {
   final visible;
   final onPressed;
 
-  SubmitButton({this.visible, this.onPressed = VoidCallBack});
+  _SubmitButton({this.visible, this.onPressed = VoidCallBack});
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +238,7 @@ class SubmitButton extends StatelessWidget {
   }
 }
 
-class LastName extends StatelessWidget {
+class _LastName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
@@ -256,7 +265,7 @@ class LastName extends StatelessWidget {
                         border: OutlineInputBorder(),
                         filled: true,
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: SubmitButton(
+                        suffixIcon: _SubmitButton(
                           visible: (state.last.valid),
                           onPressed: () {
                             context
@@ -304,7 +313,7 @@ class _PhoneNumber extends StatelessWidget {
                         border: OutlineInputBorder(),
                         filled: true,
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: SubmitButton(
+                        suffixIcon: _SubmitButton(
                           visible: state.phoneNumber.valid,
                           onPressed: () {
                             context
@@ -347,7 +356,7 @@ class _EmailBox extends StatelessWidget {
                       border: OutlineInputBorder(),
                       filled: true,
                       contentPadding: EdgeInsets.all(10),
-                      suffixIcon: SubmitButton(
+                      suffixIcon: _SubmitButton(
                         visible: state.email.valid,
                         onPressed: () {
                           context
@@ -363,6 +372,7 @@ class _EmailBox extends StatelessWidget {
   }
 }
 
+// ?
 class ChoreBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -382,7 +392,7 @@ class ChoreBox extends StatelessWidget {
         ]));
   }
 }
-
+// ?
 class MoneyBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -402,29 +412,9 @@ class MoneyBox extends StatelessWidget {
         ]));
   }
 }
-/*
-class DeleteAccount extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-        child: Container(
-            height: 450,
-            width: 350,
-            color: Colors.yellow.shade200,
-            child: Column(
-              children: [
-                Text("Are you sure you want to delete your account"),
-                ElevatedButton(
-                    child: Text("Delete"),
-                    onPressed: () {
-                      context.read<AuthenticationBloc>().deleteAccount();
-                    })
-              ],
-            )));
-  }
-}*/
 
-class NewChangePassword extends StatelessWidget {
+// TODO: Should give feedback when it succesfully changes password.
+class ChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(builder: (context, state) {

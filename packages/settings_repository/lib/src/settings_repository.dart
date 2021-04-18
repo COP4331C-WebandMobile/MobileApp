@@ -43,6 +43,8 @@ class SettingsRepository {
   }
 
   Future<void> leaveHome() async {
+
+    try{
     await _fireStore.collection('users').doc(_email).update({"house_name": ""});
 
     await _fireStore
@@ -71,6 +73,12 @@ class SettingsRepository {
         ds.reference.delete();
       }
     });
+    }
+    on Exception catch (e)
+    {
+      print(e);
+      throw Exception();
+    }
   }
 
   Future<void> changeLastName(String lastName) async {

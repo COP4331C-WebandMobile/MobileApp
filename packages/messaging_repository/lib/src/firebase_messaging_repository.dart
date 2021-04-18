@@ -5,9 +5,12 @@ import 'package:messaging_repository/src/entities/response_entity.dart';
 import 'package:messaging_repository/src/messaging_repository.dart';
 import 'package:messaging_repository/src/models/message.dart';
 
+import 'models/response.dart';
+
 class FirebaseMessageRepository implements MessagingRepository {
   
   final String houseName;
+  FirebaseFirestore _firestore;
   CollectionReference messageCollection;
 
   // Will need to pass the house name to our repo that way we can reference the correct messages collection..
@@ -15,8 +18,8 @@ class FirebaseMessageRepository implements MessagingRepository {
   {
     // Assuming that the house name is wrong, then it cant find the collection.
     try {
-
-      messageCollection = FirebaseFirestore.instance.collection('message').doc(houseName).collection('messages');
+      _firestore = FirebaseFirestore.instance;
+      messageCollection = _firestore.collection('message').doc(houseName).collection('messages');
     }
     on Exception {
       throw InvalidHouseNameException();
@@ -47,7 +50,9 @@ class FirebaseMessageRepository implements MessagingRepository {
       throw Exception('Too many responses to question');
     }
 
-    final response = ResponseEntity('targetId', creator, body);
+    final Timestamp time = Timestamp.now();
+
+    final response = ResponseEntity(targetId, creator, body, time);
 
     
     return await responses.doc().set(response.toDocument());
@@ -65,6 +70,12 @@ class FirebaseMessageRepository implements MessagingRepository {
     return messageCollection.doc(message.id).update(message.toEntity().toDocument());
   }
 
+  Stream<List<Response>> responses(String messageId) {
+    return _firestore.collection('message').doc(houseName).collection('messages').doc(messageId).collection('responses').snapshots().map((snapshots) {
+      return snapshots.docs.map((doc) => Response.fromEntity(ResponseEntity.fromSnapshot(doc))).toList();
+    });
+  }
+
   @override
   Stream<List<Message>> messages() {
     return messageCollection.snapshots().map((snapshot){   
@@ -72,6 +83,7 @@ class FirebaseMessageRepository implements MessagingRepository {
         .map((doc) => Message.fromEntity(MessageEntity.fromSnapshot(doc)))
         .toList();
     });
+    
   }
 
 }

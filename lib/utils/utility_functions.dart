@@ -37,6 +37,8 @@ class UtilityFunctions {
     final int minutes = dateTime.minute;
     final String prefix = hour >= 12 ? "P.M" : "A.M";
     
+    final String newMinutes = minutes < 10 ? '0$minutes' : '$minutes';
+
     if(hour == 0)
     {
       hour = 12;
@@ -46,7 +48,7 @@ class UtilityFunctions {
       hour -= 12;
     }
 
-    return '$hour:$minutes $prefix';
+    return '$hour:$newMinutes $prefix';
   }
 
 }

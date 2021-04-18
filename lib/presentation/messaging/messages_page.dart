@@ -2,15 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messaging_repository/messaging_repository.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
-import 'package:roomiesMobile/business_logic/messages/bloc/messaging_bloc.dart';
-import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
+import 'package:roomiesMobile/business_logic/messages/bloc/responses_bloc.dart';
+import 'package:roomiesMobile/business_logic/messages/messaging/messaging_bloc.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/utils/utility_functions.dart';
 import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
-import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import 'package:roomiesMobile/widgets/messages/message_card.dart';
 
 class TestMessagePage extends StatelessWidget {
@@ -18,9 +20,17 @@ class TestMessagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final String houseName = context.read<LandingCubit>().state.home;
 
-    return BlocProvider(
-      create: (context) =>
-          MessagingBloc(FirebaseMessageRepository(houseName: houseName)),
+    final FirebaseMessageRepository messageRepository = FirebaseMessageRepository(houseName: houseName);
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => MessagingBloc(messageRepository),
+        ),
+        BlocProvider(
+          create: (context) => ResponsesBloc(messageRepository),
+        )
+      ],
       child: Scaffold(
         body: MyMessagePage(),
       ),
@@ -222,6 +232,22 @@ class MessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    messages.sort( (m1, m2) { 
+      if(m1.type.index < m2.type.index)
+      {
+        return -1;
+      }
+      else if(m1.type == m2.type)
+      {
+        return 0;
+      }
+      else
+      {
+        return 1;
+      }
+    });
+
     return ListView.builder(
       itemCount: messages.length,
       itemBuilder: (BuildContext context, i) {
@@ -242,84 +268,101 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (message.type == MessageType.alert) {
-      return AlertWidget(message);
-    } else if (message.type == MessageType.question) {
-      return QuestionWidget(message);
+      return AnimatedMessage(
+        message: message,
+      );
+    } else if (message.type == MessageType.question) 
+    {
+      return AnimatedMessage(
+        message: message,
+
+        child: 
+        Column( children: [
+        Card(
+          margin: EdgeInsets.symmetric(vertical: 16,),
+          
+          child: 
+          ExpansionTile(
+            title: Text('Responses'),
+            children: [BlocBuilder<ResponsesBloc, ResponsesState>(
+              buildWhen: (previous, current) {
+                return current.associatedMessage == message.id;
+              },
+              builder: (context, state) 
+              {
+                if(state is NoResponsesFound)
+                {
+                  return Center(child: Text('There are no responses to this message...'));
+                }
+                if(state is SuccessfullyRetreivedResponses)
+                {
+                         
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.responses.length,
+                    itemBuilder: (context, i) {
+
+                      state.responses.sort((r1, r2){
+                        if(r1.postedTime.millisecondsSinceEpoch < r2.postedTime.millisecondsSinceEpoch)
+                        {
+                          return 1;
+                        }
+                        else if(r1.postedTime == r2.postedTime)
+                        {
+                          return 0;
+                        }
+                        else
+                        {
+                          return -1;
+                        }
+                      });
+
+                      return ListTile(
+                        leading: Text('${state.responses[i].creator}'),
+                        title: Text('${state.responses[i].body}'),
+                      );
+                    },
+                  );
+                }
+
+                return Container();
+              },
+            )],      
+            onExpansionChanged: (opened) {
+              if(opened)
+              {
+                context.read<ResponsesBloc>().add(SubsribedToResponses(message.id));
+              }
+              else
+              {
+                context.read<ResponsesBloc>().add(UnsubscribeFromResponses(message.id));
+              }
+            },
+          ),
+        ),
+        FloatingActionButton.extended(
+          label: const Text('Respond'),
+          heroTag: null,
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (_) => BlocProvider<MessagingBloc>.value(
+                value: BlocProvider.of<MessagingBloc>(context),
+                child: CreateResponseDialog(message.id),
+              ),
+            );
+          },
+        ),
+        
+        ]),
+      );
     } else if (message.type == MessageType.purchase) {
       return PurchaseWidget(message);
     } else {
-      return Text('*Invalid Message type*');
+      return Container();
     }
   }
 }
-class AlertWidget extends StatelessWidget {
-  final Message message;
-
-  AlertWidget(this.message);
-
-  @override
-  Widget build(BuildContext context) {
-    return MessageCard(
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.supervised_user_circle),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(child: Text(message.body)),
-              IconButton(
-                  icon: Icon(Icons.remove_circle_outline_outlined),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => BlocProvider<MessagingBloc>.value(
-                              value: BlocProvider.of<MessagingBloc>(context),
-                              child: ConfirmationDialog(
-                                snippet: const Text(
-                                  'Are you sure you want to delete this message?',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                onConfirm: () {
-                                  context.read<MessagingBloc>().add(DeleteMessage(message));
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ));
-                  }),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text('- ' + message.creator),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-                color: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Text(
-                  'Posted: ' +
-                      message.date.toDate().month.toString() +
-                      "-" +
-                      message.date.toDate().day.toString() +
-                      "-" +
-                      message.date.toDate().year.toString() +
-                      "  " +
-                      message.date.toDate().hour.toString() +
-                      ":" +
-                      message.date.toDate().minute.toString(),
-                  style: TextStyle(color: Colors.white),
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class CreateResponseDialog extends StatelessWidget {
   final targetId;
 
@@ -346,57 +389,6 @@ class CreateResponseDialog extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class QuestionWidget extends StatelessWidget {
-  final Message message;
-
-  QuestionWidget(this.message);
-
-  @override
-  Widget build(BuildContext context) {
-    return MessageCard(
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.supervised_user_circle),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(child: Text(message.body))
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text('- ' + message.creator),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text('Posted date'),
-          ),
-          Text(''),
-          // Make button textbox appear and then allow input to submit...
-          ElevatedButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) => BlocProvider<MessagingBloc>.value(
-                          value: BlocProvider.of<MessagingBloc>(context),
-                          child: CreateResponseDialog(message.id),
-                        ));
-              },
-              child: Text('Create Response')),
-          IconButton(
-              icon: Icon(Icons.remove_circle_outline_outlined),
-              onPressed: () {
-                context.read<MessagingBloc>().add(DeleteMessage(message));
-              }),
-        ],
       ),
     );
   }
@@ -452,5 +444,127 @@ class CustomBoxWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AnimatedMessage extends StatefulWidget {
+  final Message message;
+  final Widget child;
+
+  AnimatedMessage({
+    this.message,
+    this.child = const Text(''),
+  });
+
+  State<StatefulWidget> createState() => AnimatedMessageState();
+}
+
+class AnimatedMessageState extends State<AnimatedMessage> {
+  Icon _setProperIcon() {
+    if (widget.message.type == MessageType.alert) {
+      return Icon(Icons.notification_important);
+    } else {
+      return Icon(Icons.read_more);
+    }
+  }
+
+  String _getTypeName() {
+    if (widget.message.type == MessageType.alert) {
+      return 'Alert';
+    } else {
+      return 'Question';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Icon icon = _setProperIcon();
+
+    return Stack(children: [
+      Card(
+        color: CustomColors.gold,
+        elevation: 8,
+        margin: EdgeInsets.all(16),
+        child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.black,
+                            radius: 16,
+                            child: icon),
+                      ],
+                    )),
+                Expanded(
+                    flex: 6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Text(
+                                  '${widget.message.creator}',
+                                )),
+                            Expanded(
+                                flex: 0,
+                                child: Text(
+                                    '${UtilityFunctions.formatDate(widget.message.date.toDate())} ${UtilityFunctions.formatTime(widget.message.date.toDate())}')),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Text('${widget.message.body}'),
+                        ),
+                        widget.child
+                      ],
+                    )),
+              ],
+            )),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(36))),
+      ),
+      Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+            height: 40,
+            width: MediaQuery.of(context).size.width / 3,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade700,
+                  offset: Offset(0.0, 3.0),
+                  blurRadius: 6.0,
+                )
+              ],
+              color: Colors.black,
+              borderRadius: BorderRadius.all(Radius.circular(36)),
+            ),
+            child: Center(
+              child: Text(
+                '${_getTypeName()}',
+                style: TextStyle(
+                    color: Colors.white, fontSize: 18, letterSpacing: 1),
+              ),
+            )),
+      ),
+    ]);
   }
 }

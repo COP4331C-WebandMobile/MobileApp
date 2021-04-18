@@ -32,22 +32,16 @@ class HouseLoadingWrapper extends StatelessWidget {
     return BlocListener<LandingCubit, LandingState>(
       listener: (context, state) {
         print(state);
-        // if (state.status == HomeStatus.Loading) {
-        //   MaterialPageRoute(
-        //       builder: (_) => BlocProvider<LandingCubit>.value(
-        //           value: BlocProvider.of<LandingCubit>(context),
-        //           child: Center(child: CircularProgressIndicator(),)));
-        // }
         if (state.status == HomeStatus.HomeVerified) {
           final _roomateRepository = RoomateRepository(state.home);
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => MultiBlocProvider(providers: [
                     BlocProvider<LandingCubit>.value(
                         value: BlocProvider.of<LandingCubit>(context)),
                     BlocProvider<RoomatesCubit>(
                         create: (context) => RoomatesCubit(
                             roomateRepository: _roomateRepository))
-                  ], child: HomePage())), (route) => true);
+                  ], child: HomePage())),);
         }
         else if (state.status == HomeStatus.Homeless) {
           Navigator.push(

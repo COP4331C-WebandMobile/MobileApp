@@ -40,8 +40,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     _settingsRepository.changePhoneNumber(phoneNumber);
   }
 
-  void leaveHome() {
-    _settingsRepository.leaveHome();
+  Future<void> leaveHome() async {
+    try
+    {
+      await _settingsRepository.leaveHome();
+    }
+    on Exception
+    {
+      throw Exception();
+    }
   }
 
   void onLastNameChanged(String value) {

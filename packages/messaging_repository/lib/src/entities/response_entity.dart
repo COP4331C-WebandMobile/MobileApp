@@ -9,8 +9,9 @@ class ResponseEntity extends Equatable {
   final String id;
   final String creator;
   final String body;
+  final Timestamp postedTime;
 
-  const ResponseEntity(this.id, this.creator, this.body);
+  const ResponseEntity(this.id, this.creator, this.body, this.postedTime);
 
   @override
   List<Object> get props => [id, creator, body];
@@ -22,6 +23,7 @@ class ResponseEntity extends Equatable {
       snap.id,
       data['creator'],
       data['body'],
+      data['postedTime'],
     );
   }
   
@@ -30,6 +32,7 @@ class ResponseEntity extends Equatable {
     {
       "creator": creator,
       "body": body,
+      "postedTime": postedTime
     };
   }
 }
