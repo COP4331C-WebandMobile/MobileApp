@@ -31,8 +31,79 @@ class NewLocationPage extends StatelessWidget {
           create: (context) => GoogleMapCubit(controller: _controller),
         ),
       ],
-      child: _LocationPageWrapper(_controller),
+      child: _NewLocationPageWrapper(_controller),
     );
+  }
+}
+
+class _NewLocationPageWrapper extends StatelessWidget {
+  final Completer<GoogleMapController> _controller;
+
+  const _NewLocationPageWrapper(this._controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: Row(
+          children: [
+            Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    const Text('Testing'),
+                  ],
+                )),
+            Expanded(
+              child: Padding(
+                  padding: EdgeInsets.only(right: 32, top: 32),
+                  child: Column(
+                    children: [
+                      Flexible(
+                          child: Stack(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade700,
+                                  offset: Offset(0.0, 3.0),
+                                  blurRadius: 6.0,
+                                )
+                              ],
+                              color: CustomColors.gold,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(32)),
+                            ),
+                            child: RoomateList(),
+                          ),
+                          Container(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade700,
+                                      offset: Offset(0.0, 3.0),
+                                      blurRadius: 6.0,
+                                    )
+                                  ],
+                                  color: CustomColors.gold,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
+                                ),
+                                child: const Text('Roomates'),
+                              )),
+                        ],
+                      )),
+                    ],
+                  )),
+            )
+          ],
+        ));
   }
 }
 
@@ -82,18 +153,16 @@ class _LocationPageWrapper extends StatelessWidget {
 
               return Container(
                 padding: EdgeInsets.all(32),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      
-                      //   Expanded(
-                      //     child: RoomateList(),
-                      //   ),
-                      Flexible(
-                        flex: 5,
-                        child:
-                      Column(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //   Expanded(
+                    //     child: RoomateList(),
+                    //   ),
+                    Flexible(
+                      flex: 5,
+                      child: Column(
                         children: <Widget>[
                           Expanded(
                             flex: 1,
@@ -152,13 +221,17 @@ class _LocationPageWrapper extends StatelessWidget {
                           ),
                         ],
                       ),
-                      ),
-                      const SizedBox(width: 16,),
-                      Flexible(child:
-                      RoomateList()),],
-                  ),
-                )
-              ;
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                        child: Container(
+                            color: Colors.red,
+                            child: Flexible(child: RoomateList()))),
+                  ],
+                ),
+              );
             },
           );
         },
@@ -235,23 +308,24 @@ class RoomateButton extends StatelessWidget {
                     userLocation.location.longitude);
 
                 ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  duration: Duration(seconds: 1, milliseconds: 250),
-                  backgroundColor: Colors.black,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.elliptical(5, 5))),
-                  content: Text(
-                    'Moving to ${roomate.firstName} ${roomate.lastName}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: CustomColors.gold,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ));
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    duration: Duration(seconds: 1, milliseconds: 250),
+                    backgroundColor: Colors.black,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.elliptical(5, 5))),
+                    content: Text(
+                      'Moving to ${roomate.firstName} ${roomate.lastName}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: CustomColors.gold,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ));
               },
             )),
             Expanded(
