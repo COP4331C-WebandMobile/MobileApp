@@ -173,7 +173,14 @@ class AuthenticationRepository {
 
   Future<void> deleteAccount(String home) async {
       var user = _firebaseAuth.currentUser;
-      _fireStore.collection('users').doc(user.email).delete();
+
+      try{
       await user.delete();
+      _fireStore.collection('users').doc(user.email).delete();
+      }
+      on Exception {
+        throw RecentAuthenticationFailure();
+      }
+     
   }
 }

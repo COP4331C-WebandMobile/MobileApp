@@ -519,7 +519,20 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 16),
-                        Row(
+                    
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Text('${widget.message.body}'),
+                        ),
+                        widget.child,
+                            Row(
                           children: [
                             Expanded(
                                 flex: 2,
@@ -532,18 +545,6 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                                     '${UtilityFunctions.formatDate(widget.message.date.toDate())} ${UtilityFunctions.formatTime(widget.message.date.toDate())}')),
                           ],
                         ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                          child: Text('${widget.message.body}'),
-                        ),
-                        widget.child
                       ],
                     )),
               ],

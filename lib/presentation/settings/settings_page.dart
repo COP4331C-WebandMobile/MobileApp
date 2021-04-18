@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/authentication/bloc/authentication_bloc.dart';
 import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
+import 'package:roomiesMobile/business_logic/location/address_location/address_location_bloc.dart';
 import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/utils/utility_functions.dart';
@@ -29,10 +30,10 @@ class SettingsPage extends StatelessWidget {
     SettingsRepository _settingsRepository = SettingsRepository(home, email);
 
     return Scaffold(
-        appBar:  AppBar(
-        backgroundColor: Colors.white,
-        title: const Text('Roomies'),
-        actions: <Widget>[]),
+        appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: const Text('Roomies'),
+            actions: <Widget>[]),
         body: BlocProvider<SettingsCubit>(
             create: (context) =>
                 SettingsCubit(settingsRepository: _settingsRepository),
@@ -47,7 +48,7 @@ class SettingsPage extends StatelessWidget {
                       _FirstName(),
                       _LastName(),
                       _PhoneNumber(),
-                     // _EmailBox(),
+                      // _EmailBox(),
                       Row(
                         children: [
                           Container(
@@ -69,17 +70,13 @@ class SettingsPage extends StatelessWidget {
                                                           FontWeight.bold),
                                                 ),
                                                 onConfirm: () {
-                                                  try{
-                                                  context
-                                                      .read<SettingsCubit>()
-                                                      .leaveHome();
+                                                  try {
+                                                    context
+                                                        .read<SettingsCubit>()
+                                                        .leaveHome();
 
-                                                      Navigator.pop(context);
-                                                  }
-                                                  on Exception
-                                                  {
-                                                    
-                                                  }
+                                                    Navigator.pop(context);
+                                                  } on Exception {}
                                                 },
                                               )));
                                 },
@@ -91,29 +88,22 @@ class SettingsPage extends StatelessWidget {
                                 onPressed: () {
                                   showDialog(
                                       context: context,
-                                      builder: (_) =>
-                                          BlocProvider<SettingsCubit>.value(
-                                              value: BlocProvider.of<
-                                                  SettingsCubit>(context),
-                                              child: ConfirmationDialog(
-                                                snippet: const Text(
-                                                  'Are you sure you want to delete your account?',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                      builder: (_) => BlocProvider<
+                                              SettingsCubit>.value(
+                                          value: BlocProvider.of<SettingsCubit>(
+                                              context),
+                                          child: ConfirmationDialog(
+                                              snippet: const Text(
+                                                'Are you sure you want to delete your account?',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                                onConfirm: () async {
-                                                try{
-                                                 await context
-                                                      .read<
-                                                          AuthenticationBloc>()
-                                                      .deleteAccount(home);
-                                                } on RecentAuthenticationFailure {
-                                                  
-                                                }
-                                                
-                                                },
-                                              )));
+                                              ),
+                                              onConfirm: () {
+                                                context
+                                                    .read<AuthenticationBloc>()
+                                                    .deleteAccount(home);
+                                              })));
                                 },
                                 child: Text("Delete Account"),
                               )),
@@ -131,13 +121,17 @@ class SettingsPage extends StatelessWidget {
                             child: Text("Change Password"),
                           )),
                         ],
-                      ), 
-                    ]),
+                      ),
+              
+                    ])
+                    ,
                   );
                 })),
-                 drawer: NewSideBar());
+        drawer: NewSideBar());
   }
 }
+
+
 // TODO: For some reason this page ends up accessing null on entering page.
 class HeaderBox extends StatelessWidget {
   @override
@@ -301,8 +295,8 @@ class _PhoneNumber extends StatelessWidget {
                   foregroundColor: Colors.white,
                   child: const Icon(Icons.phone),
                 ),
-                title: Text(
-                    UtilityFunctions.formatNumber(state.user.phoneNumber)),
+                title:
+                    Text(UtilityFunctions.formatNumber(state.user.phoneNumber)),
                 children: <Widget>[
                   TextField(
                     autofocus: true,
@@ -398,6 +392,7 @@ class ChoreBox extends StatelessWidget {
         ]));
   }
 }
+
 // ?
 class MoneyBox extends StatelessWidget {
   @override
@@ -424,11 +419,21 @@ class ChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(builder: (context, state) {
-
-      bool canSubmit = (state.newConfirmedPassword.valid && state.newPassword.valid && !state.newPassword.pure && !state.newConfirmedPassword.pure);
+      bool canSubmit = (state.newConfirmedPassword.valid &&
+          state.newPassword.valid &&
+          !state.newPassword.pure &&
+          !state.newConfirmedPassword.pure);
 
       return ConfirmationDialog(
-        confirmWidget: canSubmit ? const Text('Submit', style: const TextStyle(color: Colors.black),) : const Text('Invalid', style: const TextStyle(color: Colors.black),),
+        confirmWidget: canSubmit
+            ? const Text(
+                'Submit',
+                style: const TextStyle(color: Colors.black),
+              )
+            : const Text(
+                'Invalid',
+                style: const TextStyle(color: Colors.black),
+              ),
         title: const Text('Password Reset'),
         snippet: Column(
           children: [
@@ -439,17 +444,19 @@ class ChangePassword extends StatelessWidget {
             _NewPasswordConfirm(),
           ],
         ),
-        onConfirm: canSubmit ?
-        () {
-          context.read<AuthenticationBloc>().changePassword(state.newPassword.value);
-          // Going to have to alert user when fails on firebase end.
-          Navigator.pop(context);
-        }
-        :
-        // Invalid Submission
-        () {
-          Navigator.pop(context);
-           ScaffoldMessenger.of(context)
+        onConfirm: canSubmit
+            ? () {
+                context
+                    .read<AuthenticationBloc>()
+                    .changePassword(state.newPassword.value);
+                // Going to have to alert user when fails on firebase end.
+                Navigator.pop(context);
+              }
+            :
+            // Invalid Submission
+            () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(const SnackBar(
                     elevation: 20,
@@ -469,7 +476,7 @@ class ChangePassword extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                   ));
-        },
+              },
       );
     });
   }
@@ -509,12 +516,14 @@ class _NewPasswordConfirm extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           obscureText: true,
-          onChanged: (value) =>
-              context.read<SettingsCubit>().onNewConfirmedPasswordChanged(value),
+          onChanged: (value) => context
+              .read<SettingsCubit>()
+              .onNewConfirmedPasswordChanged(value),
           decoration: InputDecoration(
             labelText: 'New Password Confirm',
             hintText: 'secret',
-            errorText: state.newConfirmedPassword.invalid ? 'Invalid password' : null,
+            errorText:
+                state.newConfirmedPassword.invalid ? 'Invalid password' : null,
             border: OutlineInputBorder(),
             filled: true,
             contentPadding: EdgeInsets.all(10),
@@ -524,5 +533,3 @@ class _NewPasswordConfirm extends StatelessWidget {
     );
   }
 }
-
-

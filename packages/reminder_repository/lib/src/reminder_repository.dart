@@ -54,7 +54,7 @@ Future<void> completeReminder(String user,Reminder reminder) {
 
     return _fireStore.collection('message').doc(_home).collection("messages").add(
            {
-            "body": (reminder.description + ' completed.'),
+            "body": ("Completed " + reminder.frequency + " reminder: " + reminder.description),
             "creator":user,
             "date": date,
             "type": "MessageType.alert",
