@@ -7,7 +7,6 @@ import 'package:roomiesMobile/business_logic/reminders/cubit/reminders_cubit.dar
 import 'package:roomiesMobile/presentation/roomate_profile/roomate_profile_page.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
-import '../../widgets/home/sidebar.dart';
 import 'package:reminder_repository/reminder_repository.dart';
 import 'package:roomate_repository/roomate_repository.dart';
 
@@ -523,7 +522,7 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: CustomColors.gold,
         title: const Text('Roomies'),
         actions: <Widget>[]);
   }

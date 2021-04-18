@@ -17,6 +17,7 @@ class Message extends Equatable{
   final Timestamp date;
   final MessageType type;
   final String cost;
+  
 
   Message(this.id, this.creator,this.body, this.type, {this.date, this.cost});
  

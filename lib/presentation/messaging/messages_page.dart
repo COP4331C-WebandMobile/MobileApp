@@ -233,7 +233,18 @@ class MessagesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // ignore: missing_return
     messages.sort( (m1, m2) { 
+
+      int compare = m1.date.compareTo(m2.date);
+
+      if(compare<0) return 1;
+
+      if(compare>0) return -1;
+    
+
+      if(compare == 0){
+
       if(m1.type.index < m2.type.index)
       {
         return -1;
@@ -242,11 +253,10 @@ class MessagesList extends StatelessWidget {
       {
         return 0;
       }
-      else
-      {
-        return 1;
-      }
-    });
+    
+      return 1;
+      
+    }});
 
     return ListView.builder(
       itemCount: messages.length,

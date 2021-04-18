@@ -93,7 +93,7 @@ class ChoresRepository {
 
     _fireStore.collection('message').doc(_home).collection("messages").add({
       "body": (chore.description + ' completed.'),
-      "creator": chore.creator,
+      "creator": email,
       "date": date,
       "type": "MessageType.alert",
     });

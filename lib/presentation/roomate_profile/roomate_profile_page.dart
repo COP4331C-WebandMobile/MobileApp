@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomate_repository/roomate_repository.dart';
 import 'package:roomiesMobile/utils/utility_functions.dart';
+import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
 
 class ProfilePage extends StatelessWidget {
   final Roomate roomate;
@@ -15,9 +16,9 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text('Roomies'),
-        ),
+        backgroundColor: Colors.white,
+        title: const Text('Roomies'),
+        actions: <Widget>[]),
         body: Container(
             child: Column(children: [
           HeaderBox(roomate),
@@ -26,8 +27,10 @@ class ProfilePage extends StatelessWidget {
           ChoreBox(roomate),
           //MoneyBox(roomate),
         ])));
+        
   }
 }
+
 
 class HeaderBox extends StatelessWidget {
   final Roomate roomate;
@@ -127,24 +130,3 @@ class ChoreBox extends StatelessWidget {
   }
 }
 
-class MoneyBox extends StatelessWidget {
-  final Roomate roomate;
-  MoneyBox(this.roomate);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            color: CustomColors.gold,
-            border: Border.all(
-              color: Colors.black,
-              width: 8,
-            )),
-        child: Row(children: [
-          CircleAvatar(),
-          Text(roomate.firstName + " "),
-          Text(roomate.lastName),
-        ]));
-  }
-}

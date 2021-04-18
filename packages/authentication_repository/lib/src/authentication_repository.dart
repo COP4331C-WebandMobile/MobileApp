@@ -160,6 +160,9 @@ class AuthenticationRepository {
   Future<void> changeEmail(String email) async {
     var user = _firebaseAuth.currentUser;
     await user.updateEmail(email);
+    user.sendEmailVerification();
+
+ 
   }
 
   void changePassword(String newPassword) async 

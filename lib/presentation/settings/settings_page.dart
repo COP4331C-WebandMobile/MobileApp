@@ -7,7 +7,8 @@ import 'package:roomiesMobile/business_logic/settings/cubit/settings_cubit.dart'
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/utils/utility_functions.dart';
 import 'package:roomiesMobile/widgets/ConfirmationDialog.dart';
-import 'package:roomiesMobile/widgets/appbar.dart';
+import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
+
 import 'package:settings_repository/settings_repository.dart';
 
 typedef VoidCallBack = Function(void);
@@ -28,7 +29,10 @@ class SettingsPage extends StatelessWidget {
     SettingsRepository _settingsRepository = SettingsRepository(home, email);
 
     return Scaffold(
-        appBar: Bar(),
+        appBar:  AppBar(
+        backgroundColor: Colors.white,
+        title: const Text('Roomies'),
+        actions: <Widget>[]),
         body: BlocProvider<SettingsCubit>(
             create: (context) =>
                 SettingsCubit(settingsRepository: _settingsRepository),
@@ -43,7 +47,7 @@ class SettingsPage extends StatelessWidget {
                       _FirstName(),
                       _LastName(),
                       _PhoneNumber(),
-                      _EmailBox(),
+                     // _EmailBox(),
                       Row(
                         children: [
                           Container(
@@ -130,7 +134,8 @@ class SettingsPage extends StatelessWidget {
                       ), 
                     ]),
                   );
-                })));
+                })),
+                 drawer: NewSideBar());
   }
 }
 // TODO: For some reason this page ends up accessing null on entering page.
@@ -329,7 +334,7 @@ class _PhoneNumber extends StatelessWidget {
   }
 }
 
-class _EmailBox extends StatelessWidget {
+/*class _EmailBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
@@ -371,6 +376,7 @@ class _EmailBox extends StatelessWidget {
         });
   }
 }
+*/
 
 // ?
 class ChoreBox extends StatelessWidget {
@@ -518,3 +524,5 @@ class _NewPasswordConfirm extends StatelessWidget {
     );
   }
 }
+
+
