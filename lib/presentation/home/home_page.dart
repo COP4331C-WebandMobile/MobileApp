@@ -25,6 +25,7 @@ class HomePage extends StatelessWidget {
     MediaQueryData mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         appBar: Bar(),
         body: Container(
             padding: EdgeInsets.all(5),
