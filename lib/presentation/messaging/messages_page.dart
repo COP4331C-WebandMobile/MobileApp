@@ -329,12 +329,8 @@ class MessageWidget extends StatelessWidget {
                     return current.associatedMessage == message.id;
                   },
                   builder: (context, state) {
-                    if (state is NoResponsesFound) {
-                      return Center(
-                          child: Text(
-                              'There are no responses to this message...'));
-                    }
-                    if (state is SuccessfullyRetreivedResponses) {
+                    if (state is SuccessfullyRetreivedResponses && state.associatedMessage == message.id) {
+                      
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: state.responses.length,
@@ -355,7 +351,12 @@ class MessageWidget extends StatelessWidget {
                       );
                     }
 
-                    return Text('wtf');
+                    if (state is NoResponsesFound) {
+                      return Center(
+                          child: Text(
+                              'There are no responses to this message...'));
+                    }
+                    return Container();
                   },
                 )
               ],
