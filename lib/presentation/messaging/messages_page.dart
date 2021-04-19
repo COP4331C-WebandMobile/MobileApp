@@ -20,7 +20,8 @@ class TestMessagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final String houseName = context.read<LandingCubit>().state.home;
 
-    final FirebaseMessageRepository messageRepository = FirebaseMessageRepository(houseName: houseName);
+    final FirebaseMessageRepository messageRepository =
+        FirebaseMessageRepository(houseName: houseName);
 
     return MultiBlocProvider(
       providers: [
@@ -232,31 +233,24 @@ class MessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // ignore: missing_return
-    messages.sort( (m1, m2) { 
-
+    messages.sort((m1, m2) {
       int compare = m1.date.compareTo(m2.date);
 
-      if(compare<0) return 1;
+      if (compare < 0) return 1;
 
-      if(compare>0) return -1;
-    
+      if (compare > 0) return -1;
 
-      if(compare == 0){
+      if (compare == 0) {
+        if (m1.type.index < m2.type.index) {
+          return -1;
+        } else if (m1.type == m2.type) {
+          return 0;
+        }
 
-      if(m1.type.index < m2.type.index)
-      {
-        return -1;
+        return 1;
       }
-      else if(m1.type == m2.type)
-      {
-        return 0;
-      }
-    
-      return 1;
-      
-    }});
+    });
 
     return ListView.builder(
       itemCount: messages.length,
@@ -281,89 +275,81 @@ class MessageWidget extends StatelessWidget {
       return AnimatedMessage(
         message: message,
       );
-    } else if (message.type == MessageType.question) 
-    {
+    } else if (message.type == MessageType.question) {
       return AnimatedMessage(
         message: message,
+        child: Column(children: [
+          Card(
+            margin: EdgeInsets.symmetric(
+              vertical: 16,
+            ),
+            child: ExpansionTile(
+              title: Text('Responses'),
+              children: [
+                BlocBuilder<ResponsesBloc, ResponsesState>(
+                  buildWhen: (previous, current) {
+                    return current.associatedMessage == message.id;
+                  },
+                  builder: (context, state) {
+                    if (state is NoResponsesFound) {
+                      return Center(
+                          child: Text(
+                              'There are no responses to this message...'));
+                    }
+                    if (state is SuccessfullyRetreivedResponses) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.responses.length,
+                        itemBuilder: (context, i) {
+                          state.responses.sort((r1, r2) {
+                            if (r1.postedTime.millisecondsSinceEpoch <
+                                r2.postedTime.millisecondsSinceEpoch) {
+                              return 1;
+                            } else if (r1.postedTime == r2.postedTime) {
+                              return 0;
+                            } else {
+                              return -1;
+                            }
+                          });
 
-        child: 
-        Column( children: [
-        Card(
-          margin: EdgeInsets.symmetric(vertical: 16,),
-          
-          child: 
-          ExpansionTile(
-            title: Text('Responses'),
-            children: [BlocBuilder<ResponsesBloc, ResponsesState>(
-              buildWhen: (previous, current) {
-                return current.associatedMessage == message.id;
-              },
-              builder: (context, state) 
-              {
-                if(state is NoResponsesFound)
-                {
-                  return Center(child: Text('There are no responses to this message...'));
-                }
-                if(state is SuccessfullyRetreivedResponses)
-                {
-                         
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.responses.length,
-                    itemBuilder: (context, i) {
-
-                      state.responses.sort((r1, r2){
-                        if(r1.postedTime.millisecondsSinceEpoch < r2.postedTime.millisecondsSinceEpoch)
-                        {
-                          return 1;
-                        }
-                        else if(r1.postedTime == r2.postedTime)
-                        {
-                          return 0;
-                        }
-                        else
-                        {
-                          return -1;
-                        }
-                      });
-
-                      return ListTile(
-                        leading: Text('${state.responses[i].creator}'),
-                        title: Text('${state.responses[i].body}'),
+                          return ListTile(
+                            leading: Text('${state.responses[i].creator}'),
+                            title: Text('${state.responses[i].body}'),
+                          );
+                        },
                       );
-                    },
-                  );
-                }
+                    }
 
-                return Container();
+                    return Container();
+                  },
+                )
+              ],
+              onExpansionChanged: (opened) {
+                if (opened) {
+                  context
+                      .read<ResponsesBloc>()
+                      .add(SubsribedToResponses(message.id));
+                } else {
+                  context
+                      .read<ResponsesBloc>()
+                      .add(UnsubscribeFromResponses(message.id));
+                }
               },
-            )],      
-            onExpansionChanged: (opened) {
-              if(opened)
-              {
-                context.read<ResponsesBloc>().add(SubsribedToResponses(message.id));
-              }
-              else
-              {
-                context.read<ResponsesBloc>().add(UnsubscribeFromResponses(message.id));
-              }
+            ),
+          ),
+          FloatingActionButton.extended(
+            label: const Text('Respond'),
+            heroTag: null,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider<MessagingBloc>.value(
+                  value: BlocProvider.of<MessagingBloc>(context),
+                  child: CreateResponseDialog(message.id),
+                ),
+              );
             },
           ),
-        ),
-        FloatingActionButton.extended(
-          label: const Text('Respond'),
-          heroTag: null,
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (_) => BlocProvider<MessagingBloc>.value(
-                value: BlocProvider.of<MessagingBloc>(context),
-                child: CreateResponseDialog(message.id),
-              ),
-            );
-          },
-        ),
-        
         ]),
       );
     } else if (message.type == MessageType.purchase) {
@@ -373,6 +359,7 @@ class MessageWidget extends StatelessWidget {
     }
   }
 }
+
 class CreateResponseDialog extends StatelessWidget {
   final targetId;
 
@@ -381,22 +368,54 @@ class CreateResponseDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String creator = context.read<AuthenticationBloc>().state.user.email;
-
+    final body = TextEditingController();
     return AlertDialog(
-      title: Text('Replying to Question'),
+      title: Text(
+        'Replying to Question',
+        textAlign: TextAlign.center,
+      ),
       content: Container(
         alignment: Alignment.center,
-        height: 200,
+        height: 300,
         width: 300,
+        padding: EdgeInsets.all(0),
         child: Column(
           children: [
-            TextField(
-              onSubmitted: (body) {
-                context
-                    .read<MessagingBloc>()
-                    .add(RespondToQuestion(targetId, creator, body));
-              },
-            ),
+            Container(
+                padding:
+                    EdgeInsets.only(bottom: 100, left: 20, right: 20, top: 40),
+                color: Colors.yellow.shade200,
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  onSubmitted: (value) {},
+                  maxLines: 2,
+                  maxLength: 150,
+                  textAlign: TextAlign.start,
+                  controller: body,
+                  textAlignVertical: TextAlignVertical.top,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Message',
+                    helperText: '',
+                    hintText: 'Yeah',
+                  ),
+                )),
+            Container(
+                padding: EdgeInsets.only(top: 20),
+                child: FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    context
+                        .read<MessagingBloc>()
+                        .add(RespondToQuestion(targetId, creator, body.text));
+                    Navigator.pop(context);
+                  },
+                  label: Text('Post'),
+                ))
           ],
         ),
       ),
@@ -525,6 +544,7 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                                 flex: 2,
                                 child: Text(
                                   '${widget.message.creator}',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                             Expanded(
                                 flex: 0,
@@ -536,7 +556,7 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                           height: 16,
                         ),
                         Container(
-                          padding: EdgeInsets.all(0),
+                          padding: EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(8)),
