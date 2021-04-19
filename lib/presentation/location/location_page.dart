@@ -77,36 +77,79 @@ class _NewLocationPageWrapper extends StatelessWidget {
                               child: Column(
                                 children: [
                                   BlocBuilder<GoogleMapCubit, GoogleMapState>(
-                                      builder: (context, state) {
-                                    return Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                            //border: Border.all(),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(16)),
-                                          ),
-                                          margin: EdgeInsets.all(8),
-                                          child: ClipRRect(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(16)),
-                                              child: GoogleMap(
-                                                mapType: MapType.normal,
-                                                initialCameraPosition:
-                                                    const CameraPosition(
-                                                        target: const LatLng(
-                                                            39.5, -98.35),
-                                                        zoom: 3),
-                                                myLocationEnabled: false,
-                                                myLocationButtonEnabled: true,
-                                                onMapCreated:
-                                                    (mapController) async {
-                                                  _controller
-                                                      .complete(mapController);
-                                                },
-                                              ))),
-                                    );
-                                  }),
+                                      buildWhen: (previous, current) =>
+                                          previous.markers != current.markers,
+                                      builder: (context, mapState) {
+                                        return BlocConsumer<AddressLocationBloc,
+                                                AddressLocationState>(
+                                            listener: (context, state) {
+                                          if (state
+                                              is SuccessfullyRetreievedAddresses) {
+                                            state.houseLocations
+                                                .forEach((element) {
+                                              context
+                                                  .read<GoogleMapCubit>()
+                                                  .addAddressMarker(
+                                                    element.address,
+                                                    element.longLat.latitude,
+                                                    element.longLat.longitude,
+                                                  );
+                                            });
+                                          }
+
+                                          if (state is HomeAddressUpdated) {
+                                            print('Working???');
+                                            context
+                                                .read<GoogleMapCubit>()
+                                                .setHomeMarker(
+                                                  state.houseLocation.longLat
+                                                      .longitude,
+                                                  state.houseLocation.longLat
+                                                      .latitude,
+                                                  state.houseLocation.address,
+                                                );
+                                          }
+                                        }, builder: (context, state) {
+                                          Set<Marker> myMarkers =
+                                              mapState.markers.toSet();
+
+                                          return Expanded(
+                                            flex: 5,
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                  //border: Border.all(),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(16)),
+                                                ),
+                                                margin: EdgeInsets.all(8),
+                                                child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                16)),
+                                                    child: GoogleMap(
+                                                      markers: myMarkers,
+                                                      mapType: MapType.normal,
+                                                      initialCameraPosition:
+                                                          const CameraPosition(
+                                                              target:
+                                                                  const LatLng(
+                                                                      39.5,
+                                                                      -98.35),
+                                                              zoom: 3),
+                                                      myLocationEnabled: false,
+                                                      myLocationButtonEnabled:
+                                                          true,
+                                                      onMapCreated:
+                                                          (mapController) async {
+                                                        _controller.complete(
+                                                            mapController);
+                                                      },
+                                                    ))),
+                                          );
+                                        });
+                                      }),
                                   Expanded(
                                     child: Container(
                                       margin: EdgeInsets.all(8),
@@ -129,21 +172,37 @@ class _NewLocationPageWrapper extends StatelessWidget {
                                                   style: TextStyle())),
                                           Expanded(
                                               flex: 3,
-                                              child: Container(
-                                                margin: EdgeInsets.all(8),
-                                                child: TextField(
-                                                    decoration: InputDecoration(
-                                                        fillColor: Colors.white,
-                                                        filled: true,
-                                                        border:
-                                                            OutlineInputBorder())),
-                                              )),
+                                              child: BlocBuilder<
+                                                      AddressLocationBloc,
+                                                      AddressLocationState>(
+                                                  builder: (context, state) {
+                                                return Container(
+                                                  margin: EdgeInsets.all(8),
+                                                  child: TextField(
+                                                      controller:
+                                                          addressController,
+                                                      decoration: InputDecoration(
+                                                          fillColor:
+                                                              Colors.white,
+                                                          filled: true,
+                                                          border:
+                                                              OutlineInputBorder())),
+                                                );
+                                              })),
                                           Expanded(
                                             flex: 2,
                                             child:
                                                 FloatingActionButton.extended(
                                               label: const Text('Search'),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                print('WORK');
+                                                print(addressController.text);
+                                                context
+                                                    .read<AddressLocationBloc>()
+                                                    .add(QueryAddresses(
+                                                        addressController
+                                                            .text));
+                                              },
                                             ),
                                           )
                                         ],
