@@ -102,11 +102,14 @@ class CreateHome extends StatelessWidget {
                       Column(children: [
                         Text("Enter Password"),
                         TextField(
+                           obscureText: true,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                             border: OutlineInputBorder(),
+                                       
+
                             filled: true,
                             fillColor: Colors.white,
                             labelText: 'Password',
@@ -188,7 +191,7 @@ class JoinHome extends StatelessWidget {
                         fillColor: Colors.white,
                         labelText: 'Home',
                         helperText: '',
-                        hintText: '123 Fake St.',
+                        hintText: 'Home',
                       ),
                       controller: houseName,
                     ),
@@ -197,6 +200,7 @@ class JoinHome extends StatelessWidget {
                           fontSize: 20,
                         )),
                     TextField(
+                       obscureText: true,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         contentPadding:

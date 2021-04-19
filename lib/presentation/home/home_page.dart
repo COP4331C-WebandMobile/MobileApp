@@ -454,7 +454,7 @@ class _CreateReminderState extends State<CreateReminder> {
                       fillColor: Colors.white,
                       labelText: 'Reminder',
                       helperText: '',
-                      hintText: 'I have a test today!',
+                      hintText: 'Turn off Lights!',
                     ),
                   )),
               Text("How Often ?",
