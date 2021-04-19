@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roomiesMobile/business_logic/password_reset/cubit/password_reset_cubit.dart';
 import 'package:roomiesMobile/presentation/password_reset/password_reset_form.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/widgets/appbar.dart';
 
 class PasswordResetPage extends StatelessWidget {
   const PasswordResetPage({Key key}) : super(key: key);
@@ -16,6 +17,7 @@ class PasswordResetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: Bar(),
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.gold,
       body: Padding(

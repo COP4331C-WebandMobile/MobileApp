@@ -600,7 +600,10 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          child: Text('${widget.message.body}'),
+                          child: Text('${widget.message.body}',
+                          style: TextStyle(
+                                          fontSize: 24),
+                                    )
                         ),
                         widget.child,
                         Row(
