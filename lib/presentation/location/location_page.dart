@@ -375,7 +375,9 @@ class _NewLocationPageWrapper extends StatelessWidget {
                   )),
             )
           ],
-        ));
+        ),
+        drawer: SideBar(),
+        );
   }
 }
 
@@ -474,7 +476,7 @@ class RoomateButton extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(top: 24),
                     child:
-                  Text('${roomate.firstName[0]}.${roomate.lastName[1]}', style: TextStyle(color: Colors.white),)),
+                  Text('${roomate.firstName[0]}.${roomate.lastName[0]}', style: TextStyle(color: Colors.white),)),
                 ],
               ),
             ),

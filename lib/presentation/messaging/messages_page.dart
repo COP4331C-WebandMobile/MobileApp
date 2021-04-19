@@ -621,7 +621,7 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                             ),
                           ],
                         ),
-                        /*const SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                       ],
