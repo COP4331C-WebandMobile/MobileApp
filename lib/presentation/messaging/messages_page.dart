@@ -63,6 +63,7 @@ class CreateMessageModal extends StatelessWidget {
                   Message('Temp', creator, body.text, type);
 
               context.read<MessagingBloc>().add(CreateMessage(newMessage));
+              Navigator.pop(context);
             },
             label: Text('Post'),
           ),

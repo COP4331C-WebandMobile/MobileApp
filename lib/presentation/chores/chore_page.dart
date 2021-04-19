@@ -273,46 +273,59 @@ class AddModal extends StatelessWidget {
   Widget build(BuildContext context) {
     final email = context.read<AuthenticationBloc>().state.user.email;
     final description = TextEditingController();
-
-    return Dialog(
-      child: Container(
-          color: Colors.yellow.shade200,
-          height: 300,
-          width: 400,
-          child: Column(children: <Widget>[
-            Text("Enter Description of Chore",
-                style: TextStyle(
-                  fontSize: 20,
-                )),
+    final body = TextEditingController();
+    return AlertDialog(
+      title: Text(
+        'Enter Description of Chore',
+        textAlign: TextAlign.center,
+      ),
+      content: Container(
+        alignment: Alignment.center,
+        height: 300,
+        width: 300,
+        padding: EdgeInsets.all(0),
+        child: Column(
+          children: [
             Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    EdgeInsets.only(bottom: 100, left: 20, right: 20, top: 40),
+                color: Colors.yellow.shade200,
                 child: TextField(
-                  maxLines: null,
-                  controller: description,
+                  keyboardType: TextInputType.text,
+                  onSubmitted: (value) {},
+                  maxLines: 2,
+                  maxLength: 150,
+                  textAlign: TextAlign.start,
+                  controller: body,
+                  textAlignVertical: TextAlignVertical.top,
                   decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    isDense: true,
                     border: OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Content',
+                    labelText: 'Message',
                     helperText: '',
-                    hintText: 'Wash clothes!',
+                    hintText: 'Yeah',
                   ),
                 )),
-            Align(
-                alignment: Alignment.bottomRight,
-                child: IconButton(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                    icon: const Icon(
-                      Icons.add_circle_outline_rounded,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    onPressed: () => context.read<ChoresBloc>().add(AddChore(
-                        Chore(email, false, description.text, "test")))))
-          ])),
+            Container(
+                padding: EdgeInsets.only(top: 20),
+                child: FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    context
+                        .read<ChoresBloc>()
+                        .add(AddChore(Chore(email, false, body.text, "test")));
+                    Navigator.pop(context);
+                  },
+                  label: Text('Post'),
+                ))
+          ],
+        ),
+      ),
     );
+    //context.read<ChoresBloc>().add(AddChore(
+    //    Chore(email, false, description.text, "test"))
   }
 }
 

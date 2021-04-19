@@ -409,6 +409,7 @@ class _CreateReminderState extends State<CreateReminder> {
               context
                   .read<ReminderCubit>()
                   .createReminder(body.text, dropdownValue);
+              Navigator.pop(context);
             },
             label: Text('Post'),
           ),
