@@ -10,6 +10,7 @@ import 'package:roomiesMobile/business_logic/landing/cubit/landing_cubit.dart';
 import 'package:roomiesMobile/business_logic/location/location.dart';
 import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
+import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
 import 'package:roomiesMobile/widgets/home/sidebar.dart';
 
 class NewLocationPage extends StatelessWidget {
@@ -377,7 +378,7 @@ class _NewLocationPageWrapper extends StatelessWidget {
             )
           ],
         ),
-        drawer: SideBar(),
+        drawer: NewSideBar(),
         );
   }
 }
