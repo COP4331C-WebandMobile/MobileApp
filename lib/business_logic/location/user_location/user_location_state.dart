@@ -25,4 +25,6 @@ class FailureOnRetreiveLocations extends UserLocationState { }
 
 class FailureToSetLocation extends UserLocationState { }
 
+class LoadingUserCheckIn extends UserLocationState {}
+
 class SuccessfulToSetLocation extends UserLocationState { }

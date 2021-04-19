@@ -8,7 +8,6 @@ import 'package:roomiesMobile/business_logic/roomates/cubit/roomates_cubit.dart'
 import 'package:roomiesMobile/business_logic/statistics/cubit/statistics_cubit.dart';
 import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import 'package:roomiesMobile/widgets/home/new_sidebar.dart';
-import 'package:roomiesMobile/widgets/home/sidebar.dart';
 import '../../business_logic/chores/bloc/chores_bloc.dart';
 
 class ChoresPage extends StatefulWidget {
