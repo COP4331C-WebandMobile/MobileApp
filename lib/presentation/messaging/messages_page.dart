@@ -565,8 +565,6 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                                     '${UtilityFunctions.formatDate(widget.message.date.toDate())} ${UtilityFunctions.formatTime(widget.message.date.toDate())}')),
                           ],
                         ),
-<<<<<<< HEAD
-=======
                         const SizedBox(
                           height: 16,
                         ),
@@ -579,7 +577,6 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                           child: Text('${widget.message.body}'),
                         ),
                         widget.child
->>>>>>> 787fea6cca66b153bc23ae98ed4f2bcbf08799e7
                       ],
                     )),
               ],
