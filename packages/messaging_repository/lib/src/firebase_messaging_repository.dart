@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:messaging_repository/src/entities/message_entity.dart';
 import 'package:messaging_repository/src/entities/response_entity.dart';
 import 'package:messaging_repository/src/messaging_repository.dart';
@@ -59,8 +60,16 @@ class FirebaseMessageRepository implements MessagingRepository {
   } 
 
   @override
-  Future<void> deleteMessage(Message message) {
-    return messageCollection.doc(message.id).delete();
+  Future<void> deleteMessage(Message message) async {
+
+    if(message.type == MessageType.question)
+    {
+      await messageCollection.doc(message.id).collection('responses').get().then((value) {
+        value.docs.forEach((element) {element.reference.delete();});
+      });
+    }
+
+    return await messageCollection.doc(message.id).delete();
   }
 
   @override

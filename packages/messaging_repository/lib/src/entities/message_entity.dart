@@ -35,6 +35,8 @@ class MessageEntity extends Equatable {
       case 'MessageType.purchase':
         return MessageType.purchase;
         break;
+      case 'MessageType.anonymous':
+        return MessageType.anonymous;
       default:
         return MessageType.invalid;
     }

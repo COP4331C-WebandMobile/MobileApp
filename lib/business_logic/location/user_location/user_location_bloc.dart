@@ -38,6 +38,8 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
     }
     else if(event is CheckInUserLocation)
     {
+      yield LoadingUserCheckIn();
+
       yield await mapCheckInUserToState(event);
     }
   }

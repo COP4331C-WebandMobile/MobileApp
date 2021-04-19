@@ -1,2 +1,2 @@
 
-enum MessageType { alert, question, purchase, invalid }
+enum MessageType { alert, question, purchase, anonymous,invalid }
