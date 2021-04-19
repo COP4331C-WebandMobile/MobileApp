@@ -26,7 +26,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      buttonPadding: EdgeInsets.symmetric(horizontal: 50),
+      buttonPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       title: Center( child: widget.title),
       content: SingleChildScrollView(
         child: Center(

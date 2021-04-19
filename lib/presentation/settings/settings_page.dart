@@ -51,6 +51,7 @@ class SettingsPage extends StatelessWidget {
                       // _EmailBox(),
                       Row(
                         children: [
+                          Flexible(child:
                           Container(
                               margin: EdgeInsets.only(left: 30),
                               child: ElevatedButton(
@@ -81,7 +82,8 @@ class SettingsPage extends StatelessWidget {
                                               )));
                                 },
                                 child: Text("Leave Home"),
-                              )),
+                              ))),
+                          Flexible(child:
                           Container(
                               margin: EdgeInsets.only(left: 10, right: 10),
                               child: ElevatedButton(
@@ -106,8 +108,11 @@ class SettingsPage extends StatelessWidget {
                                               })));
                                 },
                                 child: Text("Delete Account"),
-                              )),
+                              ))),
+                          Flexible(
+                            child:
                           Container(
+                              margin: EdgeInsets.only(right: 10),
                               child: ElevatedButton(
                             onPressed: () {
                               showDialog(
@@ -119,7 +124,7 @@ class SettingsPage extends StatelessWidget {
                                           child: ChangePassword()));
                             },
                             child: Text("Change Password"),
-                          )),
+                          ))),
                         ],
                       ),
               

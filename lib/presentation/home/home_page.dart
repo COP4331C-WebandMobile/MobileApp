@@ -131,7 +131,7 @@ class HouseInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 54,
+            height: 42,
           ),
           Text(
             home,
