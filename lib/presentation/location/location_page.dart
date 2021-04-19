@@ -46,11 +46,12 @@ class _NewLocationPageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Locations'),
         ),
-        body: Row(
+        body: 
+        Row(
           children: [
             Expanded(
                 flex: 3,

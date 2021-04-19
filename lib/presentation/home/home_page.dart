@@ -140,7 +140,7 @@ class HouseInfo extends StatelessWidget {
             ),
           ),
           Text(
-            address,
+            '',
             style: TextStyle(
               fontSize: 24,
             ),
