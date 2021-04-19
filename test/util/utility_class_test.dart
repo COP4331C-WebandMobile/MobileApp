@@ -24,7 +24,7 @@ void main()
         expect(result, phoneNumber);
       });
 
-      test('Reject Non-Number String of 10', (){
+      test('Reject Non-Number String of 10', () {
         
         final String phoneNumber = 'abcdefghij';
 
