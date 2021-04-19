@@ -557,6 +557,7 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                                 flex: 2,
                                 child: Text(
                                   '${widget.message.creator}',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                             Expanded(
                                 flex: 0,
@@ -564,6 +565,21 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                                     '${UtilityFunctions.formatDate(widget.message.date.toDate())} ${UtilityFunctions.formatTime(widget.message.date.toDate())}')),
                           ],
                         ),
+<<<<<<< HEAD
+=======
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Text('${widget.message.body}'),
+                        ),
+                        widget.child
+>>>>>>> 787fea6cca66b153bc23ae98ed4f2bcbf08799e7
                       ],
                     )),
               ],

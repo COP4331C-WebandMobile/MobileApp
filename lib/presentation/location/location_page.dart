@@ -44,62 +44,193 @@ class _NewLocationPageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController addressController = TextEditingController();
+
     return Scaffold(
-        appBar: AppBar(),
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: const Text('Location'),
+        ),
         body: Row(
           children: [
             Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    const Text('Testing'),
-                  ],
-                )),
+                flex: 3,
+                child: Padding(
+                    padding: EdgeInsets.only(top: 32, left: 8),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                              margin: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade700,
+                                    offset: Offset(0.0, 3.0),
+                                    blurRadius: 6.0,
+                                  )
+                                ],
+                                color: CustomColors.gold,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16)),
+                              ),
+                              child: Column(
+                                children: [
+                                  BlocBuilder<GoogleMapCubit, GoogleMapState>(
+                                      builder: (context, state) {
+                                    return Expanded(
+                                      flex: 5,
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            //border: Border.all(),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(16)),
+                                          ),
+                                          margin: EdgeInsets.all(8),
+                                          child: ClipRRect(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16)),
+                                              child: GoogleMap(
+                                                mapType: MapType.normal,
+                                                initialCameraPosition:
+                                                    const CameraPosition(
+                                                        target: const LatLng(
+                                                            39.5, -98.35),
+                                                        zoom: 3),
+                                                myLocationEnabled: false,
+                                                myLocationButtonEnabled: true,
+                                                onMapCreated:
+                                                    (mapController) async {
+                                                  _controller
+                                                      .complete(mapController);
+                                                },
+                                              ))),
+                                    );
+                                  }),
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.shade700,
+                                              offset: Offset(0.0, 3.0),
+                                              blurRadius: 6.0,
+                                            )
+                                          ],
+                                          color: CustomColors.gold,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(16))),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                              child: const Text(
+                                                  'Address Search',
+                                                  style: TextStyle())),
+                                          Expanded(
+                                              flex: 3,
+                                              child: Container(
+                                                margin: EdgeInsets.all(8),
+                                                child: TextField(
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white,
+                                                        filled: true,
+                                                        border:
+                                                            OutlineInputBorder())),
+                                              )),
+                                          Expanded(
+                                            flex: 2,
+                                            child:
+                                                FloatingActionButton.extended(
+                                              label: const Text('Search'),
+                                              onPressed: () {},
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )),
+                        ),
+                      ],
+                    ))),
             Expanded(
               child: Padding(
                   padding: EdgeInsets.only(right: 32, top: 32),
                   child: Column(
                     children: [
                       Flexible(
-                          child: Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 20),
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade700,
-                                  offset: Offset(0.0, 3.0),
-                                  blurRadius: 6.0,
-                                )
-                              ],
-                              color: CustomColors.gold,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(32)),
+                          child: Column(children: [
+                        Stack(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height / 1.49,
+                              margin: EdgeInsets.only(top: 20),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 8),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade700,
+                                    offset: Offset(0.0, 3.0),
+                                    blurRadius: 6.0,
+                                  )
+                                ],
+                                color: CustomColors.gold,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32)),
+                              ),
+                              child: RoomateList(),
                             ),
-                            child: RoomateList(),
+                            Container(
+                                alignment: Alignment.topCenter,
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.shade700,
+                                        offset: Offset(0.0, 3.0),
+                                        blurRadius: 6.0,
+                                      )
+                                    ],
+                                    color: Colors.black,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                  ),
+                                  child: const Text('Roomates',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      )),
+                                )),
+                          ],
+                        ),
+                        Container(
+                          height: 90,
+                          width: 150,
+                          margin: EdgeInsets.only(top: 32),
+                          child: FloatingActionButton.extended(
+                            shape: CircleBorder(),
+                            tooltip:
+                                'Record your current location for other roomates to view.',
+                            heroTag: null,
+                            label: const Text('Check In'),
+                            onPressed: () {
+                              final String id = context
+                                  .read<AuthenticationBloc>()
+                                  .state
+                                  .user
+                                  .email;
+
+                              context
+                                  .read<UserLocationBloc>()
+                                  .add(CheckInUserLocation(id));
+                            },
                           ),
-                          Container(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.shade700,
-                                      offset: Offset(0.0, 3.0),
-                                      blurRadius: 6.0,
-                                    )
-                                  ],
-                                  color: CustomColors.gold,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16)),
-                                ),
-                                child: const Text('Roomates'),
-                              )),
-                        ],
-                      )),
+                        ),
+                      ])),
                     ],
                   )),
             )
@@ -132,7 +263,6 @@ class _LocationPageWrapper extends StatelessWidget {
                       element.address,
                       element.longLat.latitude,
                       element.longLat.longitude, onTap: () {
-                    print('This is a test.');
                     context
                         .read<AddressLocationBloc>()
                         .add(SetHomeAddress(element));
@@ -254,7 +384,7 @@ class RoomateList extends StatelessWidget {
             itemCount: state.locations.length,
             separatorBuilder: (context, i) {
               return const SizedBox(
-                height: 16,
+                height: 8,
               );
             },
             itemBuilder: (context, i) {
@@ -292,7 +422,7 @@ class RoomateButton extends StatelessWidget {
     return Container(
         child: Center(
       child: CircleAvatar(
-        radius: 28,
+        radius: 32,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         child: Column(
@@ -331,9 +461,9 @@ class RoomateButton extends StatelessWidget {
               },
             )),
             Expanded(
-                flex: 0,
-                child: Padding(
-                    padding: EdgeInsets.only(bottom: 3),
+                flex: 1,
+                child: Container(
+                    margin: EdgeInsets.only(top: 8),
                     child: Text(
                       '${roomate.firstName[0]}.${roomate.lastName[0]}',
                       style: TextStyle(fontSize: 12),
