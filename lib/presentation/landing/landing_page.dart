@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:roomiesMobile/presentation/themes/primary_theme/colors.dart';
 import '../../business_logic/authentication/authentication.dart';
 import '../../business_logic/landing/cubit/landing_cubit.dart';
 
@@ -13,6 +14,7 @@ class LandingPage extends StatelessWidget {
     return Builder(
         builder: (context) => Scaffold(
                 body: Container(
+              color: CustomColors.gold,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -20,7 +22,7 @@ class LandingPage extends StatelessWidget {
                     Image.asset('assets/house-logo.png'),
                     Container(
                       child: Text(
-                        "Welcome to Roomies , either create a home or join an existing home to get started",
+                        "Welcome to Roomies , either create a home or join an existing home to get started!",
                         textAlign: TextAlign.center,
                       ),
                       color: Colors.yellow[200],
