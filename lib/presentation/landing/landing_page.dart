@@ -57,7 +57,27 @@ class LandingPage extends StatelessWidget {
                                     )),
                             child: Text("Join Home")),
                       ),
-                    ])
+                    ]),
+                    const SizedBox(height: 32,),
+                    Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child:
+              FloatingActionButton.extended(
+                heroTag: null,
+                splashColor: Colors.yellow,
+                backgroundColor: Colors.black,
+                icon: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                  ),            
+                ),          
+                label: Icon(Icons.logout, size: 40, color: Colors.white,),
+                onPressed: () {
+                  context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+                },
+              )),
                   ]),
             )));
   }
