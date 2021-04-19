@@ -538,7 +538,6 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 16),
-                    
                         const SizedBox(
                           height: 16,
                         ),
@@ -551,32 +550,28 @@ class AnimatedMessageState extends State<AnimatedMessage> {
                           child: Text('${widget.message.body}'),
                         ),
                         widget.child,
-                            Row(
+                        Row(
                           children: [
-                            Expanded(
-                                flex: 2,
-                                child: Text(
-                                  '${widget.message.creator}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )),
-                            Expanded(
-                                flex: 0,
-                                child: Text(
-                                    '${UtilityFunctions.formatDate(widget.message.date.toDate())} ${UtilityFunctions.formatTime(widget.message.date.toDate())}')),
+                            Container(
+                                padding: EdgeInsets.only(top: 5, right: 5),
+                                child: Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      '${widget.message.creator}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ))),
+                            Container(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Expanded(
+                                    flex: 0,
+                                    child: Text(
+                                        '${UtilityFunctions.formatDate(widget.message.date.toDate())} ${UtilityFunctions.formatTime(widget.message.date.toDate())}'))),
                           ],
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                          child: Text('${widget.message.body}'),
-                        ),
-                        widget.child
                       ],
                     )),
               ],
