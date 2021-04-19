@@ -48,7 +48,7 @@ class _NewLocationPageWrapper extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text('Location'),
+          title: const Text('Locations'),
         ),
         body: Row(
           children: [

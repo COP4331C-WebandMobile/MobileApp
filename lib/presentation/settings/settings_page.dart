@@ -32,7 +32,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white,
-            title: const Text('Roomies'),
+            title: const Text('Settings'),
             actions: <Widget>[]),
         body: BlocProvider<SettingsCubit>(
             create: (context) =>

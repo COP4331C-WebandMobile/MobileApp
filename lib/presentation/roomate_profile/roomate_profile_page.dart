@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Roomies'),
+        title: const Text('Roomate'),
         actions: <Widget>[]),
         body: Container(
             child: Column(children: [
